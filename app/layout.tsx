@@ -27,13 +27,23 @@ export const metadata: Metadata = {
     title: 'UNOTUSK — The Project Intelligence Engine',
     description: 'Your project already knows. UNOTUSK makes it visible.',
     siteName: 'UNOTUSK',
+    url: 'https://unotusk.com',
     locale: 'en_US',
     type: 'website',
+    images: [
+      {
+        url: '/og.png',
+        width: 1200,
+        height: 630,
+        alt: 'UNOTUSK — The Project Intelligence Engine',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'UNOTUSK — The Project Intelligence Engine',
     description: 'Your project already knows. UNOTUSK makes it visible.',
+    images: ['/og.png'],
   },
 }
 
