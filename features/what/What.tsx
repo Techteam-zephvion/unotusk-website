@@ -13,6 +13,13 @@ const V = 'inset(0 0% 0 0)'
 // so the word cloud takes the icon's EXACT silhouette (eye becomes a gap).
 const FAVICON_SRC = '/favicon.png'
 
+// Pre-load the favicon image at module scope so it's fully cached and ready by the time the component mounts
+let preloadedImage: HTMLImageElement | null = null
+if (typeof window !== 'undefined') {
+  preloadedImage = new Image()
+  preloadedImage.src = FAVICON_SRC
+}
+
 // ---------------------------------------------------------------------------
 // Word source. tier = size/weight. The list runs head -> trunk; each word's
 // index gives its preferred vertical band, so decision vocabulary packs into
@@ -20,11 +27,11 @@ const FAVICON_SRC = '/favicon.png'
 // ---------------------------------------------------------------------------
 type Tier = 'xl' | 'l' | 'm' | 's' | 'xs'
 const TIER: Record<Tier, { size: number; op: number; weight: number }> = {
-  xl: { size: 0.78, op: 0.96, weight: 700 },
-  l:  { size: 0.54, op: 0.84, weight: 600 },
-  m:  { size: 0.40, op: 0.64, weight: 500 },
-  s:  { size: 0.29, op: 0.46, weight: 400 },
-  xs: { size: 0.20, op: 0.30, weight: 400 },
+  xl: { size: 0.68, op: 0.96, weight: 700 },
+  l:  { size: 0.46, op: 0.84, weight: 600 },
+  m:  { size: 0.35, op: 0.64, weight: 500 },
+  s:  { size: 0.26, op: 0.46, weight: 400 },
+  xs: { size: 0.18, op: 0.30, weight: 400 },
 }
 
 const SOURCE: [string, Tier][] = [
@@ -81,6 +88,7 @@ interface Placed {
 }
 
 export function What() {
+  const STAGE_SIZE = 'clamp(480px, 72vh, 600px)'
   const containerRef = useRef<HTMLDivElement>(null)
   const megaRef      = useRef<HTMLDivElement>(null)
   const sqRef        = useRef<HTMLDivElement>(null)
@@ -94,10 +102,27 @@ export function What() {
   const psClose2      = useRef<HTMLDivElement>(null)
 
   const [placed, setPlaced] = useState<Placed[]>([])
+  const [logoStyle, setLogoStyle] = useState<React.CSSProperties>({
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '70%',
+    height: '70%',
+    objectFit: 'contain',
+    filter: 'invert(1) brightness(0.82)',
+    pointerEvents: 'none',
+    maxWidth: 'none',
+    maxHeight: 'none',
+  })
 
-  // ---- Phase 0: pack the words into the real favicon silhouette ------------
   useEffect(() => {
     let cancelled = false
+
+    const fontVar = typeof window !== 'undefined'
+      ? (getComputedStyle(document.documentElement).getPropertyValue('--font-inter') || 'Inter')
+      : 'Inter'
+    const fontName = fontVar.trim()
 
     // The square stage may not have a measured width on first paint. Retry on
     // animation frames until it does, otherwise packing bails forever, `placed`
@@ -108,155 +133,185 @@ export function What() {
       if (!sq) { requestAnimationFrame(start); return }
       const S = sq.getBoundingClientRect().width
       if (!S) { requestAnimationFrame(start); return }
-      pack(sq, S)
+
+      if (typeof document !== 'undefined' && 'fonts' in document) {
+        document.fonts.ready.then(() => {
+          if (!cancelled) pack(sq, S)
+        })
+      } else {
+        pack(sq, S)
+      }
     }
 
     const pack = (sq: HTMLDivElement, S: number) => {
-      const img = new Image()
-      img.src = FAVICON_SRC
-      img.onload = () => {
-      if (cancelled) return
-
-      const G    = 164               // occupancy grid resolution (finer = crisper edges/tail)
-      const cell = S / G
-      const basePx = S * 0.068
-
-      // 1) rasterize favicon -> luminance, crop to the elephant's bbox, map
-      //    that (square-aspect) region into a GxG inside-mask.
-      const R = 240
-      const oc = document.createElement('canvas')
-      oc.width = R; oc.height = R
-      const octx = oc.getContext('2d')!
-      octx.drawImage(img, 0, 0, R, R)
-      const px = octx.getImageData(0, 0, R, R).data
-      const darkAt = (x: number, y: number) => {
-        if (x < 0 || y < 0 || x >= R || y >= R) return false
-        const i = (y * R + x) * 4
-        if (px[i + 3] < 40) return false                    // transparent
-        return px[i] * 0.299 + px[i + 1] * 0.587 + px[i + 2] * 0.114 < 110  // dark ink
+      const img = preloadedImage || new Image()
+      if (!preloadedImage) {
+        img.src = FAVICON_SRC
       }
-      // bounding box of the ink
-      let bx0 = R, by0 = R, bx1 = 0, by1 = 0
-      for (let y = 0; y < R; y++)
-        for (let x = 0; x < R; x++)
-          if (darkAt(x, y)) {
-            if (x < bx0) bx0 = x; if (x > bx1) bx1 = x
-            if (y < by0) by0 = y; if (y > by1) by1 = y
-          }
-      const bs = Math.max(bx1 - bx0, by1 - by0) * 1.04       // square, tiny margin
-      const ox = (bx0 + bx1) / 2 - bs / 2
-      const oy = (by0 + by1) / 2 - bs / 2
 
-      const insideArr = new Uint8Array(G * G)
-      const rowMin = new Int16Array(G).fill(-1)
-      const rowMax = new Int16Array(G).fill(-1)
-      for (let gy = 0; gy < G; gy++) {
-        for (let gx = 0; gx < G; gx++) {
-          const sx = Math.round(ox + (gx / (G - 1)) * bs)
-          const sy = Math.round(oy + (gy / (G - 1)) * bs)
-          if (darkAt(sx, sy)) {
-            insideArr[gy * G + gx] = 1
-            if (rowMin[gy] < 0) rowMin[gy] = gx
-            rowMax[gy] = gx
+      const runPack = () => {
+        if (cancelled) return
+
+        const G    = 164               // occupancy grid resolution (finer = crisper edges/tail)
+        const cell = S / G
+        const basePx = S * 0.068
+
+        // 1) rasterize favicon -> luminance, crop to the elephant's bbox, map
+        //    that (square-aspect) region into a GxG inside-mask.
+        const R = 240
+        const oc = document.createElement('canvas')
+        oc.width = R; oc.height = R
+        const octx = oc.getContext('2d')!
+        octx.drawImage(img, 0, 0, R, R)
+        const px = octx.getImageData(0, 0, R, R).data
+        const darkAt = (x: number, y: number) => {
+          if (x < 0 || y < 0 || x >= R || y >= R) return false
+          const i = (y * R + x) * 4
+          if (px[i + 3] < 40) return false                    // transparent
+          return px[i] * 0.299 + px[i + 1] * 0.587 + px[i + 2] * 0.114 < 110  // dark ink
+        }
+        // bounding box of the ink
+        let bx0 = R, by0 = R, bx1 = 0, by1 = 0
+        for (let y = 0; y < R; y++)
+          for (let x = 0; x < R; x++)
+            if (darkAt(x, y)) {
+              if (x < bx0) bx0 = x; if (x > bx1) bx1 = x
+              if (y < by0) by0 = y; if (y > by1) by1 = y
+            }
+        const bs = Math.max(bx1 - bx0, by1 - by0) * 1.04       // square, tiny margin
+        const ox = (bx0 + bx1) / 2 - bs / 2
+        const oy = (by0 + by1) / 2 - bs / 2
+
+        const insideArr = new Uint8Array(G * G)
+        const rowMin = new Int16Array(G).fill(-1)
+        const rowMax = new Int16Array(G).fill(-1)
+        for (let gy = 0; gy < G; gy++) {
+          for (let gx = 0; gx < G; gx++) {
+            const sx = Math.round(ox + (gx / (G - 1)) * bs)
+            const sy = Math.round(oy + (gy / (G - 1)) * bs)
+            if (darkAt(sx, sy)) {
+              insideArr[gy * G + gx] = 1
+              if (rowMin[gy] < 0) rowMin[gy] = gx
+              rowMax[gy] = gx
+            }
           }
         }
-      }
-      const inside = (gx: number, gy: number) =>
-        gx >= 0 && gy >= 0 && gx < G && gy < G && insideArr[gy * G + gx] === 1
-      const occupied = new Uint8Array(G * G)
+        const inside = (gx: number, gy: number) =>
+          gx >= 0 && gy >= 0 && gx < G && gy < G && insideArr[gy * G + gx] === 1
+        const occupied = new Uint8Array(G * G)
 
-      // 2) measurement probe
-      const probe = document.createElement('span')
-      probe.style.cssText = [
-        'position:absolute', 'visibility:hidden', 'white-space:nowrap',
-        'font-family:var(--font-inter),sans-serif', 'letter-spacing:0.01em',
-        'text-transform:uppercase', 'left:-9999px', 'top:0', 'line-height:1',
-      ].join(';')
-      document.body.appendChild(probe)
-      const measure = (text: string, fs: number, w: number) => {
-        probe.style.fontSize = `${fs}px`
-        probe.style.fontWeight = String(w)
-        probe.textContent = text
-        const r = probe.getBoundingClientRect()
-        return { w: r.width, h: r.height }
-      }
+        // 2) in-memory canvas measurement (performance optimization, no DOM thrashing)
+        const mCanvas = document.createElement('canvas')
+        const mCtx = mCanvas.getContext('2d')!
+        const measure = (text: string, fs: number, w: number) => {
+          mCtx.font = `${w} ${fs}px ${fontName}, sans-serif`
+          const metrics = mCtx.measureText(text.toUpperCase())
+          return { w: metrics.width, h: fs }
+        }
 
-      // 3) word list with preferred vertical band; large first
-      const N = SOURCE.length
-      const items = SOURCE.map(([text, tier], i) => {
-        const t = TIER[tier]
-        return { text, fs: basePx * t.size, op: t.op, weight: t.weight, py: i / (N - 1) }
-      })
-      for (let pass = 0; pass < 6; pass++) {
-        FILLER.forEach((text, i) => {
-          // later passes are smaller and biased to the lower body / trunk / tail,
-          // so the narrow bottom of the silhouette packs precisely.
-          const lower = pass >= 3
-          const tier: Tier = lower ? 'xs' : ((i + pass) % 3 === 0 ? 's' : 'xs')
+        // 3) word list with preferred vertical band; large first
+        const N = SOURCE.length
+        const items = SOURCE.map(([text, tier], i) => {
           const t = TIER[tier]
-          const py = lower ? 0.58 + Math.random() * 0.42 : Math.random()
-          items.push({ text, fs: basePx * t.size, op: t.op, weight: t.weight, py })
+          return { text, fs: basePx * t.size, op: t.op, weight: t.weight, py: i / (N - 1) }
         })
-      }
-      const order = items.map((_it, i) => i).sort((a, b) => items[b].fs - items[a].fs)
-
-      // 4) greedy placement: word box must fit fully inside the mask; centre it
-      //    on the shape's per-row middle so words hug the silhouette.
-      const rectFree = (gx: number, gy: number, cw: number, ch: number) => {
-        for (let yy = gy; yy < gy + ch; yy++)
-          for (let xx = gx; xx < gx + cw; xx++) {
-            if (!inside(xx, yy)) return false
-            if (occupied[yy * G + xx]) return false
-          }
-        return true
-      }
-      const mark = (gx: number, gy: number, cw: number, ch: number) => {
-        for (let yy = gy; yy < gy + ch; yy++)
-          for (let xx = gx; xx < gx + cw; xx++) occupied[yy * G + xx] = 1
-      }
-
-      const result: Placed[] = []
-      for (const idx of order) {
-        const it = items[idx]
-        const { w, h } = measure(it.text, it.fs, it.weight)
-        const cw = Math.ceil(w / cell) + 1
-        const ch = Math.ceil(h / cell)
-        if (cw >= G || ch >= G) continue
-
-        const prefGy = Math.round(it.py * (G - 1))
-        let best: { gx: number; gy: number } | null = null
-
-        for (let d = 0; d <= G && !best; d++) {
-          for (const sign of d === 0 ? [0] : [1, -1]) {
-            const gy = prefGy + sign * d
-            if (gy < 0 || gy + ch > G) continue
-            // centre of the shape across the rows this word would occupy
-            let lo = G, hi = -1
-            for (let yy = gy; yy < gy + ch; yy++) {
-              if (rowMin[yy] >= 0 && rowMin[yy] < lo) lo = rowMin[yy]
-              if (rowMax[yy] > hi) hi = rowMax[yy]
-            }
-            if (hi < 0) continue
-            const prefCx = (lo + hi) / 2
-            let bestGx = -1, bestDist = Infinity
-            for (let gx = 0; gx + cw <= G; gx++) {
-              if (!rectFree(gx, gy, cw, ch)) continue
-              const dist = Math.abs(gx + cw / 2 - prefCx)
-              if (dist < bestDist) { bestDist = dist; bestGx = gx }
-            }
-            if (bestGx >= 0) { best = { gx: bestGx, gy }; break }
-          }
+        for (let pass = 0; pass < 6; pass++) {
+          FILLER.forEach((text, i) => {
+            // later passes are smaller and biased to the lower body / trunk / tail,
+            // so the narrow bottom of the silhouette packs precisely.
+            const lower = pass >= 3
+            const tier: Tier = lower ? 'xs' : ((i + pass) % 3 === 0 ? 's' : 'xs')
+            const t = TIER[tier]
+            const py = lower ? 0.58 + Math.random() * 0.42 : Math.random()
+            items.push({ text, fs: basePx * t.size, op: t.op, weight: t.weight, py })
+          })
         }
-        if (!best) continue
-        mark(best.gx, best.gy, cw, ch)
-        result.push({
-          text: it.text, x: best.gx * cell, y: best.gy * cell,
-          fontSize: it.fs, op: it.op, weight: it.weight,
+        const order = items.map((_it, i) => i).sort((a, b) => items[b].fs - items[a].fs)
+
+        // 4) greedy placement: word box must fit fully inside the mask; centre it
+        //    on the shape's per-row middle so words hug the silhouette.
+        const rectFree = (gx: number, gy: number, cw: number, ch: number) => {
+          for (let yy = gy; yy < gy + ch; yy++)
+            for (let xx = gx; xx < gx + cw; xx++) {
+              if (!inside(xx, yy)) return false
+              if (occupied[yy * G + xx]) return false
+            }
+          return true
+        }
+        const mark = (gx: number, gy: number, cw: number, ch: number) => {
+          for (let yy = gy; yy < gy + ch; yy++)
+            for (let xx = gx; xx < gx + cw; xx++) occupied[yy * G + xx] = 1
+        }
+
+        const result: Placed[] = []
+        for (const idx of order) {
+          const it = items[idx]
+          const { w, h } = measure(it.text, it.fs, it.weight)
+          const cw = Math.ceil(w / cell) + 2
+          const ch = Math.ceil(h / cell) + 2
+          if (cw >= G || ch >= G) continue
+
+          const prefGy = Math.round(it.py * (G - 1))
+          let best: { gx: number; gy: number } | null = null
+
+          for (let d = 0; d <= G && !best; d++) {
+            for (const sign of d === 0 ? [0] : [1, -1]) {
+              const gy = prefGy + sign * d
+              if (gy < 0 || gy + ch > G) continue
+              // centre of the shape across the rows this word would occupy
+              let lo = G, hi = -1
+              for (let yy = gy; yy < gy + ch; yy++) {
+                if (rowMin[yy] >= 0 && rowMin[yy] < lo) lo = rowMin[yy]
+                if (rowMax[yy] > hi) hi = rowMax[yy]
+              }
+              if (hi < 0) continue
+              const prefCx = (lo + hi) / 2
+              let bestGx = -1, bestDist = Infinity
+              for (let gx = 0; gx + cw <= G; gx++) {
+                if (!rectFree(gx, gy, cw, ch)) continue
+                const dist = Math.abs(gx + cw / 2 - prefCx)
+                if (dist < bestDist) { bestDist = dist; bestGx = gx }
+              }
+              if (bestGx >= 0) { best = { gx: bestGx, gy }; break }
+            }
+          }
+          if (!best) continue
+          mark(best.gx, best.gy, cw, ch)
+          result.push({
+            text: it.text,
+            x: (best.gx * cell) / S,
+            y: (best.gy * cell) / S,
+            fontSize: it.fs / S,
+            op: it.op,
+            weight: it.weight,
+          })
+        }
+
+        const scaleVal = R / bs
+        const wPct = scaleVal * 100
+        const xPct = -(ox / bs) * 100
+        const yPct = -(oy / bs) * 100
+
+        setLogoStyle({
+          position: 'absolute',
+          left: `${xPct}%`,
+          top: `${yPct}%`,
+          width: `${wPct}%`,
+          height: `${wPct}%`,
+          objectFit: 'fill',
+          filter: 'invert(1) brightness(0.82)',
+          pointerEvents: 'none',
+          maxWidth: 'none',
+          maxHeight: 'none',
         })
+
+        setPlaced(result)
       }
 
-      document.body.removeChild(probe)
-      setPlaced(result)
+      if (img.complete) {
+        runPack()
+      } else {
+        img.onload = runPack
       }
     }
 
@@ -334,20 +389,17 @@ export function What() {
         scrollTrigger: {
           trigger: megaRef.current, pin: true, anticipatePin: 1,
           refreshPriority: 2,
-          start: 'top top', end: () => '+=' + 5900 * pinFactor(), scrub: 0.7,
+          start: 'top top', end: () => '+=' + 2200 * pinFactor(), scrub: 0.7,
         },
       })
 
       // ── Reconstruction begins immediately after "UNOTUSK changes that" ──
-      // No wide-scatter hold: the words come straight in and build the shape,
-      // chapter by chapter — trunk → body → head + ear — with a beat between
-      // each so the growing silhouette is recognised before the next joins.
-      mega.to(vapourRef.current, { opacity: 1, ease: 'none', duration: 0.5 }, 0.0)
+      mega.to(vapourRef.current, { opacity: 1, ease: 'none', duration: 0.4 }, 0.0)
 
       const STAGE = [
-        { start: 0.5,  span: 1.4 },   // trunk — the first hint
-        { start: 2.4,  span: 1.8 },   // body
-        { start: 4.6,  span: 2.2 },   // head + ear — recognition completes
+        { start: 0.3,  span: 0.8 },   // trunk — the first hint
+        { start: 1.4,  span: 1.0 },   // body
+        { start: 2.7,  span: 1.2 },   // head + ear — recognition completes
       ]
       words.forEach((el, i) => {
         const st  = STAGE[stageOf[i]]
@@ -355,40 +407,42 @@ export function What() {
         const at  = st.start + (stageRank[i] / cnt) * st.span
         mega.to(el, {
           opacity: placed[i].op, x: 0, y: 0, rotate: 0, scale: 1,
-          ease: 'power2.out', duration: 1.0,
+          ease: 'power2.out', duration: 0.6,
         }, at)
       })
-      // HOLD after trunk
-      mega.to({}, { duration: 0.6 }, 1.9)
-      // HOLD after body
-      mega.to({}, { duration: 0.7 }, 4.2)
 
-      // ── HOLD: completed typography favicon — the climax ───────────
-      mega.to({}, { duration: 1.4 }, 6.8)
+      // brief holds
+      mega.to({}, { duration: 0.3 }, 1.2)
+      mega.to({}, { duration: 0.3 }, 2.5)
 
-      // ── Letters dissolve into clean strokes → final clean favicon ──
-      mega.to(words, { opacity: 0, ease: 'power2.in', duration: 1.4 }, 9.0)
-      mega.to(faviconImgRef.current, { opacity: 0.82, ease: 'power1.out', duration: 1.4 }, 9.4)
+      // completed typography favicon hold
+      mega.to({}, { duration: 0.6 }, 4.0)
 
-      // ── HOLD: clean favicon — UNOTUSK's mark ──────────────────────
-      mega.to({}, { duration: 0.9 }, 11.2)
+      // Letters dissolve into clean favicon
+      mega.to(words, { opacity: 0, ease: 'power2.in', duration: 0.8 }, 4.8)
+      mega.to(faviconImgRef.current, { opacity: 0.82, ease: 'power1.out', duration: 0.8 }, 5.0)
 
-      // ── Favicon fades away, clearing the stage for the statement ──
-      // (so the text never overlaps the icon — it lands on a clean field)
-      mega.to(faviconImgRef.current, { opacity: 0, ease: 'power2.in', duration: 0.9 }, 12.5)
+      // HOLD: clean favicon
+      mega.to({}, { duration: 0.5 }, 5.9)
 
-      // ── Reveal: the solution (on a clean background) ──────────────
-      mega.to(ps1.current, { clipPath: V, ease: 'none', duration: 1.0 }, 13.8)
-      mega.to(ps2.current, { clipPath: V, ease: 'none', duration: 1.0 }, 14.8)
-      mega.to(ps3.current, { clipPath: V, ease: 'none', duration: 1.0 }, 15.8)
-      // HOLD — the solution lands
-      mega.to({}, { duration: 1.6 }, 17.0)
+      // Favicon fades away, and simultaneously, the solution begins to reveal!
+      // This completely avoids any black blank screen transition gap!
+      mega.to(faviconImgRef.current, { opacity: 0, ease: 'power2.in', duration: 0.6 }, 6.5)
 
-      // ── Reveal: closing line ──────────────────────────────────────
-      mega.to(psClose1.current, { clipPath: V, ease: 'none', duration: 1.0 }, 18.8)
-      mega.to(psClose2.current, { clipPath: V, ease: 'none', duration: 1.0 }, 19.9)
-      // ── FINAL HOLD before the invitation ──────────────────────────
-      mega.to({}, { duration: 1.6 }, 21.1)
+      // Start revealing solution lines immediately at 6.8
+      mega.to(ps1.current, { clipPath: V, ease: 'none', duration: 0.6 }, 6.8)
+      mega.to(ps2.current, { clipPath: V, ease: 'none', duration: 0.6 }, 7.4)
+      mega.to(ps3.current, { clipPath: V, ease: 'none', duration: 0.6 }, 8.0)
+      
+      // hold for solution
+      mega.to({}, { duration: 0.8 }, 8.7)
+
+      // Reveal closing line
+      mega.to(psClose1.current, { clipPath: V, ease: 'none', duration: 0.6 }, 9.6)
+      mega.to(psClose2.current, { clipPath: V, ease: 'none', duration: 0.6 }, 10.2)
+      
+      // FINAL HOLD before invitation
+      mega.to({}, { duration: 0.8 }, 10.9)
     }, containerRef)
 
     // This pinned trigger is created LATE (after async favicon load + packing).
@@ -396,9 +450,25 @@ export function What() {
     // start/end BEFORE this section's ~13000px pin-spacer existed, so the CTA's
     // pin range ends up nested inside this one. A refresh recomputes every
     // trigger's scroll math against the final layout, pushing the CTA below.
-    const raf = requestAnimationFrame(() => ScrollTrigger.refresh())
+    // Ensure all triggers are refreshed after a slight delay to allow full DOM render and spacing stability
+    // Ensure all triggers are refreshed after a slight delay to allow full DOM render and spacing stability.
+    // We run a double-refresh timer and dispatch a window resize event to force Lenis smooth scroll
+    // to recalculate its cached scroll heights and prevent scrolling limits from locking.
+    const timer1 = setTimeout(() => {
+      ScrollTrigger.refresh()
+      window.dispatchEvent(new Event('resize'))
+    }, 150)
 
-    return () => { cancelAnimationFrame(raf); ctx.revert() }
+    const timer2 = setTimeout(() => {
+      ScrollTrigger.refresh()
+      window.dispatchEvent(new Event('resize'))
+    }, 450)
+
+    return () => {
+      clearTimeout(timer1)
+      clearTimeout(timer2)
+      ctx.revert()
+    }
   }, [placed])
 
   const serif: React.CSSProperties = { fontFamily: "var(--font-young-serif), 'Young Serif', Georgia, serif" }
@@ -429,9 +499,9 @@ export function What() {
           ref={sqRef}
           aria-hidden="true"
           style={{
-            position: 'absolute', left: '50%', top: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 'min(82vh, 88vw)', height: 'min(82vh, 88vw)',
+            position: 'absolute', left: '50%', top: 'calc(50% + 32px)',
+            transform: 'translate(-50%, -50%) scale(clamp(0.5, calc(80vw / 480px), 1.0))',
+            width: STAGE_SIZE, height: STAGE_SIZE,
             pointerEvents: 'none',
           }}
         >
@@ -441,9 +511,10 @@ export function What() {
               ref={el => { wordRefs.current[i] = el }}
               style={{
                 position: 'absolute',
-                left: `${p.x}px`, top: `${p.y}px`,
+                left: `${p.x * 100}%`,
+                top: `${p.y * 100}%`,
                 ...mono,
-                fontSize: `${p.fontSize}px`,
+                fontSize: `calc(${p.fontSize} * ${STAGE_SIZE})`,
                 fontWeight: p.weight,
                 opacity: p.op,
                 color: '#CBC1B5',
@@ -457,23 +528,15 @@ export function What() {
             </span>
           ))}
           {/* Clean favicon — appears after the word cloud dissolves */}
-          <img
-            ref={faviconImgRef}
-            src={FAVICON_SRC}
-            alt=""
-            aria-hidden="true"
-            style={{
-              position: 'absolute',
-              left: '50%',
-              top: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '70%',
-              height: '70%',
-              objectFit: 'contain',
-              filter: 'invert(1) brightness(0.82)',
-              pointerEvents: 'none',
-            }}
-          />
+          <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+            <img
+              ref={faviconImgRef}
+              src={FAVICON_SRC}
+              alt=""
+              aria-hidden="true"
+              style={logoStyle}
+            />
+          </div>
         </div>
 
         {/* Product statement */}

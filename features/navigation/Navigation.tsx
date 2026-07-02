@@ -5,7 +5,11 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { SITE } from '@/lib/constants'
 
-export function Navigation() {
+interface NavigationProps {
+  onOpenModal: () => void
+}
+
+export function Navigation({ onOpenModal }: NavigationProps) {
   const [scrolled, setScrolled] = useState(false)
   // The CTA is the conclusion of the story — it must not appear until the
   // visitor has travelled through the entire solution. Reveal it only once
@@ -15,9 +19,7 @@ export function Navigation() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 32)
-      const doc = document.documentElement
-      const max = doc.scrollHeight - window.innerHeight
-      setShowCTA(max > 0 && window.scrollY / max > 0.9)
+      setShowCTA(window.scrollY > 400)
     }
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -38,8 +40,18 @@ export function Navigation() {
         backdropFilter: scrolled ? 'blur(12px)' : 'none',
       }}
     >
+      <style>{`
+        @media (max-width: 439px) {
+          .nav-box {
+            flex-direction: column !important;
+            gap: 0.15rem !important;
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
+          }
+        }
+      `}</style>
       <nav
-        className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-12 lg:px-16"
+        className="nav-box mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-12 lg:px-16 transition-all duration-300 ease-in-out"
         aria-label="Main navigation"
       >
         {/* Logo */}
@@ -59,15 +71,15 @@ export function Navigation() {
         </Link>
 
         {/* CTA — only after the solution story has finished */}
-        <Link
-          href="#early-access"
+        <button
+          onClick={onOpenModal}
           aria-hidden={!showCTA}
           tabIndex={showCTA ? undefined : -1}
           className={[
-            'group flex min-h-[44px] items-center gap-1.5',
-            'font-mono text-[11px] uppercase tracking-[0.18em]',
-            'text-[#CBC1B5]/40 transition-all duration-500 hover:text-[#A07C4A]',
-            showCTA ? 'opacity-100' : 'pointer-events-none opacity-0',
+            'group flex items-center gap-1.5 justify-center cursor-pointer bg-transparent border-0 p-0 outline-none',
+            'font-sans text-[clamp(10px,0.85vw,12px)] uppercase tracking-[0.12em]',
+            'text-[#CBC1B5]/80 transition-all duration-500 hover:text-[#A07C4A]',
+            showCTA ? 'opacity-100 min-h-[44px] max-h-12 mt-1 pointer-events-auto' : 'pointer-events-none opacity-0 min-h-0 max-h-0 overflow-hidden',
           ].join(' ')}
         >
           <span>Join Lighthouse</span>
@@ -77,7 +89,7 @@ export function Navigation() {
           >
             →
           </span>
-        </Link>
+        </button>
       </nav>
     </header>
   )

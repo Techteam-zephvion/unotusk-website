@@ -6,7 +6,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-export function CTA() {
+interface CTAProps {
+  onOpenModal: () => void
+}
+
+export function CTA({ onOpenModal }: CTAProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const headRef      = useRef<HTMLDivElement>(null)
   const bodyRef      = useRef<HTMLDivElement>(null)
@@ -39,15 +43,15 @@ export function CTA() {
           anticipatePin: 1,
           refreshPriority: 1,
           start: 'top top',
-          end: () => '+=' + 1220 * pinFactor(),
+          end: () => '+=' + 500 * pinFactor(),
           scrub: 1.2,
         },
       })
-        .fromTo(headRef.current,    { clipPath: H }, { clipPath: V, ease: 'none', duration: 1.4 }, 0.0)
-        .fromTo(bodyRef.current,    { opacity: 0 },  { opacity: 1, ease: 'none', duration: 0.9 }, 1.6)
-        .fromTo(promiseRef.current, { opacity: 0 },  { opacity: 1, ease: 'none', duration: 0.7 }, 2.6)
-        .fromTo(btnRef.current,     { opacity: 0 },  { opacity: 1, ease: 'none', duration: 0.7 }, 3.4)
-        .to({}, { duration: 1.2 }, 4.3)
+        .fromTo(headRef.current,    { clipPath: H }, { clipPath: V, ease: 'none', duration: 0.8 }, 0.1)
+        .fromTo(bodyRef.current,    { opacity: 0 },  { opacity: 1, ease: 'none', duration: 0.5 }, 0.9)
+        .fromTo(promiseRef.current, { opacity: 0 },  { opacity: 1, ease: 'none', duration: 0.4 }, 1.4)
+        .fromTo(btnRef.current,     { opacity: 0 },  { opacity: 1, ease: 'none', duration: 0.4 }, 1.8)
+        .to({}, { duration: 0.5 }, 2.2)
 
     }, containerRef)
 
@@ -114,8 +118,8 @@ export function CTA() {
         </div>
 
         <div ref={btnRef} style={{ opacity: 0 }}>
-          <a
-            href="mailto:hello@unotusk.com"
+          <button
+            onClick={onOpenModal}
             style={{
               ...mono,
               fontSize: '0.70rem',
@@ -128,20 +132,26 @@ export function CTA() {
               gap: '0.5rem',
               minHeight: '44px',
               paddingBottom: '0.35rem',
+              background: 'transparent',
+              borderTop: 0,
+              borderLeft: 0,
+              borderRight: 0,
               borderBottom: '1px solid rgba(160,124,74,0.30)',
+              outline: 'none',
+              cursor: 'pointer',
               transition: 'border-color 0.3s, opacity 0.3s',
             }}
             onMouseEnter={e => {
-              (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(160,124,74,0.70)'
-              ;(e.currentTarget as HTMLAnchorElement).style.opacity = '0.80'
+              (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(160,124,74,0.70)'
+              ;(e.currentTarget as HTMLButtonElement).style.opacity = '0.80'
             }}
             onMouseLeave={e => {
-              (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(160,124,74,0.30)'
-              ;(e.currentTarget as HTMLAnchorElement).style.opacity = '1'
+              (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(160,124,74,0.30)'
+              ;(e.currentTarget as HTMLButtonElement).style.opacity = '1'
             }}
           >
             Request Early Access →
-          </a>
+          </button>
         </div>
 
       </div>

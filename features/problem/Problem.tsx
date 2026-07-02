@@ -86,28 +86,17 @@ export function Problem() {
           anticipatePin: 1,
           refreshPriority: 6,
           start: 'top top',
-          end:   () => '+=' + 1800 * pinFactor(),
+          end:   () => '+=' + 600 * pinFactor(),
           scrub: 1.2,
         },
       })
-        .fromTo(mask1Ref.current, { xPercent: 0 }, { xPercent: 110, ease: 'power2.out', duration: 1.1 }, 0.3)
-        .to({}, { duration: 0.5 }, 1.4)
-        .fromTo(mask2Ref.current, { xPercent: 0 }, { xPercent: 110, ease: 'power2.out', duration: 1.1 }, 1.9)
-        .to({}, { duration: 1.2 }, 3.0)
-        .fromTo([tL1.current, tL2.current], { opacity: 1 }, { opacity: 0.10, ease: 'power1.in', duration: 1.0 }, 4.2)
-        .to({}, { duration: 0.6 }, 5.4)
+        .fromTo(mask1Ref.current, { xPercent: 0 }, { xPercent: 110, ease: 'power2.out', duration: 0.8 }, 0.2)
+        .to({}, { duration: 0.3 }, 1.0)
+        .fromTo(mask2Ref.current, { xPercent: 0 }, { xPercent: 110, ease: 'power2.out', duration: 0.8 }, 1.3)
+        .to({}, { duration: 0.8 }, 2.1)
+        .fromTo([tL1.current, tL2.current], { opacity: 1 }, { opacity: 0.15, ease: 'power1.in', duration: 0.6 }, 2.9)
 
       // ── Chapter 2 — Statistics ───────────────────────────────────
-      //
-      //  0–1.5:    arrival silence
-      //  1.5–3.5:  95% blooms
-      //  3.5–5.2:  description + source appear
-      //  5.2–11.0: HOLD — visitor reads, absorbs the weight of 95%
-      //  11.0–12.0: morph 95% → 0%
-      //  12.0–13.0: 0% + second stat appears
-      //  13.0–18.5: HOLD — visitor reads, absorbs the weight of 0%
-      //  18.5–19.9: fade to silence
-      // ─────────────────────────────────────────────────────────────
       gsap.timeline({
         scrollTrigger: {
           trigger: statsRef.current,
@@ -115,29 +104,24 @@ export function Problem() {
           anticipatePin: 1,
           refreshPriority: 5,
           start: 'top top',
-          end:   () => '+=' + 2850 * pinFactor(),
+          end:   () => '+=' + 1000 * pinFactor(),
           scrub: 1.2,
         },
       })
-        .fromTo(s1Num.current,  { clipPath: HC }, { clipPath: V, ease: 'power2.out', duration: 1.4 }, 1.0)
-        .fromTo(s1Desc.current, { opacity: 0 },   { opacity: 1, ease: 'none', duration: 0.8 }, 2.2)
-        .fromTo(s1Src.current,  { opacity: 0 },   { opacity: 1, ease: 'none', duration: 0.6 }, 3.0)
-        // ── HOLD: visitor reads 95% ──────────────────────────────
-        .fromTo(s1Num.current,  { clipPath: V },   { clipPath: HC, ease: 'power3.in',  duration: 0.8 }, 6.0)
-        .fromTo(s2Num.current,  { clipPath: HC },  { clipPath: V,  ease: 'power3.out', duration: 0.8 }, 6.4)
-        .fromTo(s1Desc.current, { opacity: 1 },    { opacity: 0,  ease: 'none', duration: 0.6 }, 6.0)
-        .fromTo(s2Desc.current, { opacity: 0 },    { opacity: 1,  ease: 'none', duration: 0.6 }, 6.8)
-        .fromTo(s1Src.current,  { opacity: 1 },    { opacity: 0,  ease: 'none', duration: 0.4 }, 6.0)
-        .fromTo(s2Src.current,  { opacity: 0 },    { opacity: 1,  ease: 'none', duration: 0.4 }, 6.8)
-        // ── HOLD: visitor reads 0% ───────────────────────────────
-        .to([s2Num.current, s2Desc.current, s2Src.current],
-          { opacity: 0, ease: 'none', duration: 0.8, stagger: 0.15 }, 9.5)
+        .fromTo(s1Num.current,  { clipPath: HC }, { clipPath: V, ease: 'power2.out', duration: 0.8 }, 0.4)
+        .fromTo(s1Desc.current, { opacity: 0 },   { opacity: 1, ease: 'none', duration: 0.5 }, 1.0)
+        .fromTo(s1Src.current,  { opacity: 0 },   { opacity: 1, ease: 'none', duration: 0.4 }, 1.3)
+        // Short HOLD: visitor reads 95%
+        .fromTo(s1Num.current,  { clipPath: V },   { clipPath: HC, ease: 'power3.in',  duration: 0.6 }, 2.8)
+        .fromTo(s2Num.current,  { clipPath: HC },  { clipPath: V,  ease: 'power3.out', duration: 0.6 }, 3.1)
+        .fromTo(s1Desc.current, { opacity: 1 },    { opacity: 0,  ease: 'none', duration: 0.4 }, 2.8)
+        .fromTo(s2Desc.current, { opacity: 0 },    { opacity: 1,  ease: 'none', duration: 0.4 }, 3.3)
+        .fromTo(s1Src.current,  { opacity: 1 },    { opacity: 0,  ease: 'none', duration: 0.3 }, 2.8)
+        .fromTo(s2Src.current,  { opacity: 0 },    { opacity: 1,  ease: 'none', duration: 0.3 }, 3.3)
+        // Short HOLD: visitor reads 0%, then it stays visible and scrolls away naturally
+        .to({}, { duration: 1.2 }, 3.7)
 
       // ── Chapter 3 — Punch ────────────────────────────────────────
-      //
-      //  0–6:    three lines reveal, one by one
-      //  6–16:   HOLD — emotional peak, visitor absorbs fully
-      // ─────────────────────────────────────────────────────────────
       gsap.timeline({
         scrollTrigger: {
           trigger: punchRef.current,
@@ -145,27 +129,17 @@ export function Problem() {
           anticipatePin: 1,
           refreshPriority: 4,
           start: 'top top',
-          end:   () => '+=' + 2640 * pinFactor(),
+          end:   () => '+=' + 800 * pinFactor(),
           scrub: 1.2,
         },
       })
-        .fromTo(pL1.current, { clipPath: H }, { clipPath: V, duration: 1.4 }, 0.0)
-        .fromTo(pL2.current, { clipPath: H }, { clipPath: V, duration: 1.4 }, 1.4)
-        .fromTo(pL3.current, { clipPath: H }, { clipPath: V, duration: 1.4 }, 2.8)
-        // ── HOLD: the cost of forgetting lands here ───────────────
-        .to({}, { duration: 4.0 }, 4.7)
+        .fromTo(pL1.current, { clipPath: H }, { clipPath: V, duration: 0.8 }, 0.2)
+        .fromTo(pL2.current, { clipPath: H }, { clipPath: V, duration: 0.8 }, 0.9)
+        .fromTo(pL3.current, { clipPath: H }, { clipPath: V, duration: 0.8 }, 1.6)
+        // Short hold, then it ends and scrolls away
+        .to({}, { duration: 1.0 }, 2.4)
 
       // ── Chapter 4 — Bridge ───────────────────────────────────────
-      //
-      // The turning point of the story.
-      // A quiet sentence. Maximum weight.
-      //
-      //  0.0 – 1.0    Arrival silence
-      //  1.0 – 2.5    Mask slides — sentence uncovered
-      //  2.5 – 9.5    HOLD — visitor feels the pivot from problem to solution
-      //  9.5 – 11.5   Sentence dissolves — absorbed into the void
-      //  11.5 – 19.5  Darkness — intentional breath before reconstruction
-      // ─────────────────────────────────────────────────────────────
       gsap.timeline({
         scrollTrigger: {
           trigger:      bridgeRef.current,
@@ -173,20 +147,19 @@ export function Problem() {
           anticipatePin: 1,
           refreshPriority: 3,
           start: 'top top',
-          end:   () => '+=' + 3000 * pinFactor(),
+          end:   () => '+=' + 800 * pinFactor(),
           scrub: 1.2,
         },
       })
-        .to({}, { duration: 0.5 }, 0.0)
-        .fromTo(bridgeMask.current, { xPercent: 0 }, { xPercent: 110, ease: 'power2.out', duration: 1.1 }, 0.5)
-        // ── HOLD: the turning point ───────────────────────────────
-        .to({}, { duration: 3.0 }, 1.6)
+        .to({}, { duration: 0.3 }, 0.0)
+        .fromTo(bridgeMask.current, { xPercent: 0 }, { xPercent: 110, ease: 'power2.out', duration: 0.8 }, 0.3)
+        // HOLD: visitor reads the pivot
+        .to({}, { duration: 1.2 }, 1.1)
+        // Fade out at the end of the pin, and transition directly
         .fromTo(bridgeT.current,
           { opacity: 1, filter: 'blur(0px)' },
-          { opacity: 0, filter: 'blur(4px)', ease: 'power2.in', duration: 1.4 },
-          4.6)
-        // ── Darkness: breath before the solution begins ───────────
-        .to({}, { duration: 3.0 }, 6.0)
+          { opacity: 0, filter: 'blur(4px)', ease: 'power2.in', duration: 0.8 },
+          2.3)
 
     }, containerRef)
 
@@ -219,19 +192,19 @@ export function Problem() {
         style={{ padding: '0 7vw', background: '#0B1020' }}
       >
         <div>
-          <div style={{ position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'relative', overflow: 'hidden', paddingBottom: '0.1em' }}>
             <div
               ref={tL1}
-              style={{ ...serif, fontSize: 'clamp(2.4rem, 5.8vw, 6rem)', lineHeight: 1.02, letterSpacing: '-0.025em', color: '#CBC1B5' }}
+              style={{ ...serif, fontSize: 'clamp(2.4rem, 5.8vw, 6rem)', lineHeight: 1.1, letterSpacing: '-0.025em', color: '#CBC1B5' }}
             >
               The problem isn&rsquo;t AI capability.
             </div>
             <div ref={mask1Ref} aria-hidden="true" style={maskOverlay} />
           </div>
-          <div style={{ position: 'relative', overflow: 'hidden', marginTop: '0.1em' }}>
+          <div style={{ position: 'relative', overflow: 'hidden', marginTop: '0.1em', paddingBottom: '0.1em' }}>
             <div
               ref={tL2}
-              style={{ ...serif, fontSize: 'clamp(2.4rem, 5.8vw, 6rem)', lineHeight: 1.02, letterSpacing: '-0.025em', color: 'rgba(203,193,181,0.62)' }}
+              style={{ ...serif, fontSize: 'clamp(2.4rem, 5.8vw, 6rem)', lineHeight: 1.1, letterSpacing: '-0.025em', color: 'rgba(203,193,181,0.62)' }}
             >
               It&rsquo;s AI without project memory.
             </div>
@@ -248,10 +221,10 @@ export function Problem() {
         aria-live="polite"
       >
         <div style={{ position: 'relative', width: '100%', height: 'clamp(6rem, 16vw, 15rem)', marginBottom: '3.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div ref={s1Num} aria-label="95 percent" style={{ ...serif, position: 'absolute', clipPath: HC, fontSize: 'clamp(5.5rem, 15vw, 14rem)', lineHeight: 0.88, letterSpacing: '-0.045em', color: '#CBC1B5' }}>
+          <div ref={s1Num} aria-label="95 percent" style={{ ...serif, position: 'absolute', clipPath: HC, fontSize: 'clamp(5.5rem, 15vw, 14rem)', lineHeight: 1.05, letterSpacing: '-0.045em', color: '#CBC1B5' }}>
             95%
           </div>
-          <div ref={s2Num} aria-label="0 percent" style={{ ...serif, position: 'absolute', clipPath: HC, fontSize: 'clamp(5.5rem, 15vw, 14rem)', lineHeight: 0.88, letterSpacing: '-0.045em', color: '#CBC1B5' }}>
+          <div ref={s2Num} aria-label="0 percent" style={{ ...serif, position: 'absolute', clipPath: HC, fontSize: 'clamp(5.5rem, 15vw, 14rem)', lineHeight: 1.05, letterSpacing: '-0.045em', color: '#CBC1B5' }}>
             0%
           </div>
         </div>
@@ -292,14 +265,81 @@ export function Problem() {
         className="flex min-h-screen items-center justify-center px-6 text-center"
         style={{ background: '#0B1020' }}
       >
-        <div style={{ position: 'relative', overflow: 'hidden' }}>
-          <div
-            ref={bridgeT}
-            style={{ ...mono, fontSize: 'clamp(0.85rem, 1.6vw, 1.15rem)', letterSpacing: '0.03em', color: 'rgba(203,193,181,0.40)', filter: 'blur(0px)' }}
+        <style>{`
+          @keyframes sparkleTwinkle {
+            0%, 100% {
+              transform: scale(0) rotate(0deg);
+              opacity: 0;
+            }
+            50% {
+              transform: scale(1) rotate(90deg);
+              opacity: 0.95;
+            }
+          }
+          .sparkle-star {
+            position: absolute;
+            pointer-events: none;
+            animation: sparkleTwinkle 2.5s ease-in-out infinite;
+          }
+        `}</style>
+
+        <div className="relative inline-block px-12 py-6" ref={bridgeT}>
+          {/* Sparkles */}
+          <svg
+            className="sparkle-star top-0 left-6 text-[#A07C4A]"
+            style={{ animationDelay: '0.2s' }}
+            width="12"
+            height="12"
+            viewBox="0 0 21 21"
           >
-            UNOTUSK changes that.
+            <path d="M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z" fill="currentColor"/>
+          </svg>
+          <svg
+            className="sparkle-star bottom-2 right-6 text-[#C5A880]"
+            style={{ animationDelay: '1.1s' }}
+            width="14"
+            height="14"
+            viewBox="0 0 21 21"
+          >
+            <path d="M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z" fill="currentColor"/>
+          </svg>
+          <svg
+            className="sparkle-star top-2 right-20 text-[#A07C4A]"
+            style={{ animationDelay: '1.9s' }}
+            width="10"
+            height="10"
+            viewBox="0 0 21 21"
+          >
+            <path d="M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z" fill="currentColor"/>
+          </svg>
+
+          <div style={{ position: 'relative', overflow: 'hidden' }}>
+            <div className="flex items-center justify-center gap-4 flex-wrap">
+              <img
+                src="/logo.png"
+                alt="UNOTUSK"
+                className="brightness-0 invert"
+                style={{
+                  height: 'clamp(1.7rem, 3.4vw, 2.7rem)',
+                  width: 'auto',
+                  opacity: 0.9,
+                }}
+              />
+              <span
+                style={{
+                  ...mono,
+                  fontSize: 'clamp(1.4rem, 2.8vw, 2.2rem)',
+                  letterSpacing: '0.04em',
+                  color: 'rgba(203,193,181,0.85)',
+                  filter: 'blur(0px)',
+                  fontWeight: 300,
+                }}
+              >
+                changes that.
+              </span>
+            </div>
+            <div ref={bridgeMask} aria-hidden="true" style={maskOverlay} />
           </div>
-          <div ref={bridgeMask} aria-hidden="true" style={maskOverlay} />
         </div>
       </div>
 

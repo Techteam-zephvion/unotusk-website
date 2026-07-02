@@ -8,30 +8,30 @@ gsap.registerPlugin(ScrollTrigger)
 
 // ── Vocabulary — real project memory language ─────────────────
 const VOCAB: string[] = [
-  'PR-482',  'PR-103',  'PR-891',  'PR-227',  'PR-560',  'PR-318',  'PR-744',
+  'PR-482', 'PR-103', 'PR-891', 'PR-227', 'PR-560', 'PR-318', 'PR-744',
   'checkout.ts', 'auth-flow.ts', 'webhook.ts', 'retry.ts', 'payments.ts',
-  'session.ts',  'cache.ts',     'queue.ts',   'router.ts', 'middleware.ts',
-  'Slack',    'Jira',    'Notion',   'Linear',    'GitHub',    'Confluence',
-  'Decision', 'Rejected', 'Latency', 'Webhook',  'Risk',      'Owner',
-  'Incident', 'Timeout',  'Queue',   'Architecture', 'Migration', 'Bug',
-  'Constraint', 'Review', 'Merged',  'Rollback',  'Deprecated', 'Blocked',
-  'Escalated',  'Archived', 'Resolved', 'Postponed', 'Abandoned',
+  'session.ts', 'cache.ts', 'queue.ts', 'router.ts', 'middleware.ts',
+  'Slack', 'Jira', 'Notion', 'Linear', 'GitHub', 'Confluence',
+  'Decision', 'Rejected', 'Latency', 'Webhook', 'Risk', 'Owner',
+  'Incident', 'Timeout', 'Queue', 'Architecture', 'Migration', 'Bug',
+  'Constraint', 'Review', 'Merged', 'Rollback', 'Deprecated', 'Blocked',
+  'Escalated', 'Archived', 'Resolved', 'Postponed', 'Abandoned',
   'commit a9f83d', 'commit 3b1f72', 'commit d44c90', 'commit b91034',
   'PLAT-1204', 'PAY-340', 'AUTH-112', 'INFRA-559', 'ENG-2201',
-  'RFC-009',   'ADR-014', 'ADR-022', 'Postmortem', 'Retro: Q1',
+  'RFC-009', 'ADR-014', 'ADR-022', 'Postmortem', 'Retro: Q1',
   'March Incident', 'P0 Alert', 'Outage', 'DB Spike', 'Memory Leak',
   'Deadlock', 'Race Condition', 'Cache Miss', 'Cold Start', 'Rate Limit',
   'Circuit Breaker', 'Backpressure', 'Idempotency', 'Dual Write',
   'Feature Flag', 'Kill Switch', 'Dark Launch', 'Canary: 5%',
   'Sprint 44', 'Tech Debt', 'Security Review', 'Compliance Flag',
-  'EC2 Spot',  'Lambda Timeout', 'RDS Failover', 'Redis Eviction',
+  'EC2 Spot', 'Lambda Timeout', 'RDS Failover', 'Redis Eviction',
   '#incidents', '#deploys', '#on-call', '#security', '#backend',
   'migration 019', 'Slow Query Log', 'Read Replica', 'Index Bloat',
   'Stripe', '3DS', 'Dispute', 'Refund Logic', 'Subscription Pause',
   'JWT Expiry', 'CSRF', 'OAuth Flow', 'MFA', 'Token Rotation',
   'breaking change', 'workaround', 'temporary fix', 'needs-review',
   'v2 rollback', 'silent failure', 'orphaned records', 'schema lock',
-  'LCP 4.2s',  'CLS 0.18', 'bundle 2.4MB', 'tree shaking',
+  'LCP 4.2s', 'CLS 0.18', 'bundle 2.4MB', 'tree shaking',
   'connection pool', 'N+1 query', 'soft delete', 'cursor pagination',
 ]
 
@@ -69,13 +69,13 @@ function buildFragments(): Frag[] {
       text, x, y,
       baseOpacity: isChain
         ? 0.11 + Math.random() * 0.08
-        : 0.04 + Math.random() * 0.09,
+        : 0.05 + Math.random() * 0.08,
       blur: isChain
-        ? 0.8 + Math.random() * 1.0
-        : 1.8 + Math.random() * 2.4,
+        ? 0.0
+        : 0.3 + Math.random() * 0.6,
       size: isChain
-        ? 10 + Math.floor(Math.random() * 3)
-        :  8 + Math.floor(Math.random() * 3),
+        ? 12 + Math.floor(Math.random() * 2)
+        : 9 + Math.floor(Math.random() * 2),
       rotate: Math.round((Math.random() - 0.5) * (isChain ? 5 : 12)),
       isChain,
     }
@@ -83,15 +83,20 @@ function buildFragments(): Frag[] {
 }
 
 // ── Component ─────────────────────────────────────────────────
-export function HeroV3() {
-  const sectionRef     = useRef<HTMLElement>(null)
-  const fragRefs       = useRef<(HTMLSpanElement | null)[]>([])
+interface HeroV3Props {
+  onOpenModal: () => void
+}
+
+export function HeroV3({ onOpenModal }: HeroV3Props) {
+  const sectionRef = useRef<HTMLElement>(null)
+  const fragRefs = useRef<(HTMLSpanElement | null)[]>([])
   const reconstructRef = useRef<HTMLDivElement>(null)
-  const line1Ref       = useRef<HTMLSpanElement>(null)
-  const line2Ref       = useRef<HTMLSpanElement>(null)
-  const ctaRef         = useRef<HTMLDivElement>(null)
+  const line1Ref = useRef<HTMLSpanElement>(null)
+  const line2Ref = useRef<HTMLSpanElement>(null)
+  const ctaRef = useRef<HTMLDivElement>(null)
 
   const [frags, setFrags] = useState<Frag[]>([])
+  const [animDone, setAnimDone] = useState(false)
 
   // Generate layout client-side only (avoids SSR mismatch)
   useEffect(() => { setFrags(buildFragments()) }, [])
@@ -103,9 +108,9 @@ export function HeroV3() {
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     const ctx = gsap.context(() => {
-      const allEls    = fragRefs.current.filter(Boolean) as HTMLSpanElement[]
-      const chainEls  = allEls.filter((_, i) => frags[i]?.isChain)
-      const bgEls     = allEls.filter((_, i) => !frags[i]?.isChain)
+      const allEls = fragRefs.current.filter(Boolean) as HTMLSpanElement[]
+      const chainEls = allEls.filter((_, i) => frags[i]?.isChain)
+      const bgEls = allEls.filter((_, i) => !frags[i]?.isChain)
 
       // Map each element → its base opacity (used in multiple stages)
       const opMap = new WeakMap<HTMLSpanElement, number>()
@@ -129,107 +134,101 @@ export function HeroV3() {
           clipPath: 'inset(0 0% 0 0)',
         })
         gsap.set(ctaRef.current, { opacity: 1 })
+        setAnimDone(true)
         return
       }
 
       // ── Master timeline ───────────────────────────────────────
       const tl = gsap.timeline({ defaults: { overwrite: 'auto' } })
 
-      // Scene 1 — Hidden memory (0 → ~1s)
-      // Background fills with fragments: slow, from-random stagger
+      // Scene 1 — Hidden memory (0 → ~0.5s)
+      // Background fills with fragments: fast, stagger
       tl.to(bgEls, {
-        opacity: (_, el) => opMap.get(el as HTMLSpanElement) ?? 0.06,
+        opacity: (_, el) => opMap.get(el as HTMLSpanElement) ?? 0.05,
         duration: 0.55,
-        stagger: { amount: 1.0, from: 'random' },
-        ease: 'power1.in',
+        stagger: { amount: 0.5, from: 'random' },
+        ease: 'power1.out',
       })
-      // Chain fragments appear slightly later, slightly brighter
+      // Chain fragments appear slightly later
       tl.to(chainEls, {
         opacity: (_, el) => opMap.get(el as HTMLSpanElement) ?? 0.11,
         duration: 0.4,
-        stagger: 0.06,
+        stagger: 0.04,
         ease: 'power1.inOut',
-      }, '-=0.25')
+      }, '-=0.45')
 
-      // Scene 2 — Intelligence begins (~1 → ~1.8s)
-      // Selected chain fragments sharpen and brighten — the rest stay hidden.
-      // Feels like the system is recognising connections.
+      // Scene 2 — Intelligence begins
       tl.to(chainEls, {
         opacity: (_, el) => Math.min(0.42, (opMap.get(el as HTMLSpanElement) ?? 0.11) * 3.2),
         filter: 'blur(0.2px)',
-        duration: 0.55,
-        stagger: 0.055,
+        duration: 0.3,
+        stagger: 0.03,
         ease: 'power2.out',
-      }, '+=0.35')
+      }, '+=0.15')
 
-      // Scene 3 — Reconstruction (~1.8 → ~3.2s)
-      // Chain fragments converge to an invisible centre point, then vanish.
-      // Their disappearance is the "assembly" — the knowledge is being formed.
+      // Scene 3 — Reconstruction (converging)
       tl.add(() => {
         if (!sectionRef.current) return
         const box = sectionRef.current.getBoundingClientRect()
-        const cx = box.width  / 2
-        const cy = box.height * 0.40   // slightly above true centre
+        const cx = box.width / 2
+        const cy = box.height * 0.40
 
         chainEls.forEach((el, i) => {
-          const r  = el.getBoundingClientRect()
-          const dx = cx - (r.left + r.width  / 2)
-          const dy = cy - (r.top  + r.height / 2)
+          const r = el.getBoundingClientRect()
+          const dx = cx - (r.left + r.width / 2)
+          const dy = cy - (r.top + r.height / 2)
 
           gsap.to(el, {
             x: dx,
             y: dy,
             opacity: 0,
             filter: 'blur(0px)',
-            duration: 0.85,
-            delay:   i * 0.055,
-            ease:    'power3.inOut',
+            duration: 0.45,
+            delay: i * 0.02,
+            ease: 'power3.inOut',
           })
         })
-      }, '+=0.3')
+      }, '+=0.15')
 
-      tl.to({}, { duration: 1.1 })   // wait for convergence
+      tl.to({}, { duration: 0.5 })   // wait for convergence
 
       // Scene 3b — Reconstruction label resolves
       tl.to(reconstructRef.current, {
         opacity: 1,
-        duration: 0.55,
+        duration: 0.3,
         ease: 'power2.out',
-      }, '-=0.25')
+      }, '-=0.15')
 
-      // Scene 4 — Headline reveals through masking (~3.2 → ~4.5s)
-      // clipPath wipe: text already exists, the mask simply lifts.
-      // Feels like something surfacing, not appearing.
+      // Scene 4 — Headline reveals through masking
       tl.to(line1Ref.current, {
         clipPath: 'inset(0 0% 0 0)',
-        duration: 0.85,
+        duration: 0.5,
         ease: 'power2.inOut',
-      }, '+=0.45')
+      }, '+=0.15')
 
       tl.to(line2Ref.current, {
         clipPath: 'inset(0 0% 0 0)',
-        duration: 0.85,
+        duration: 0.5,
         ease: 'power2.inOut',
-      }, '-=0.55')
+      }, '-=0.35')
 
-      // Scene 5 — CTA (~4.5s+)
+      // Scene 5 — CTA
       tl.to(ctaRef.current, {
         opacity: 1,
-        duration: 0.5,
+        duration: 0.3,
         ease: 'power1.out',
-      }, '+=0.35')
+        onComplete: () => setAnimDone(true)
+      }, '+=0.15')
 
-      // Post-animation — fragments settle quieter, not brighter
-      // The knowledge is still there. Quieter.
+      // Post-animation — settle
       tl.to(bgEls, {
-        opacity: (_, el) => (opMap.get(el as HTMLSpanElement) ?? 0.06) * 0.6,
-        duration: 2.2,
-        stagger: { amount: 1.2, from: 'random' },
+        opacity: (_, el) => (opMap.get(el as HTMLSpanElement) ?? 0.05) * 0.6,
+        duration: 1.2,
+        stagger: { amount: 0.8, from: 'random' },
         ease: 'power1.inOut',
-      }, '+=0.4')
+      }, '+=0.2')
 
       // Neuron pulse — one fragment wakes briefly, then rests.
-      // Very slow. 2-4 second intervals. Never the same one twice in a row.
       tl.add(() => {
         const pool = [...bgEls]
         let last = -1
@@ -240,8 +239,8 @@ export function HeroV3() {
           let idx: number
           do { idx = Math.floor(Math.random() * pool.length) } while (idx === last && pool.length > 1)
           last = idx
-          const el  = pool[idx]
-          const base = (opMap.get(el) ?? 0.06) * 0.6
+          const el = pool[idx]
+          const base = (opMap.get(el) ?? 0.05) * 0.6
 
           gsap.to(el, {
             opacity: base + 0.1,
@@ -341,17 +340,20 @@ export function HeroV3() {
           <span
             key={i}
             ref={(el) => { fragRefs.current[i] = el }}
-            className="absolute font-mono uppercase text-[#CBC1B5]"
+            className={`absolute font-mono uppercase text-[#CBC1B5] ${animDone
+                ? 'pointer-events-auto cursor-default hover:!opacity-85 hover:![filter:none] hover:text-white transition-all duration-300 ease-out'
+                : ''
+              }`}
             style={{
-              left:          `${f.x}%`,
-              top:           `${f.y}%`,
-              fontSize:      `${f.size}px`,
-              opacity:       0,
-              filter:        `blur(${f.blur}px)`,
-              transform:     f.rotate ? `rotate(${f.rotate}deg)` : undefined,
+              left: `${f.x}%`,
+              top: `${f.y}%`,
+              fontSize: `${f.size}px`,
+              opacity: 0,
+              filter: `blur(${f.blur}px)`,
+              transform: f.rotate ? `rotate(${f.rotate}deg)` : undefined,
               letterSpacing: '0.15em',
-              lineHeight:    1,
-              willChange:    'opacity, transform, filter',
+              lineHeight: 1,
+              willChange: 'opacity, transform, filter',
             }}
           >
             {f.text}
@@ -365,20 +367,20 @@ export function HeroV3() {
         {/* Reconstruction indicator — abstract, universal */}
         <div
           ref={reconstructRef}
-          className="flex flex-col items-center gap-2.5"
+          className="flex flex-col items-center gap-3"
           style={{ opacity: 0 }}
           aria-live="polite"
         >
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <span
-              className="inline-block h-[5px] w-[5px] rounded-full"
-              style={{ background: '#A07C4A', opacity: 0.75 }}
+              className="inline-block h-[6px] w-[6px] rounded-full"
+              style={{ background: '#A07C4A', opacity: 0.95 }}
             />
-            <span className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#A07C4A]/80">
+            <span className="font-mono text-[11.5px] font-medium uppercase tracking-[0.28em] text-[#A07C4A]">
               Project Intelligence Layer
             </span>
           </div>
-          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#CBC1B5]/40">
+          <span className="font-mono text-[12.5px] uppercase tracking-[0.20em] text-[#CBC1B5]/70">
             Context Reconstructed
           </span>
         </div>
@@ -396,7 +398,7 @@ export function HeroV3() {
             className="block text-[clamp(1.85rem,3.5vw,3rem)] leading-[1.08] tracking-[-0.026em] text-[#CBC1B5]"
             style={{
               fontFamily: 'var(--font-young-serif), Georgia, serif',
-              clipPath:   'inset(0 100% 0 0)',
+              clipPath: 'inset(0 100% 0 0)',
             }}
           >
             AI ships the wrong things.
@@ -412,9 +414,9 @@ export function HeroV3() {
 
         {/* CTA */}
         <div ref={ctaRef} style={{ opacity: 0 }}>
-          <a
-            href="#early-access"
-            className="group inline-flex items-center gap-2 border-b border-[#CBC1B5]/14 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-[#CBC1B5]/55 transition-colors duration-300 hover:border-[#CBC1B5]/28 hover:text-[#CBC1B5]"
+          <button
+            onClick={onOpenModal}
+            className="group inline-flex items-center gap-2 border-b border-[#CBC1B5]/14 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-[#CBC1B5]/55 bg-transparent border-t-0 border-x-0 outline-none cursor-pointer transition-colors duration-300 hover:border-[#CBC1B5]/28 hover:text-[#CBC1B5]"
           >
             <span>Request Early Access</span>
             <span
@@ -423,7 +425,7 @@ export function HeroV3() {
             >
               →
             </span>
-          </a>
+          </button>
         </div>
       </div>
     </section>

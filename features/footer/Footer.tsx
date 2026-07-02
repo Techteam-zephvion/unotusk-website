@@ -1,13 +1,18 @@
+'use client'
+
 export function Footer() {
   const mono = { fontFamily: 'var(--font-inter), sans-serif' } as React.CSSProperties
 
+  const responsiveFontSize = 'clamp(10px, 0.85vw, 12px)'
+
   const linkStyle: React.CSSProperties = {
     ...mono,
-    fontSize: 8,
-    letterSpacing: '0.16em',
+    fontSize: responsiveFontSize,
+    letterSpacing: '0.12em',
     textTransform: 'uppercase' as const,
-    color: 'rgba(203,193,181,0.14)',
+    color: 'rgba(203,193,181,0.60)',
     textDecoration: 'none',
+    transition: 'color 0.3s ease',
   }
 
   return (
@@ -30,23 +35,26 @@ export function Footer() {
         <img
           src="/logo.png"
           alt="UNOTUSK"
-          style={{ height: 16, width: 'auto', opacity: 0.14, filter: 'brightness(10)' }}
+          style={{ height: 'clamp(24px, 2.5vw, 36px)', width: 'auto', opacity: 0.35, filter: 'brightness(10)' }}
         />
 
         {/* Footer links — far right */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '2.5rem', flexWrap: 'wrap' }}>
-          <span style={{ ...mono, fontSize: 8, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(203,193,181,0.12)' }}>
+          <span style={{ ...mono, fontSize: responsiveFontSize, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(203,193,181,0.50)' }}>
             Zephvion Pvt. Ltd.
           </span>
-          <span style={{ ...mono, fontSize: 8, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(203,193,181,0.12)' }}>
+          <span style={{ ...mono, fontSize: responsiveFontSize, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(203,193,181,0.50)' }}>
             Built in Bengaluru
           </span>
-          <a href="mailto:hello@unotusk.com" style={linkStyle}>
+          <a
+            href="mailto:hello@unotusk.com"
+            style={linkStyle}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#CBC1B5' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(203,193,181,0.60)' }}
+          >
             hello@unotusk.com
           </a>
-          <a href="mailto:hello@unotusk.com" style={{ ...linkStyle, color: 'rgba(203,193,181,0.20)' }}>
-            Join Lighthouse →
-          </a>
+
         </div>
       </div>
     </footer>

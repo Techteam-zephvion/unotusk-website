@@ -24,6 +24,7 @@
   --color-text-secondary:    var(--color-text-secondary);
   --color-accent:            var(--color-accent);
   --color-border:            var(--color-border);
+  --font-sans:               var(--font-body), system-ui, sans-serif;
   --font-display:            var(--font-display);
   --font-body:               var(--font-body);
 }
