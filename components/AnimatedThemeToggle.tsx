@@ -7,10 +7,41 @@ export const AnimatedThemeToggle = ({ className }: { className?: string }) => {
   const [theme, setTheme] = useState("dark");
   const isDark = theme === "dark";
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
+      
+      const handleChange = (e: MediaQueryListEvent) => {
+        if (!localStorage.getItem("theme")) {
+          const systemTheme = e.matches ? "light" : "dark";
+          setTheme(systemTheme);
+          document.documentElement.classList.toggle("light", systemTheme === "light");
+          document.documentElement.classList.toggle("dark", systemTheme === "dark");
+        }
+      };
+
+      const savedTheme = localStorage.getItem("theme");
+      let initialTheme = "dark";
+      if (savedTheme) {
+        initialTheme = savedTheme;
+      } else if (mediaQuery.matches) {
+        initialTheme = "light";
+      }
+
+      setTheme(initialTheme);
+      document.documentElement.classList.toggle("light", initialTheme === "light");
+      document.documentElement.classList.toggle("dark", initialTheme === "dark");
+
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
+  }, []);
+
   const handleToggle = () => {
     const nextTheme = isDark ? "light" : "dark";
     setTheme(nextTheme);
     if (typeof window !== "undefined") {
+      localStorage.setItem("theme", nextTheme);
       document.documentElement.classList.toggle("light", nextTheme === "light");
       document.documentElement.classList.toggle("dark", nextTheme === "dark");
     }
