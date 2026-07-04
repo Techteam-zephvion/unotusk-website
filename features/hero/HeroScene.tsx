@@ -392,7 +392,7 @@ export function HeroScene() {
                 AI ships the wrong things.
               </span>
               <span className="block text-[clamp(1.6rem,3vw,2.5rem)] font-light leading-[1.12] tracking-[-0.02em] text-[#CBC1B5]">
-                UNOTUSK rebuilds the memory it needs.
+                Unotusk rebuilds the memory it needs.
               </span>
             </h1>
 

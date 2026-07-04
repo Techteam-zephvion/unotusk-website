@@ -62,7 +62,7 @@ export async function POST(request: Request) {
       <html>
         <head>
           <meta charset="utf-8">
-          <title>Welcome to UNOTUSK</title>
+          <title>Welcome to Unotusk</title>
           <style>
             body {
               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -147,13 +147,13 @@ export async function POST(request: Request) {
         <body>
           <div class="container">
             <div class="header">
-              <h1 class="logo-text">UNOTUSK</h1>
+              <h1 class="logo-text">Unotusk</h1>
             </div>
             
             <h2 class="greeting">Hi ${name},</h2>
             
             <p class="body-text">
-              Thank you for requesting early access to <strong>UNOTUSK</strong>. We are excited to partner with engineering and product leaders at <strong>${company}</strong> to rebuild context around design decision records, code rationale, and development memory.
+              Thank you for requesting early access to <strong>Unotusk</strong>. We are excited to partner with engineering and product leaders at <strong>${company}</strong> to rebuild context around design decision records, code rationale, and development memory.
             </p>
             
             <p class="body-text">
@@ -171,7 +171,7 @@ export async function POST(request: Request) {
             ` : ''}
             
             <div class="footer">
-              UNOTUSK is built by <a href="https://zepvion.com" target="_blank">Zepvion</a>.<br>
+              Unotusk is built by <a href="https://zepvion.com" target="_blank">Zepvion</a>.<br>
               Learn more at <a href="https://unotusk.com" target="_blank">unotusk.com</a>.
             </div>
           </div>
@@ -190,7 +190,7 @@ export async function POST(request: Request) {
         from: fromEmail,
         to: email,
         reply_to: email,
-        subject: `Welcome to UNOTUSK — Early Access Request Received`,
+        subject: `Welcome to Unotusk — Early Access Request Received`,
         html: emailHtml,
       }),
     });

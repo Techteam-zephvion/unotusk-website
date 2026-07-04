@@ -11,12 +11,13 @@ import { EarlyAccessModal } from '@/components/EarlyAccessModal'
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [initialAnimDone, setInitialAnimDone] = useState(false)
 
   return (
     <>
-      <Navigation onOpenModal={() => setIsModalOpen(true)} />
+      <Navigation onOpenModal={() => setIsModalOpen(true)} initialAnimDone={initialAnimDone} />
       <main>
-        <Hero onOpenModal={() => setIsModalOpen(true)} />
+        <Hero onOpenModal={() => setIsModalOpen(true)} onAnimationComplete={() => setInitialAnimDone(true)} />
         <Problem />
         <What />
         <CTA onOpenModal={() => setIsModalOpen(true)} />

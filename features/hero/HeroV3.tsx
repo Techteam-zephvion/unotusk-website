@@ -85,9 +85,10 @@ function buildFragments(): Frag[] {
 // ── Component ─────────────────────────────────────────────────
 interface HeroV3Props {
   onOpenModal: () => void
+  onAnimationComplete?: () => void
 }
 
-export function HeroV3({ onOpenModal }: HeroV3Props) {
+export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
   const sectionRef = useRef<HTMLElement>(null)
   const fragRefs = useRef<(HTMLSpanElement | null)[]>([])
   const reconstructRef = useRef<HTMLDivElement>(null)
@@ -135,6 +136,7 @@ export function HeroV3({ onOpenModal }: HeroV3Props) {
         })
         gsap.set(ctaRef.current, { opacity: 1 })
         setAnimDone(true)
+        onAnimationComplete?.()
         return
       }
 
@@ -217,7 +219,10 @@ export function HeroV3({ onOpenModal }: HeroV3Props) {
         opacity: 1,
         duration: 0.3,
         ease: 'power1.out',
-        onComplete: () => setAnimDone(true)
+        onComplete: () => {
+          setAnimDone(true)
+          onAnimationComplete?.()
+        }
       }, '+=0.15')
 
       // Post-animation — settle
@@ -408,7 +413,7 @@ export function HeroV3({ onOpenModal }: HeroV3Props) {
             className="block text-[clamp(1.5rem,3vw,2.5rem)] font-light leading-[1.12] tracking-[-0.022em] text-[#CBC1B5]"
             style={{ clipPath: 'inset(0 100% 0 0)' }}
           >
-            UNOTUSK rebuilds the memory it needs.
+            Unotusk rebuilds the memory it needs.
           </span>
         </div>
 

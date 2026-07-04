@@ -19,17 +19,22 @@ const youngSerif = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'UNOTUSK — The Project Intelligence Engine',
+  title: 'Unotusk — The Project Intelligence Engine',
   description:
-    'Your project already knows. UNOTUSK makes it visible. Every decision your team ever made, reconstructed into intelligence AI can actually use.',
+    'Your project already knows. Unotusk makes it visible. Every decision your team ever made, reconstructed into intelligence AI can actually use.',
   metadataBase: new URL('https://unotusk.com'),
   alternates: {
     canonical: '/',
   },
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   openGraph: {
-    title: 'UNOTUSK — The Project Intelligence Engine',
-    description: 'Your project already knows. UNOTUSK makes it visible.',
-    siteName: 'UNOTUSK',
+    title: 'Unotusk — The Project Intelligence Engine',
+    description: 'Your project already knows. Unotusk makes it visible.',
+    siteName: 'Unotusk',
     url: 'https://unotusk.com',
     locale: 'en_US',
     type: 'website',
@@ -38,14 +43,14 @@ export const metadata: Metadata = {
         url: '/og.png',
         width: 1200,
         height: 630,
-        alt: 'UNOTUSK — The Project Intelligence Engine',
+        alt: 'Unotusk — The Project Intelligence Engine',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'UNOTUSK — The Project Intelligence Engine',
-    description: 'Your project already knows. UNOTUSK makes it visible.',
+    title: 'Unotusk — The Project Intelligence Engine',
+    description: 'Your project already knows. Unotusk makes it visible.',
     images: ['/og.png'],
   },
 }
@@ -67,15 +72,15 @@ export default function RootLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'SoftwareApplication',
-              name: 'UNOTUSK',
+              name: 'Unotusk',
               applicationCategory: 'DeveloperApplication',
               operatingSystem: 'Web',
               url: 'https://unotusk.com',
               description:
-                'Your project already knows. UNOTUSK makes it visible. Every decision your team ever made, reconstructed into intelligence AI can actually use.',
+                'Your project already knows. Unotusk makes it visible. Every decision your team ever made, reconstructed into intelligence AI can actually use.',
               publisher: {
                 '@type': 'Organization',
-                name: 'UNOTUSK',
+                name: 'Unotusk',
                 url: 'https://unotusk.com',
                 logo: 'https://unotusk.com/icon.png',
               },

@@ -304,7 +304,7 @@ Change how the coordinates and fonts are rendered inside the render map:
   * Rendered 3 tiny absolute gold/cream SVG magic stars surrounding the `"UNOTUSK changes that."` text block in `Problem.tsx`.
   * Added offset delays to ensure they twinkle asynchronously for a professional and non-intrusive magic sheen.
 - [✓] **Task 13: Creative Logo & Clamp Text in Bridge Pivot**
-  * Replaced the plain text `"UNOTUSK"` inside the pivot block of `Problem.tsx` with the official ghost logo mark (`/logo.png`).
+  * Replaced the plain text `"UNOTUSK"` inside the pivot block of `Problem.tsx` with the official ghost logo mark (`/logo.svg`).
   * Styled the logo height (`clamp(1.7rem, 3.4vw, 2.7rem)`) and text size (`clamp(1.4rem, 2.8vw, 2.2rem)`) with corresponding responsive CSS clamps.
   * Wrapped inside a flexbox container with overflow masks, causing the slide transition to uncover the logo followed dynamically by the text.
   * Styled the logo using `brightness-0 invert` with `0.9` opacity to match the off-white color guidelines.

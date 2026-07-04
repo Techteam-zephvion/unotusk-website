@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger)
 const H = 'inset(0 100% 0 0)'
 const V = 'inset(0 0% 0 0)'
 
-// The packing mask is rasterized at runtime from the real UNOTUSK favicon
+// The packing mask is rasterized at runtime from the real Unotusk favicon
 // so the word cloud takes the icon's EXACT silhouette (eye becomes a gap).
 const FAVICON_SRC = '/favicon.png'
 
@@ -28,9 +28,9 @@ if (typeof window !== 'undefined') {
 type Tier = 'xl' | 'l' | 'm' | 's' | 'xs'
 const TIER: Record<Tier, { size: number; op: number; weight: number }> = {
   xl: { size: 0.68, op: 0.96, weight: 700 },
-  l:  { size: 0.46, op: 0.84, weight: 600 },
-  m:  { size: 0.35, op: 0.64, weight: 500 },
-  s:  { size: 0.26, op: 0.46, weight: 400 },
+  l: { size: 0.46, op: 0.84, weight: 600 },
+  m: { size: 0.35, op: 0.64, weight: 500 },
+  s: { size: 0.26, op: 0.46, weight: 400 },
   xs: { size: 0.18, op: 0.30, weight: 400 },
 }
 
@@ -90,16 +90,16 @@ interface Placed {
 export function What() {
   const STAGE_SIZE = 'clamp(480px, 72vh, 600px)'
   const containerRef = useRef<HTMLDivElement>(null)
-  const megaRef      = useRef<HTMLDivElement>(null)
-  const sqRef        = useRef<HTMLDivElement>(null)
-  const vapourRef    = useRef<HTMLDivElement>(null)
-  const wordRefs     = useRef<(HTMLSpanElement | null)[]>([])
-  const ps1           = useRef<HTMLDivElement>(null)
-  const ps2           = useRef<HTMLDivElement>(null)
-  const ps3           = useRef<HTMLDivElement>(null)
+  const megaRef = useRef<HTMLDivElement>(null)
+  const sqRef = useRef<HTMLDivElement>(null)
+  const vapourRef = useRef<HTMLDivElement>(null)
+  const wordRefs = useRef<(HTMLSpanElement | null)[]>([])
+  const ps1 = useRef<HTMLDivElement>(null)
+  const ps2 = useRef<HTMLDivElement>(null)
+  const ps3 = useRef<HTMLDivElement>(null)
   const faviconImgRef = useRef<HTMLImageElement>(null)
-  const psClose1      = useRef<HTMLDivElement>(null)
-  const psClose2      = useRef<HTMLDivElement>(null)
+  const psClose1 = useRef<HTMLDivElement>(null)
+  const psClose2 = useRef<HTMLDivElement>(null)
 
   const [placed, setPlaced] = useState<Placed[]>([])
   const [logoStyle, setLogoStyle] = useState<React.CSSProperties>({
@@ -152,7 +152,7 @@ export function What() {
       const runPack = () => {
         if (cancelled) return
 
-        const G    = 164               // occupancy grid resolution (finer = crisper edges/tail)
+        const G = 164               // occupancy grid resolution (finer = crisper edges/tail)
         const cell = S / G
         const basePx = S * 0.068
 
@@ -168,7 +168,8 @@ export function What() {
           if (x < 0 || y < 0 || x >= R || y >= R) return false
           const i = (y * R + x) * 4
           if (px[i + 3] < 40) return false                    // transparent
-          return px[i] * 0.299 + px[i + 1] * 0.587 + px[i + 2] * 0.114 < 110  // dark ink
+          const lum = px[i] * 0.299 + px[i + 1] * 0.587 + px[i + 2] * 0.114
+          return lum < 240                                    // any non-white/non-transparent pixel is logo ink
         }
         // bounding box of the ink
         let bx0 = R, by0 = R, bx1 = 0, by1 = 0
@@ -393,18 +394,18 @@ export function What() {
         },
       })
 
-      // ── Reconstruction begins immediately after "UNOTUSK changes that" ──
+      // ── Reconstruction begins immediately after "Unotusk changes that" ──
       mega.to(vapourRef.current, { opacity: 1, ease: 'none', duration: 0.4 }, 0.0)
 
       const STAGE = [
-        { start: 0.3,  span: 0.8 },   // trunk — the first hint
-        { start: 1.4,  span: 1.0 },   // body
-        { start: 2.7,  span: 1.2 },   // head + ear — recognition completes
+        { start: 0.3, span: 0.8 },   // trunk — the first hint
+        { start: 1.4, span: 1.0 },   // body
+        { start: 2.7, span: 1.2 },   // head + ear — recognition completes
       ]
       words.forEach((el, i) => {
-        const st  = STAGE[stageOf[i]]
+        const st = STAGE[stageOf[i]]
         const cnt = Math.max(1, stageSeen[stageOf[i]])
-        const at  = st.start + (stageRank[i] / cnt) * st.span
+        const at = st.start + (stageRank[i] / cnt) * st.span
         mega.to(el, {
           opacity: placed[i].op, x: 0, y: 0, rotate: 0, scale: 1,
           ease: 'power2.out', duration: 0.6,
@@ -433,14 +434,14 @@ export function What() {
       mega.to(ps1.current, { clipPath: V, ease: 'none', duration: 0.6 }, 6.8)
       mega.to(ps2.current, { clipPath: V, ease: 'none', duration: 0.6 }, 7.4)
       mega.to(ps3.current, { clipPath: V, ease: 'none', duration: 0.6 }, 8.0)
-      
+
       // hold for solution
       mega.to({}, { duration: 0.8 }, 8.7)
 
       // Reveal closing line
       mega.to(psClose1.current, { clipPath: V, ease: 'none', duration: 0.6 }, 9.6)
       mega.to(psClose2.current, { clipPath: V, ease: 'none', duration: 0.6 }, 10.2)
-      
+
       // FINAL HOLD before invitation
       mega.to({}, { duration: 0.8 }, 10.9)
     }, containerRef)
@@ -472,7 +473,7 @@ export function What() {
   }, [placed])
 
   const serif: React.CSSProperties = { fontFamily: "var(--font-young-serif), 'Young Serif', Georgia, serif" }
-  const mono:  React.CSSProperties = { fontFamily: 'var(--font-inter), sans-serif' }
+  const mono: React.CSSProperties = { fontFamily: 'var(--font-inter), sans-serif' }
 
   return (
     <div ref={containerRef} style={{ background: '#0B1020', color: '#CBC1B5' }}>
@@ -483,7 +484,7 @@ export function What() {
         className="relative overflow-hidden"
         style={{ minHeight: '100vh', background: '#0B1020' }}
         role="region"
-        aria-label="Project knowledge forming the UNOTUSK elephant"
+        aria-label="Project knowledge forming the Unotusk elephant"
       >
         <div
           ref={vapourRef}
@@ -549,7 +550,7 @@ export function What() {
               letterSpacing: '-0.025em', color: '#CBC1B5',
             }}
           >
-            UNOTUSK gives AI
+            Unotusk gives AI
           </div>
           <div
             ref={ps2}
@@ -597,7 +598,7 @@ export function What() {
               lineHeight: 1.7,
             }}
           >
-            UNOTUSK makes it visible.
+            Unotusk makes it visible.
           </div>
         </div>
       </div>

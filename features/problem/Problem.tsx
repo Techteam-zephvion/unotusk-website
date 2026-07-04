@@ -11,19 +11,19 @@ export function Problem() {
 
   // Chapter 1 — Title
   const titleRef = useRef<HTMLDivElement>(null)
-  const tL1      = useRef<HTMLDivElement>(null)
-  const tL2      = useRef<HTMLDivElement>(null)
+  const tL1 = useRef<HTMLDivElement>(null)
+  const tL2 = useRef<HTMLDivElement>(null)
   const mask1Ref = useRef<HTMLDivElement>(null)
   const mask2Ref = useRef<HTMLDivElement>(null)
 
   // Chapter 2 — Statistics
   const statsRef = useRef<HTMLDivElement>(null)
-  const s1Num    = useRef<HTMLDivElement>(null)
-  const s2Num    = useRef<HTMLDivElement>(null)
-  const s1Desc   = useRef<HTMLDivElement>(null)
-  const s2Desc   = useRef<HTMLDivElement>(null)
-  const s1Src    = useRef<HTMLDivElement>(null)
-  const s2Src    = useRef<HTMLDivElement>(null)
+  const s1Num = useRef<HTMLDivElement>(null)
+  const s2Num = useRef<HTMLDivElement>(null)
+  const s1Desc = useRef<HTMLDivElement>(null)
+  const s2Desc = useRef<HTMLDivElement>(null)
+  const s1Src = useRef<HTMLDivElement>(null)
+  const s2Src = useRef<HTMLDivElement>(null)
 
   // Chapter 3 — Punch
   const punchRef = useRef<HTMLDivElement>(null)
@@ -32,15 +32,15 @@ export function Problem() {
   const pL3 = useRef<HTMLDivElement>(null)
 
   // Chapter 4 — Bridge
-  const bridgeRef  = useRef<HTMLDivElement>(null)
-  const bridgeT    = useRef<HTMLDivElement>(null)
+  const bridgeRef = useRef<HTMLDivElement>(null)
+  const bridgeT = useRef<HTMLDivElement>(null)
   const bridgeMask = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    const V  = 'inset(0 0% 0 0)'
-    const H  = 'inset(0 100% 0 0)'
+    const V = 'inset(0 0% 0 0)'
+    const H = 'inset(0 100% 0 0)'
     const HC = 'inset(0 50% 0 50%)'
 
     // Scale pinned-scroll distance to the device. Desktop keeps the exact tuned
@@ -54,8 +54,8 @@ export function Problem() {
 
       // ── Initial states ───────────────────────────────────────────
       gsap.set([mask1Ref.current, mask2Ref.current, bridgeMask.current], { xPercent: 0 })
-      gsap.set(s1Num.current,  { clipPath: HC })
-      gsap.set(s2Num.current,  { clipPath: HC })
+      gsap.set(s1Num.current, { clipPath: HC })
+      gsap.set(s2Num.current, { clipPath: HC })
       gsap.set([s1Desc.current, s1Src.current, s2Desc.current, s2Src.current], { opacity: 0 })
       gsap.set([pL1.current, pL2.current, pL3.current], { clipPath: H })
 
@@ -81,12 +81,12 @@ export function Problem() {
       // ─────────────────────────────────────────────────────────────
       gsap.timeline({
         scrollTrigger: {
-          trigger:      titleRef.current,
-          pin:          true,
+          trigger: titleRef.current,
+          pin: true,
           anticipatePin: 1,
           refreshPriority: 6,
           start: 'top top',
-          end:   () => '+=' + 600 * pinFactor(),
+          end: () => '+=' + 600 * pinFactor(),
           scrub: 1.2,
         },
       })
@@ -100,24 +100,24 @@ export function Problem() {
       gsap.timeline({
         scrollTrigger: {
           trigger: statsRef.current,
-          pin:          true,
+          pin: true,
           anticipatePin: 1,
           refreshPriority: 5,
           start: 'top top',
-          end:   () => '+=' + 1000 * pinFactor(),
+          end: () => '+=' + 1000 * pinFactor(),
           scrub: 1.2,
         },
       })
-        .fromTo(s1Num.current,  { clipPath: HC }, { clipPath: V, ease: 'power2.out', duration: 0.8 }, 0.4)
-        .fromTo(s1Desc.current, { opacity: 0 },   { opacity: 1, ease: 'none', duration: 0.5 }, 1.0)
-        .fromTo(s1Src.current,  { opacity: 0 },   { opacity: 1, ease: 'none', duration: 0.4 }, 1.3)
+        .fromTo(s1Num.current, { clipPath: HC }, { clipPath: V, ease: 'power2.out', duration: 0.8 }, 0.4)
+        .fromTo(s1Desc.current, { opacity: 0 }, { opacity: 1, ease: 'none', duration: 0.5 }, 1.0)
+        .fromTo(s1Src.current, { opacity: 0 }, { opacity: 1, ease: 'none', duration: 0.4 }, 1.3)
         // Short HOLD: visitor reads 95%
-        .fromTo(s1Num.current,  { clipPath: V },   { clipPath: HC, ease: 'power3.in',  duration: 0.6 }, 2.8)
-        .fromTo(s2Num.current,  { clipPath: HC },  { clipPath: V,  ease: 'power3.out', duration: 0.6 }, 3.1)
-        .fromTo(s1Desc.current, { opacity: 1 },    { opacity: 0,  ease: 'none', duration: 0.4 }, 2.8)
-        .fromTo(s2Desc.current, { opacity: 0 },    { opacity: 1,  ease: 'none', duration: 0.4 }, 3.3)
-        .fromTo(s1Src.current,  { opacity: 1 },    { opacity: 0,  ease: 'none', duration: 0.3 }, 2.8)
-        .fromTo(s2Src.current,  { opacity: 0 },    { opacity: 1,  ease: 'none', duration: 0.3 }, 3.3)
+        .fromTo(s1Num.current, { clipPath: V }, { clipPath: HC, ease: 'power3.in', duration: 0.6 }, 2.8)
+        .fromTo(s2Num.current, { clipPath: HC }, { clipPath: V, ease: 'power3.out', duration: 0.6 }, 3.1)
+        .fromTo(s1Desc.current, { opacity: 1 }, { opacity: 0, ease: 'none', duration: 0.4 }, 2.8)
+        .fromTo(s2Desc.current, { opacity: 0 }, { opacity: 1, ease: 'none', duration: 0.4 }, 3.3)
+        .fromTo(s1Src.current, { opacity: 1 }, { opacity: 0, ease: 'none', duration: 0.3 }, 2.8)
+        .fromTo(s2Src.current, { opacity: 0 }, { opacity: 1, ease: 'none', duration: 0.3 }, 3.3)
         // Short HOLD: visitor reads 0%, then it stays visible and scrolls away naturally
         .to({}, { duration: 1.2 }, 3.7)
 
@@ -125,11 +125,11 @@ export function Problem() {
       gsap.timeline({
         scrollTrigger: {
           trigger: punchRef.current,
-          pin:          true,
+          pin: true,
           anticipatePin: 1,
           refreshPriority: 4,
           start: 'top top',
-          end:   () => '+=' + 800 * pinFactor(),
+          end: () => '+=' + 800 * pinFactor(),
           scrub: 1.2,
         },
       })
@@ -142,12 +142,12 @@ export function Problem() {
       // ── Chapter 4 — Bridge ───────────────────────────────────────
       gsap.timeline({
         scrollTrigger: {
-          trigger:      bridgeRef.current,
-          pin:          true,
+          trigger: bridgeRef.current,
+          pin: true,
           anticipatePin: 1,
           refreshPriority: 3,
           start: 'top top',
-          end:   () => '+=' + 800 * pinFactor(),
+          end: () => '+=' + 800 * pinFactor(),
           scrub: 1.2,
         },
       })
@@ -172,7 +172,7 @@ export function Problem() {
   const mono: React.CSSProperties = {
     fontFamily: 'var(--font-inter), sans-serif',
   }
-  const H  = 'inset(0 100% 0 0)'
+  const H = 'inset(0 100% 0 0)'
   const HC = 'inset(0 50% 0 50%)'
 
   const maskOverlay: React.CSSProperties = {
@@ -281,9 +281,44 @@ export function Problem() {
             pointer-events: none;
             animation: sparkleTwinkle 2.5s ease-in-out infinite;
           }
+          .bridge-flex {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+          }
+          .bridge-logo {
+            height: clamp(2.7rem, 5.76vw, 4.5rem);
+            font-size: clamp(2.7rem, 5.76vw, 4.5rem);
+            width: auto;
+            opacity: 1;
+            display: inline-block;
+          }
+          .bridge-text {
+            font-size: clamp(1.5rem, 3.2vw, 2.5rem);
+            letter-spacing: 0.04em;
+            color: #CBC1B5;
+            filter: blur(0px);
+            font-weight: 300;
+            line-height: 1;
+            display: inline-block;
+          }
+          @media (min-width: 480px) {
+            .bridge-flex {
+              flex-direction: row;
+              gap: 1rem;
+            }
+            .bridge-logo {
+              transform: translateY(-0.18em);
+            }
+            .bridge-text {
+              transform: translateY(-0.04em);
+            }
+          }
         `}</style>
 
-        <div className="relative inline-block px-12 py-6" ref={bridgeT}>
+        <div className="relative inline-block px-6 md:px-12 py-6" ref={bridgeT}>
           {/* Sparkles */}
           <svg
             className="sparkle-star top-0 left-6 text-[#A07C4A]"
@@ -292,7 +327,7 @@ export function Problem() {
             height="12"
             viewBox="0 0 21 21"
           >
-            <path d="M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z" fill="currentColor"/>
+            <path d="M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z" fill="currentColor" />
           </svg>
           <svg
             className="sparkle-star bottom-2 right-6 text-[#C5A880]"
@@ -301,7 +336,7 @@ export function Problem() {
             height="14"
             viewBox="0 0 21 21"
           >
-            <path d="M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z" fill="currentColor"/>
+            <path d="M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z" fill="currentColor" />
           </svg>
           <svg
             className="sparkle-star top-2 right-20 text-[#A07C4A]"
@@ -310,30 +345,19 @@ export function Problem() {
             height="10"
             viewBox="0 0 21 21"
           >
-            <path d="M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z" fill="currentColor"/>
+            <path d="M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z" fill="currentColor" />
           </svg>
 
           <div style={{ position: 'relative', overflow: 'hidden' }}>
-            <div className="flex items-center justify-center gap-4 flex-wrap">
+            <div className="bridge-flex">
               <img
-                src="/logo.png"
-                alt="UNOTUSK"
-                className="brightness-0 invert"
-                style={{
-                  height: 'clamp(1.7rem, 3.4vw, 2.7rem)',
-                  width: 'auto',
-                  opacity: 0.9,
-                }}
+                src="/logo.svg"
+                alt="Unotusk"
+                className="bridge-logo"
               />
               <span
-                style={{
-                  ...mono,
-                  fontSize: 'clamp(1.4rem, 2.8vw, 2.2rem)',
-                  letterSpacing: '0.04em',
-                  color: 'rgba(203,193,181,0.85)',
-                  filter: 'blur(0px)',
-                  fontWeight: 300,
-                }}
+                className="bridge-text"
+                style={mono}
               >
                 changes that.
               </span>

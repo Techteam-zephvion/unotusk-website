@@ -4,12 +4,15 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { SITE } from '@/lib/constants'
+import { AnimatedThemeToggle } from '@/components/AnimatedThemeToggle'
+import { motion } from 'framer-motion'
 
 interface NavigationProps {
   onOpenModal: () => void
+  initialAnimDone?: boolean
 }
 
-export function Navigation({ onOpenModal }: NavigationProps) {
+export function Navigation({ onOpenModal, initialAnimDone = false }: NavigationProps) {
   const [scrolled, setScrolled] = useState(false)
   // The CTA is the conclusion of the story — it must not appear until the
   // visitor has travelled through the entire solution. Reveal it only once
@@ -57,39 +60,54 @@ export function Navigation({ onOpenModal }: NavigationProps) {
         {/* Logo */}
         <Link
           href="/"
-          className="transition-opacity duration-300 hover:opacity-70"
+          className="transition-opacity duration-300"
           aria-label={SITE.name}
         >
           <Image
-            src="/logo.png"
+            src="/logo.svg"
             alt={SITE.name}
-            width={180}
-            height={180}
+            width={183}
+            height={56}
             priority
-            className="h-[64px] w-auto brightness-0 invert"
+            className="h-[56px] w-auto"
           />
         </Link>
 
-        {/* CTA — only after the solution story has finished */}
-        <button
-          onClick={onOpenModal}
-          aria-hidden={!showCTA}
-          tabIndex={showCTA ? undefined : -1}
-          className={[
-            'group flex items-center gap-1.5 justify-center cursor-pointer bg-transparent border-0 p-0 outline-none',
-            'font-sans text-[clamp(10px,0.85vw,12px)] uppercase tracking-[0.12em]',
-            'text-[#CBC1B5]/80 transition-all duration-500 hover:text-[#A07C4A]',
-            showCTA ? 'opacity-100 min-h-[44px] max-h-12 mt-1 pointer-events-auto' : 'pointer-events-none opacity-0 min-h-0 max-h-0 overflow-hidden',
-          ].join(' ')}
-        >
-          <span>Join Lighthouse</span>
-          <span
-            className="inline-block transition-transform duration-300 group-hover:translate-x-0.5"
-            aria-hidden="true"
+        {/* Right-aligned Navigation Controls */}
+        <div className="flex items-center gap-6">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{
+              opacity: (initialAnimDone && scrolled) ? 1 : 0,
+              scale: (initialAnimDone && scrolled) ? 1 : 0.8,
+              pointerEvents: (initialAnimDone && scrolled) ? 'auto' : 'none'
+            }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
           >
-            →
-          </span>
-        </button>
+            <AnimatedThemeToggle />
+          </motion.div>
+
+          {/* CTA — only after the solution story has finished */}
+          <button
+            onClick={onOpenModal}
+            aria-hidden={!showCTA}
+            tabIndex={showCTA ? undefined : -1}
+            className={[
+              'group flex items-center gap-1.5 justify-center cursor-pointer bg-transparent border-0 p-0 outline-none',
+              'font-sans text-[clamp(10px,0.85vw,12px)] uppercase tracking-[0.12em]',
+              'text-[#CBC1B5]/80 transition-all duration-500 hover:text-[#A07C4A]',
+              showCTA ? 'opacity-100 min-h-[44px] max-h-12 mt-1 pointer-events-auto' : 'pointer-events-none opacity-0 min-h-0 max-h-0 overflow-hidden',
+            ].join(' ')}
+          >
+            <span>Join Lighthouse</span>
+            <span
+              className="inline-block transition-transform duration-300 group-hover:translate-x-0.5"
+              aria-hidden="true"
+            >
+              →
+            </span>
+          </button>
+        </div>
       </nav>
     </header>
   )

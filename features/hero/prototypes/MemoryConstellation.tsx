@@ -264,7 +264,7 @@ export function MemoryConstellation() {
             AI ships the wrong things.
           </span>
           <span className="block text-[clamp(1.4rem,2.5vw,2rem)] font-light leading-[1.15] tracking-[-0.02em] text-[#CBC1B5]">
-            UNOTUSK rebuilds the memory it needs.
+            Unotusk rebuilds the memory it needs.
           </span>
         </h1>
         <div ref={ctaRef} className="mt-8" style={{ opacity: 0 }}>

@@ -206,7 +206,7 @@ export function ReconstructionEngine() {
   }, [])
 
   const line1Text = 'AI ships the wrong things.'
-  const line2Text = 'UNOTUSK rebuilds the memory it needs.'
+  const line2Text = 'Unotusk rebuilds the memory it needs.'
   const corruptedLine1 = useCorruptedText(line1Text, headlineProgress)
   const corruptedLine2 = useCorruptedText(line2Text, Math.max(0, headlineProgress - 0.15))
 

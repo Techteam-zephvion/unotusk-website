@@ -33,15 +33,15 @@ export function Footer() {
       >
         {/* Logo mark */}
         <img
-          src="/logo.png"
-          alt="UNOTUSK"
-          style={{ height: 'clamp(24px, 2.5vw, 36px)', width: 'auto', opacity: 0.35, filter: 'brightness(10)' }}
+          src="/logo.svg"
+          alt="Unotusk"
+          style={{ height: 'clamp(36px, 3.5vw, 52px)', width: 'auto', opacity: 0.85 }}
         />
 
         {/* Footer links — far right */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '2.5rem', flexWrap: 'wrap' }}>
           <span style={{ ...mono, fontSize: responsiveFontSize, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(203,193,181,0.50)' }}>
-            Zephvion Pvt. Ltd.
+            www.zephvion.com
           </span>
           <span style={{ ...mono, fontSize: responsiveFontSize, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(203,193,181,0.50)' }}>
             Built in Bengaluru

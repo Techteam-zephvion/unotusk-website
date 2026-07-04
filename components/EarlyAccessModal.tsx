@@ -149,7 +149,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
         {/* Logo and Header */}
         <div className="mb-6 text-center">
           <img
-            src="/logo.png"
+            src="/logo.svg"
             alt="Unotusk"
             className="mx-auto mb-3 h-8 w-auto brightness-0 invert"
             style={{ opacity: 0.95 }}
