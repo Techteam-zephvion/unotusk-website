@@ -110,14 +110,14 @@ export function Problem() {
       })
         .fromTo(s1Num.current, { clipPath: HC }, { clipPath: V, ease: 'power2.out', duration: 0.8 }, 0.4)
         .fromTo(s1Desc.current, { opacity: 0 }, { opacity: 1, ease: 'none', duration: 0.5 }, 1.0)
-        .fromTo(s1Src.current, { opacity: 0 }, { opacity: 1, ease: 'none', duration: 0.4 }, 1.3)
+        .fromTo(s1Src.current, { opacity: 0 }, { opacity: 0.32, ease: 'none', duration: 0.4 }, 1.3)
         // Short HOLD: visitor reads 95%
         .fromTo(s1Num.current, { clipPath: V }, { clipPath: HC, ease: 'power3.in', duration: 0.6 }, 2.8)
         .fromTo(s2Num.current, { clipPath: HC }, { clipPath: V, ease: 'power3.out', duration: 0.6 }, 3.1)
         .fromTo(s1Desc.current, { opacity: 1 }, { opacity: 0, ease: 'none', duration: 0.4 }, 2.8)
         .fromTo(s2Desc.current, { opacity: 0 }, { opacity: 1, ease: 'none', duration: 0.4 }, 3.3)
-        .fromTo(s1Src.current, { opacity: 1 }, { opacity: 0, ease: 'none', duration: 0.3 }, 2.8)
-        .fromTo(s2Src.current, { opacity: 0 }, { opacity: 1, ease: 'none', duration: 0.3 }, 3.3)
+        .fromTo(s1Src.current, { opacity: 0.32 }, { opacity: 0, ease: 'none', duration: 0.3 }, 2.8)
+        .fromTo(s2Src.current, { opacity: 0 }, { opacity: 0.32, ease: 'none', duration: 0.3 }, 3.3)
         // Short HOLD: visitor reads 0%, then it stays visible and scrolls away naturally
         .to({}, { duration: 1.2 }, 3.7)
 
@@ -239,10 +239,10 @@ export function Problem() {
         </div>
 
         <div style={{ position: 'relative', height: '1.5rem', marginTop: '1.5rem' }}>
-          <div ref={s1Src} style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', opacity: 0, ...mono, fontSize: 9, letterSpacing: '0.20em', textTransform: 'uppercase', color: 'var(--color-text-primary)', opacity: 0.32, whiteSpace: 'nowrap' }}>
+          <div ref={s1Src} style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', opacity: 0, ...mono, fontSize: 9, letterSpacing: '0.20em', textTransform: 'uppercase', color: 'var(--color-text-primary)', whiteSpace: 'nowrap' }}>
             MIT NANDA
           </div>
-          <div ref={s2Src} style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', opacity: 0, ...mono, fontSize: 9, letterSpacing: '0.20em', textTransform: 'uppercase', color: 'var(--color-text-primary)', opacity: 0.32, whiteSpace: 'nowrap' }}>
+          <div ref={s2Src} style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', opacity: 0, ...mono, fontSize: 9, letterSpacing: '0.20em', textTransform: 'uppercase', color: 'var(--color-text-primary)', whiteSpace: 'nowrap' }}>
             Stack Overflow
           </div>
         </div>

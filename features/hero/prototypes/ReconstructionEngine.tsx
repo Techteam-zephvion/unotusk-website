@@ -50,7 +50,7 @@ function scatter(): BgFrag[] {
       y = 6 + Math.random() * 88
       attempts++
     } while (x > 28 && x < 72 && y > 35 && y < 65 && attempts < 20)
-    placed.push({ text, x, y, opacity: 0.06 + Math.random() * 0.09, blur: 1.5 + Math.random() * 2, size: 8 + Math.floor(Math.random() * 4), rotate: Math.round((Math.random() - 0.5) * 10) })
+    placed.push({ text, x, y, opacity: 0.14 + Math.random() * 0.12, blur: 0.4 + Math.random() * 1.2, size: 8 + Math.floor(Math.random() * 4), rotate: Math.round((Math.random() - 0.5) * 10) })
   })
   return placed
 }
@@ -83,7 +83,7 @@ export function ReconstructionEngine() {
     function pulse() {
       if (!running) return
       const picked = live[Math.floor(Math.random() * live.length)]
-      const orig = parseFloat(picked.style.opacity || '0.08')
+      const orig = parseFloat(picked.style.opacity || '0.18')
       gsap.to(picked, {
         opacity: Math.min(orig + 0.18, 0.38),
         duration: 0.3,
@@ -103,7 +103,7 @@ export function ReconstructionEngine() {
       // Skip to final state
       setShowHeadline(true)
       setHeadlineProgress(1)
-      gsap.set(bgFragRefs.current.filter(Boolean), { opacity: (i) => bgFrags[i]?.opacity ?? 0.07 })
+      gsap.set(bgFragRefs.current.filter(Boolean), { opacity: (i) => bgFrags[i]?.opacity ?? 0.18 })
       gsap.set(assembledRef.current, { opacity: 1 })
       gsap.set(ctaRef.current, { opacity: 1 })
       return
@@ -291,7 +291,7 @@ export function ReconstructionEngine() {
           <p className="text-[clamp(1rem,2vw,1.35rem)] font-medium leading-[1.6] tracking-[-0.01em] text-primary">
             Payment retry logic was previously rejected.
             <br />
-            <span className="text-primary/70">March incident.</span>
+            <span className="text-primary/80 dark:text-primary/70">March incident.</span>
           </p>
         </div>
       </div>
@@ -310,7 +310,7 @@ export function ReconstructionEngine() {
               >
                 {corruptedLine1}
               </span>
-              <span className="mt-2 block text-[clamp(1.4rem,2.6vw,2.1rem)] font-light leading-[1.15] tracking-[-0.02em] text-primary">
+              <span className="mt-2 block text-[clamp(1.4rem,2.6vw,2.1rem)] font-normal dark:font-light leading-[1.15] tracking-[-0.02em] text-primary">
                 {corruptedLine2}
               </span>
             </h1>
@@ -320,7 +320,7 @@ export function ReconstructionEngine() {
         <div ref={ctaRef} className="mt-10" style={{ opacity: 0 }}>
           <a
             href="#early-access"
-            className="group inline-flex items-center gap-2 border-b border-primary/15 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-primary/60 transition-colors duration-300 hover:border-primary/30 hover:text-primary"
+            className="group inline-flex items-center gap-2 border-b border-primary/25 dark:border-primary/15 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-primary/75 dark:text-primary/60 transition-colors duration-300 hover:border-primary/30 hover:text-primary"
           >
             <span>Request Early Access</span>
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true">→</span>

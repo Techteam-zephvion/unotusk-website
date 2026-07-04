@@ -68,11 +68,11 @@ function buildFragments(): Frag[] {
     return {
       text, x, y,
       baseOpacity: isChain
-        ? 0.11 + Math.random() * 0.08
-        : 0.05 + Math.random() * 0.08,
+        ? 0.14 + Math.random() * 0.08
+        : 0.14 + Math.random() * 0.12,
       blur: isChain
         ? 0.0
-        : 0.3 + Math.random() * 0.6,
+        : 0.2 + Math.random() * 0.4,
       size: isChain
         ? 12 + Math.floor(Math.random() * 2)
         : 9 + Math.floor(Math.random() * 2),
@@ -115,7 +115,7 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
 
       // Map each element → its base opacity (used in multiple stages)
       const opMap = new WeakMap<HTMLSpanElement, number>()
-      allEls.forEach((el, i) => opMap.set(el, frags[i]?.baseOpacity ?? 0.06))
+      allEls.forEach((el, i) => opMap.set(el, frags[i]?.baseOpacity ?? 0.15))
 
       // ── Initial state ────────────────────────────────────────
       gsap.set(allEls, { opacity: 0 })
@@ -146,7 +146,7 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
       // Scene 1 — Hidden memory (0 → ~0.5s)
       // Background fills with fragments: fast, stagger
       tl.to(bgEls, {
-        opacity: (_, el) => opMap.get(el as HTMLSpanElement) ?? 0.05,
+        opacity: (_, el) => opMap.get(el as HTMLSpanElement) ?? 0.15,
         duration: 0.55,
         stagger: { amount: 0.5, from: 'random' },
         ease: 'power1.out',
@@ -227,7 +227,7 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
 
       // Post-animation — settle
       tl.to(bgEls, {
-        opacity: (_, el) => (opMap.get(el as HTMLSpanElement) ?? 0.05) * 0.6,
+        opacity: (_, el) => (opMap.get(el as HTMLSpanElement) ?? 0.15) * 0.85,
         duration: 1.2,
         stagger: { amount: 0.8, from: 'random' },
         ease: 'power1.inOut',
@@ -245,10 +245,10 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
           do { idx = Math.floor(Math.random() * pool.length) } while (idx === last && pool.length > 1)
           last = idx
           const el = pool[idx]
-          const base = (opMap.get(el) ?? 0.05) * 0.6
+          const base = (opMap.get(el) ?? 0.15) * 0.85
 
           gsap.to(el, {
-            opacity: base + 0.1,
+            opacity: base + 0.15,
             duration: 0.45,
             yoyo: true,
             repeat: 1,
@@ -385,7 +385,7 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
               Project Intelligence Layer
             </span>
           </div>
-          <span className="font-mono text-[12.5px] uppercase tracking-[0.20em] text-primary/70">
+          <span className="font-mono text-[12.5px] uppercase tracking-[0.20em] text-primary/85 dark:text-primary/70">
             Context Reconstructed
           </span>
         </div>
@@ -410,7 +410,7 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
           </span>
           <span
             ref={line2Ref}
-            className="block text-[clamp(1.5rem,3vw,2.5rem)] font-light leading-[1.12] tracking-[-0.022em] text-primary"
+            className="block text-[clamp(1.5rem,3vw,2.5rem)] font-normal dark:font-light leading-[1.12] tracking-[-0.022em] text-primary"
             style={{ clipPath: 'inset(0 100% 0 0)' }}
           >
             Unotusk rebuilds the memory it needs.
@@ -421,7 +421,7 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
         <div ref={ctaRef} style={{ opacity: 0 }}>
           <button
             onClick={onOpenModal}
-            className="group inline-flex items-center gap-2 border-b border-primary/14 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-primary/55 bg-transparent border-t-0 border-x-0 outline-none cursor-pointer transition-colors duration-300 hover:border-primary/28 hover:text-primary"
+            className="group inline-flex items-center gap-2 border-b border-primary/24 dark:border-primary/14 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-primary/70 dark:text-primary/55 bg-transparent border-t-0 border-x-0 outline-none cursor-pointer transition-colors duration-300 hover:border-primary/28 hover:text-primary"
           >
             <span>Request Early Access</span>
             <span

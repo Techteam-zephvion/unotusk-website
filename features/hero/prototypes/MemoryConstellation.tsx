@@ -247,11 +247,11 @@ export function MemoryConstellation() {
             <p className="text-[15px] font-medium leading-[1.55] tracking-[-0.01em] text-primary">
               Payment retry logic was previously rejected.
             </p>
-            <p className="mt-3 font-mono text-[12px] text-primary/60">March incident.</p>
+            <p className="mt-3 font-mono text-[12px] text-primary/80 dark:text-primary/60">March incident.</p>
           </div>
           <div className="flex flex-wrap gap-2 px-6 pb-5 pt-3" style={{ borderTop: '1px solid var(--color-border)' }}>
             {['PR-482', 'checkout.ts', 'Stripe'].map(tag => (
-              <span key={tag} className="rounded-md border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-primary/50" style={{ borderColor: 'var(--color-border)' }}>{tag}</span>
+              <span key={tag} className="rounded-md border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-primary/65 dark:text-primary/50" style={{ borderColor: 'var(--color-border)' }}>{tag}</span>
             ))}
           </div>
         </article>
@@ -263,12 +263,12 @@ export function MemoryConstellation() {
           <span className="block text-[clamp(1.75rem,3vw,2.6rem)] leading-[1.1] tracking-[-0.025em] text-primary" style={{ fontFamily: 'var(--font-young-serif), Georgia, serif' }}>
             AI ships the wrong things.
           </span>
-          <span className="block text-[clamp(1.4rem,2.5vw,2rem)] font-light leading-[1.15] tracking-[-0.02em] text-primary">
+          <span className="block text-[clamp(1.4rem,2.5vw,2rem)] font-normal dark:font-light leading-[1.15] tracking-[-0.02em] text-primary">
             Unotusk rebuilds the memory it needs.
           </span>
         </h1>
         <div ref={ctaRef} className="mt-8" style={{ opacity: 0 }}>
-          <a href="#early-access" className="group inline-flex items-center gap-2 border-b border-primary/15 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-primary/60 transition-colors duration-300 hover:border-primary/30 hover:text-primary">
+          <a href="#early-access" className="group inline-flex items-center gap-2 border-b border-primary/25 dark:border-primary/15 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-primary/75 dark:text-primary/60 transition-colors duration-300 hover:border-primary/30 hover:text-primary">
             <span>Request Early Access</span>
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true">→</span>
           </a>

@@ -64,7 +64,25 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${youngSerif.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var savedTheme = localStorage.getItem('theme');
+                  var systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+                  var initialTheme = savedTheme || systemTheme;
+                  document.documentElement.classList.toggle('light', initialTheme === 'light');
+                  document.documentElement.classList.toggle('dark', initialTheme === 'dark');
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col">
         <script
           type="application/ld+json"
