@@ -9,6 +9,12 @@
   --color-text-secondary: rgba(203,193,181,0.62);
   --color-accent:         #A07C4A;
   --color-border:         rgba(255, 255, 255, 0.06);
+  --color-card-bg:        #090D17;
+  --color-nav-bg:         rgba(11, 16, 32, 0.88);
+  --color-nav-border:     rgba(255, 255, 255, 0.05);
+  --color-card-shadow:    rgba(0, 0, 0, 0.55);
+  --color-vignette:       rgba(11, 16, 32, 0.82);
+  --color-logo-filter:    none;
 
   /* Typography */
   --font-display: var(--font-young-serif);
@@ -18,12 +24,28 @@
   --space-section: clamp(5rem, 10vw, 9rem);
 }
 
+html.light {
+  --color-bg:             #FAF8F5;
+  --color-ocean:          #E5ECF5;
+  --color-text-primary:   #1C2534;
+  --color-text-secondary: rgba(28,37,52,0.62);
+  --color-accent:         #8B6230;
+  --color-border:         rgba(28, 37, 52, 0.08);
+  --color-card-bg:        #FFFFFF;
+  --color-nav-bg:         rgba(250, 248, 245, 0.88);
+  --color-nav-border:     rgba(28, 37, 52, 0.05);
+  --color-card-shadow:    rgba(28, 37, 52, 0.08);
+  --color-vignette:       rgba(250, 248, 245, 0.82);
+  --color-logo-filter:    invert(0.9) sepia(0.3) saturate(1.5) hue-rotate(190deg) brightness(0.4);
+}
+
 @theme inline {
   --color-background:        var(--color-bg);
   --color-text-primary:      var(--color-text-primary);
   --color-text-secondary:    var(--color-text-secondary);
   --color-accent:            var(--color-accent);
   --color-border:            var(--color-border);
+  --color-card:              var(--color-card-bg);
   --font-sans:               var(--font-body), system-ui, sans-serif;
   --font-display:            var(--font-display);
   --font-body:               var(--font-body);
@@ -42,6 +64,7 @@ html {
   scroll-behavior: auto; /* Lenis handles smooth scroll */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
 }
 
 body {
@@ -50,6 +73,7 @@ body {
   color: var(--color-text-primary);
   min-height: 100dvh;
   overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
 }
 
 /* ── Typography Scale ──────────────────────────────────────── */
@@ -85,4 +109,10 @@ p {
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
+}
+
+/* ── Light Mode Logo Conversion ────────────────────────────── */
+html.light img[src="/logo.svg"] {
+  filter: invert(0.9) sepia(0.3) saturate(1.5) hue-rotate(190deg) brightness(0.4);
+  transition: filter 0.4s ease;
 }

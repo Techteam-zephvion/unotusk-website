@@ -299,7 +299,7 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
     <section
       ref={sectionRef}
       className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden"
-      style={{ background: '#0B1020' }}
+      style={{ background: 'var(--color-bg)' }}
       aria-label="Hero"
     >
       {/* Film grain */}
@@ -331,7 +331,7 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
         className="pointer-events-none absolute inset-0 z-10"
         style={{
           background:
-            'radial-gradient(ellipse 92% 88% at 50% 50%, transparent 28%, rgba(11,16,32,0.82) 100%)',
+            'radial-gradient(ellipse 92% 88% at 50% 50%, transparent 28%, var(--color-vignette) 100%)',
         }}
         aria-hidden="true"
       />
@@ -345,8 +345,8 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
           <span
             key={i}
             ref={(el) => { fragRefs.current[i] = el }}
-            className={`absolute font-mono uppercase text-[#CBC1B5] ${animDone
-                ? 'pointer-events-auto cursor-default hover:!opacity-85 hover:![filter:none] hover:text-white transition-all duration-300 ease-out'
+            className={`absolute font-mono uppercase text-primary ${animDone
+                ? 'pointer-events-auto cursor-default hover:!opacity-85 hover:![filter:none] hover:text-accent transition-all duration-300 ease-out'
                 : ''
               }`}
             style={{
@@ -379,13 +379,13 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
           <div className="flex items-center gap-2.5">
             <span
               className="inline-block h-[6px] w-[6px] rounded-full"
-              style={{ background: '#A07C4A', opacity: 0.95 }}
+              style={{ background: 'var(--color-accent)', opacity: 0.95 }}
             />
-            <span className="font-mono text-[11.5px] font-medium uppercase tracking-[0.28em] text-[#A07C4A]">
+            <span className="font-mono text-[11.5px] font-medium uppercase tracking-[0.28em] text-accent">
               Project Intelligence Layer
             </span>
           </div>
-          <span className="font-mono text-[12.5px] uppercase tracking-[0.20em] text-[#CBC1B5]/70">
+          <span className="font-mono text-[12.5px] uppercase tracking-[0.20em] text-primary/70">
             Context Reconstructed
           </span>
         </div>
@@ -393,14 +393,14 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
         {/* Divider — only visible after reconstruction */}
         <div
           className="h-px w-12"
-          style={{ background: 'rgba(255,255,255,0.07)' }}
+          style={{ background: 'var(--color-border)' }}
         />
 
         {/* Headline — clip-path mask reveal */}
         <div className="space-y-2 overflow-hidden">
           <span
             ref={line1Ref}
-            className="block text-[clamp(1.85rem,3.5vw,3rem)] leading-[1.08] tracking-[-0.026em] text-[#CBC1B5]"
+            className="block text-[clamp(1.85rem,3.5vw,3rem)] leading-[1.08] tracking-[-0.026em] text-primary"
             style={{
               fontFamily: 'var(--font-young-serif), Georgia, serif',
               clipPath: 'inset(0 100% 0 0)',
@@ -410,7 +410,7 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
           </span>
           <span
             ref={line2Ref}
-            className="block text-[clamp(1.5rem,3vw,2.5rem)] font-light leading-[1.12] tracking-[-0.022em] text-[#CBC1B5]"
+            className="block text-[clamp(1.5rem,3vw,2.5rem)] font-light leading-[1.12] tracking-[-0.022em] text-primary"
             style={{ clipPath: 'inset(0 100% 0 0)' }}
           >
             Unotusk rebuilds the memory it needs.
@@ -421,7 +421,7 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
         <div ref={ctaRef} style={{ opacity: 0 }}>
           <button
             onClick={onOpenModal}
-            className="group inline-flex items-center gap-2 border-b border-[#CBC1B5]/14 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-[#CBC1B5]/55 bg-transparent border-t-0 border-x-0 outline-none cursor-pointer transition-colors duration-300 hover:border-[#CBC1B5]/28 hover:text-[#CBC1B5]"
+            className="group inline-flex items-center gap-2 border-b border-primary/14 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-primary/55 bg-transparent border-t-0 border-x-0 outline-none cursor-pointer transition-colors duration-300 hover:border-primary/28 hover:text-primary"
           >
             <span>Request Early Access</span>
             <span

@@ -216,7 +216,7 @@ export function ReconstructionEngine() {
     <div
       ref={containerRef}
       className="relative flex min-h-screen items-center justify-center overflow-hidden"
-      style={{ background: '#090D17' }}
+      style={{ background: 'var(--color-bg)' }}
     >
       {/* Grain */}
       <div className="pointer-events-none absolute inset-0 z-10" style={{ opacity: 0.036, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`, backgroundRepeat: 'repeat', backgroundSize: '200px' }} aria-hidden="true" />
@@ -225,13 +225,13 @@ export function ReconstructionEngine() {
       <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(ellipse 55% 45% at 50% 50%, rgba(160,124,74,0.05) 0%, transparent 65%)' }} aria-hidden="true" />
 
       {/* Vignette */}
-      <div className="pointer-events-none absolute inset-0 z-10" style={{ background: 'radial-gradient(ellipse 95% 90% at 50% 50%, transparent 30%, rgba(9,13,23,0.8) 100%)' }} aria-hidden="true" />
+      <div className="pointer-events-none absolute inset-0 z-10" style={{ background: 'radial-gradient(ellipse 95% 90% at 50% 50%, transparent 30%, var(--color-vignette) 100%)' }} aria-hidden="true" />
 
       {/* ── Background fragments (non-word) ── */}
       <div className="pointer-events-none absolute inset-0 select-none overflow-hidden" aria-hidden="true">
         {bgFrags.map((f, i) => (
           <span key={i} ref={(el) => { bgFragRefs.current[i] = el }}
-            className="absolute font-mono uppercase text-[#F5F3EF]"
+            className="absolute font-mono uppercase text-primary"
             style={{ left: `${f.x}%`, top: `${f.y}%`, fontSize: `${f.size}px`, opacity: 0, filter: `blur(${f.blur}px)`, transform: f.rotate ? `rotate(${f.rotate}deg)` : undefined, letterSpacing: '0.15em', lineHeight: 1, willChange: 'opacity' }}
           >{f.text}</span>
         ))}
@@ -246,7 +246,7 @@ export function ReconstructionEngine() {
           ][i] ?? { x: 30 + i * 8, y: 30 }
           return (
             <span key={word} ref={(el) => { wordRefs.current[i] = el }}
-              className="absolute font-mono text-[10px] uppercase tracking-[0.18em] text-[#F5F3EF]"
+              className="absolute font-mono text-[10px] uppercase tracking-[0.18em] text-primary"
               style={{ left: `${pos.x}%`, top: `${pos.y}%`, opacity: 0, willChange: 'transform, opacity' }}
             >{word}</span>
           )
@@ -255,7 +255,7 @@ export function ReconstructionEngine() {
           const pos = [{ x: 55, y: 30 }, { x: 35, y: 75 }][i] ?? { x: 60, y: 60 }
           return (
             <span key={word} ref={(el) => { wordRefs2.current[i] = el }}
-              className="absolute font-mono text-[10px] uppercase tracking-[0.18em] text-[#F5F3EF]"
+              className="absolute font-mono text-[10px] uppercase tracking-[0.18em] text-primary"
               style={{ left: `${pos.x}%`, top: `${pos.y}%`, opacity: 0, willChange: 'transform, opacity' }}
             >{word}</span>
           )
@@ -268,14 +268,14 @@ export function ReconstructionEngine() {
           <div className="flex flex-wrap justify-center gap-x-3 gap-y-1">
             {SENTENCE_WORDS.map((word, i) => (
               <span key={word} ref={(el) => { targetWordRefs.current[i] = el }}
-                className="font-mono text-[13px] uppercase tracking-[0.18em] text-[#F5F3EF]"
+                className="font-mono text-[13px] uppercase tracking-[0.18em] text-primary"
               >{word}</span>
             ))}
           </div>
           <div className="mt-1 flex flex-wrap justify-center gap-x-3">
             {SENTENCE_LINE2.map((word, i) => (
               <span key={word} ref={(el) => { targetWordRefs2.current[i] = el }}
-                className="font-mono text-[13px] uppercase tracking-[0.18em] text-[#F5F3EF]"
+                className="font-mono text-[13px] uppercase tracking-[0.18em] text-primary"
               >{word}</span>
             ))}
           </div>
@@ -285,13 +285,13 @@ export function ReconstructionEngine() {
       {/* ── Assembled recovered sentence (replaces converged words) ── */}
       <div ref={assembledRef} className="pointer-events-none absolute inset-0 flex items-center justify-center" style={{ opacity: 0 }}>
         <div className="text-center">
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#A07C4A] mb-4">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent mb-4">
             recovered context
           </p>
-          <p className="text-[clamp(1rem,2vw,1.35rem)] font-medium leading-[1.6] tracking-[-0.01em] text-[#F5F3EF]">
+          <p className="text-[clamp(1rem,2vw,1.35rem)] font-medium leading-[1.6] tracking-[-0.01em] text-primary">
             Payment retry logic was previously rejected.
             <br />
-            <span className="text-[#CBC1B5]/70">March incident.</span>
+            <span className="text-primary/70">March incident.</span>
           </p>
         </div>
       </div>
@@ -305,12 +305,12 @@ export function ReconstructionEngine() {
           <div className="space-y-4">
             <h1>
               <span
-                className="block text-[clamp(1.75rem,3.2vw,2.6rem)] leading-[1.1] tracking-[-0.025em] text-[#F5F3EF]"
+                className="block text-[clamp(1.75rem,3.2vw,2.6rem)] leading-[1.1] tracking-[-0.025em] text-primary"
                 style={{ fontFamily: 'var(--font-young-serif), Georgia, serif' }}
               >
                 {corruptedLine1}
               </span>
-              <span className="mt-2 block text-[clamp(1.4rem,2.6vw,2.1rem)] font-light leading-[1.15] tracking-[-0.02em] text-[#CBC1B5]">
+              <span className="mt-2 block text-[clamp(1.4rem,2.6vw,2.1rem)] font-light leading-[1.15] tracking-[-0.02em] text-primary">
                 {corruptedLine2}
               </span>
             </h1>
@@ -320,7 +320,7 @@ export function ReconstructionEngine() {
         <div ref={ctaRef} className="mt-10" style={{ opacity: 0 }}>
           <a
             href="#early-access"
-            className="group inline-flex items-center gap-2 border-b border-[#F5F3EF]/15 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-[#F5F3EF]/60 transition-colors duration-300 hover:border-[#F5F3EF]/30 hover:text-[#F5F3EF]"
+            className="group inline-flex items-center gap-2 border-b border-primary/15 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-primary/60 transition-colors duration-300 hover:border-primary/30 hover:text-primary"
           >
             <span>Request Early Access</span>
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true">→</span>

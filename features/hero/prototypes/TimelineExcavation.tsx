@@ -138,11 +138,11 @@ export function TimelineExcavation() {
     <div
       ref={containerRef}
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
-      style={{ background: '#090D17' }}
+      style={{ background: 'var(--color-bg)' }}
     >
       {/* Grain */}
       <div className="pointer-events-none absolute inset-0 z-10" style={{ opacity: 0.036, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`, backgroundRepeat: 'repeat', backgroundSize: '200px' }} aria-hidden="true" />
-      <div className="pointer-events-none absolute inset-0 z-10" style={{ background: 'radial-gradient(ellipse 95% 90% at 50% 50%, transparent 30%, rgba(9,13,23,0.8) 100%)' }} aria-hidden="true" />
+      <div className="pointer-events-none absolute inset-0 z-10" style={{ background: 'radial-gradient(ellipse 95% 90% at 50% 50%, transparent 30%, var(--color-vignette) 100%)' }} aria-hidden="true" />
 
       {/* Scanline */}
       <div
@@ -150,7 +150,7 @@ export function TimelineExcavation() {
         className="pointer-events-none absolute left-0 right-0 z-30"
         style={{
           height: '1px',
-          background: 'linear-gradient(90deg, transparent 0%, rgba(160,124,74,0.6) 20%, rgba(245,243,239,0.4) 50%, rgba(160,124,74,0.6) 80%, transparent 100%)',
+          background: 'linear-gradient(90deg, transparent 0%, var(--color-accent) 20%, var(--color-text-primary) 50%, var(--color-accent) 80%, transparent 100%)',
           top: 0,
         }}
         aria-hidden="true"
@@ -164,11 +164,11 @@ export function TimelineExcavation() {
             ref={(el) => { layerRefs.current[i] = el }}
             className="flex items-center gap-8 px-12 py-4"
             style={{
-              borderBottom: i < LAYERS.length - 1 ? '1px solid rgba(255,255,255,0.025)' : 'none',
+              borderBottom: i < LAYERS.length - 1 ? '1px solid var(--color-border)' : 'none',
             }}
           >
             {/* Era label */}
-            <span className="w-24 shrink-0 text-right font-mono text-[9px] uppercase tracking-[0.2em] text-[#A07C4A]/70">
+            <span className="w-24 shrink-0 text-right font-mono text-[9px] uppercase tracking-[0.2em] text-accent/70">
               {layer.era}
             </span>
             {/* Fragments */}
@@ -180,7 +180,7 @@ export function TimelineExcavation() {
                   style={{
                     fontSize: layer.isRecovered ? 14 : 10,
                     letterSpacing: '0.14em',
-                    color: layer.isRecovered ? '#F5F3EF' : 'rgba(245,243,239,0.7)',
+                    color: layer.isRecovered ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
                     fontWeight: layer.isRecovered ? 500 : 400,
                   }}
                 >
@@ -196,24 +196,24 @@ export function TimelineExcavation() {
       <div ref={cardRef} className="relative z-20 mt-8 w-full max-w-[380px]" style={{ opacity: 0 }}>
         <article
           className="w-full overflow-hidden rounded-2xl"
-          style={{ background: 'rgba(17,24,39,0.92)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 32px 80px rgba(0,0,0,0.6)' }}
+          style={{ background: 'var(--color-card-bg)', border: '1px solid var(--color-border)', boxShadow: '0 32px 80px var(--color-card-shadow)' }}
         >
-          <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#A07C4A]">recovered context</span>
+          <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: '1px solid var(--color-border)' }}>
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">recovered context</span>
             <span className="flex items-center gap-1.5">
-              <span className="h-[5px] w-[5px] rounded-full bg-[#A07C4A]/60" />
-              <span className="font-mono text-[9px] uppercase tracking-widest text-[#CBC1B5]/40">live</span>
+              <span className="h-[5px] w-[5px] rounded-full bg-accent/60" />
+              <span className="font-mono text-[9px] uppercase tracking-widest text-primary/40">live</span>
             </span>
           </div>
           <div className="px-6 pt-6 pb-4">
-            <p className="text-[15px] font-medium leading-[1.55] text-[#F5F3EF]">
+            <p className="text-[15px] font-medium leading-[1.55] text-primary">
               Payment retry logic was previously rejected.
             </p>
-            <p className="mt-3 font-mono text-[12px] text-[#CBC1B5]/60">March incident.</p>
+            <p className="mt-3 font-mono text-[12px] text-primary/60">March incident.</p>
           </div>
-          <div className="flex flex-wrap gap-2 px-6 pb-5 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+          <div className="flex flex-wrap gap-2 px-6 pb-5 pt-3" style={{ borderTop: '1px solid var(--color-border)' }}>
             {['Q4 2023', 'PR-482', 'March Incident'].map(tag => (
-              <span key={tag} className="rounded-md border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-[#CBC1B5]/50" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>{tag}</span>
+              <span key={tag} className="rounded-md border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-primary/50" style={{ borderColor: 'var(--color-border)' }}>{tag}</span>
             ))}
           </div>
         </article>
@@ -222,15 +222,15 @@ export function TimelineExcavation() {
       {/* ── Headline + CTA ── */}
       <div ref={headlineRef} className="relative z-20 mt-12 text-center px-6" style={{ opacity: 0 }}>
         <h1>
-          <span className="block text-[clamp(1.75rem,3vw,2.6rem)] leading-[1.1] tracking-[-0.025em] text-[#F5F3EF]" style={{ fontFamily: 'var(--font-young-serif), Georgia, serif' }}>
+          <span className="block text-[clamp(1.75rem,3vw,2.6rem)] leading-[1.1] tracking-[-0.025em] text-primary" style={{ fontFamily: 'var(--font-young-serif), Georgia, serif' }}>
             AI ships the wrong things.
           </span>
-          <span className="block text-[clamp(1.4rem,2.5vw,2rem)] font-light leading-[1.15] tracking-[-0.02em] text-[#CBC1B5]">
+          <span className="block text-[clamp(1.4rem,2.5vw,2rem)] font-light leading-[1.15] tracking-[-0.02em] text-primary">
             Unotusk rebuilds the memory it needs.
           </span>
         </h1>
         <div ref={ctaRef} className="mt-8" style={{ opacity: 0 }}>
-          <a href="#early-access" className="group inline-flex items-center gap-2 border-b border-[#F5F3EF]/15 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-[#F5F3EF]/60 transition-colors duration-300 hover:border-[#F5F3EF]/30 hover:text-[#F5F3EF]">
+          <a href="#early-access" className="group inline-flex items-center gap-2 border-b border-primary/15 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-primary/60 transition-colors duration-300 hover:border-primary/30 hover:text-primary">
             <span>Request Early Access</span>
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true">→</span>
           </a>

@@ -32,7 +32,7 @@ export function PrototypeSwitcher() {
 
       {/* Switcher tabs — fixed bottom-right, review only */}
       <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-2">
-        <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#CBC1B5]/30 mb-1">
+        <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-primary/30 mb-1">
           prototype
         </p>
         {PROTOTYPES.map((p) => (
@@ -42,13 +42,13 @@ export function PrototypeSwitcher() {
             className={[
               'group flex items-center gap-2.5 rounded-full border px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] transition-all duration-200',
               active === p.id
-                ? 'border-[#A07C4A]/60 bg-[#A07C4A]/10 text-[#A07C4A]'
-                : 'border-white/[0.07] bg-[#090D17]/80 text-[#CBC1B5]/50 hover:border-white/[0.14] hover:text-[#CBC1B5]',
+                ? 'border-accent/60 bg-accent/10 text-accent'
+                : 'border-border bg-card/80 text-primary/55 hover:border-primary/20 hover:text-primary',
             ].join(' ')}
           >
             <span
               className="h-1.5 w-1.5 rounded-full flex-shrink-0"
-              style={{ background: active === p.id ? '#A07C4A' : 'rgba(203,193,181,0.3)' }}
+              style={{ background: active === p.id ? 'var(--color-accent)' : 'var(--color-text-secondary)' }}
             />
             {p.label}
           </button>

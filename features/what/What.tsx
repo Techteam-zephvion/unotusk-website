@@ -110,7 +110,7 @@ export function What() {
     width: '70%',
     height: '70%',
     objectFit: 'contain',
-    filter: 'invert(1) brightness(0.82)',
+    filter: 'var(--color-logo-filter)',
     pointerEvents: 'none',
     maxWidth: 'none',
     maxHeight: 'none',
@@ -476,13 +476,13 @@ export function What() {
   const mono: React.CSSProperties = { fontFamily: 'var(--font-inter), sans-serif' }
 
   return (
-    <div ref={containerRef} style={{ background: '#0B1020', color: '#CBC1B5' }}>
+    <div ref={containerRef} style={{ background: 'var(--color-bg)', color: 'var(--color-text-primary)' }}>
 
       {/* Favicon word cloud + product statement */}
       <div
         ref={megaRef}
         className="relative overflow-hidden"
-        style={{ minHeight: '100vh', background: '#0B1020' }}
+        style={{ minHeight: '100vh', background: 'var(--color-bg)' }}
         role="region"
         aria-label="Project knowledge forming the Unotusk elephant"
       >
@@ -491,7 +491,7 @@ export function What() {
           aria-hidden="true"
           style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: 'radial-gradient(ellipse 58% 56% at 50% 47%, rgba(203,193,181,0.03) 0%, transparent 66%)',
+            background: 'radial-gradient(ellipse 58% 56% at 50% 47%, var(--color-nav-border) 0%, transparent 66%)',
           }}
         />
 
@@ -518,7 +518,7 @@ export function What() {
                 fontSize: `calc(${p.fontSize} * ${STAGE_SIZE})`,
                 fontWeight: p.weight,
                 opacity: p.op,
-                color: '#CBC1B5',
+                color: 'var(--color-text-primary)',
                 letterSpacing: '0.01em',
                 textTransform: 'uppercase',
                 whiteSpace: 'nowrap',
@@ -547,7 +547,7 @@ export function What() {
             style={{
               ...serif, clipPath: H,
               fontSize: 'clamp(1.8rem, 4vw, 4rem)', lineHeight: 1.05,
-              letterSpacing: '-0.025em', color: '#CBC1B5',
+              letterSpacing: '-0.025em', color: 'var(--color-text-primary)',
             }}
           >
             Unotusk gives AI
@@ -557,7 +557,7 @@ export function What() {
             style={{
               ...serif, clipPath: H,
               fontSize: 'clamp(1.8rem, 4vw, 4rem)', lineHeight: 1.05,
-              letterSpacing: '-0.025em', color: '#CBC1B5',
+              letterSpacing: '-0.025em', color: 'var(--color-text-primary)',
             }}
           >
             the one thing it&rsquo;s missing&mdash;
@@ -567,7 +567,7 @@ export function What() {
             style={{
               ...serif, clipPath: H,
               fontSize: 'clamp(1.8rem, 4vw, 4rem)', lineHeight: 1.05,
-              letterSpacing: '-0.025em', color: 'rgba(203,193,181,0.62)',
+              letterSpacing: '-0.025em', color: 'var(--color-text-secondary)',
             }}
           >
             your project&rsquo;s memory.
@@ -582,7 +582,8 @@ export function What() {
               ...mono, clipPath: H,
               fontSize: 'clamp(0.85rem, 1.5vw, 1.1rem)',
               letterSpacing: '0.03em',
-              color: 'rgba(203,193,181,0.45)',
+              color: 'var(--color-text-primary)',
+              opacity: 0.45,
               lineHeight: 1.7,
             }}
           >
@@ -594,7 +595,7 @@ export function What() {
               ...mono, clipPath: H,
               fontSize: 'clamp(0.85rem, 1.5vw, 1.1rem)',
               letterSpacing: '0.03em',
-              color: 'rgba(203,193,181,0.62)',
+              color: 'var(--color-text-secondary)',
               lineHeight: 1.7,
             }}
           >
@@ -603,7 +604,7 @@ export function What() {
         </div>
       </div>
 
-      <div style={{ height: '60vh', background: '#0B1020' }} aria-hidden="true" />
+      <div style={{ height: '60vh', background: 'var(--color-bg)' }} aria-hidden="true" />
     </div>
   )
 }

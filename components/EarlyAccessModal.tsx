@@ -105,7 +105,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B1020]/75 backdrop-blur-xl transition-opacity duration-300"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-md transition-opacity duration-300"
       onClick={(e) => {
         if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
           onClose()
@@ -118,21 +118,22 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
       <style>{`
         input:focus, textarea:focus {
           outline: none !important;
-          border-color: rgba(160, 124, 74, 0.5) !important;
-          box-shadow: 0 0 0 1px rgba(160, 124, 74, 0.25) !important;
+          border-color: var(--color-accent) !important;
+          box-shadow: 0 0 0 1px var(--color-accent) !important;
         }
       `}</style>
       <div
         ref={modalRef}
-        className="relative w-full max-w-[460px] overflow-hidden rounded-xl border border-white/8 bg-[#0E1427]/90 p-8 shadow-[0_24px_48px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.05)] transition-all duration-300"
+        className="relative w-full max-w-[460px] overflow-hidden rounded-xl border border-border p-8 transition-all duration-300"
         style={{
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+          background: 'var(--color-card-bg)',
+          boxShadow: '0 32px 80px var(--color-card-shadow)',
         }}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full text-[#CBC1B5]/50 transition-colors duration-200 hover:bg-white/5 hover:text-white"
+          className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full text-primary/50 transition-colors duration-200 hover:bg-primary/5 hover:text-primary"
           aria-label="Close modal"
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -151,8 +152,8 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
           <img
             src="/logo.svg"
             alt="Unotusk"
-            className="mx-auto mb-3 h-8 w-auto brightness-0 invert"
-            style={{ opacity: 0.95 }}
+            className="mx-auto mb-3 h-8 w-auto"
+            style={{ filter: 'var(--color-logo-filter)', opacity: 0.95 }}
           />
           <h2
             id="modal-title"
@@ -162,7 +163,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
               fontWeight: 500,
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
-              color: '#A07C4A',
+              color: 'var(--color-accent)',
             }}
           >
             Request Early Access
@@ -171,7 +172,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
 
         {status === 'success' ? (
           <div className="py-6 text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#A07C4A]/10 text-[#A07C4A]">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M20 6L9 17L4 12"
@@ -186,7 +187,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
               style={{
                 ...fontSerif,
                 fontSize: '1.4rem',
-                color: '#CBC1B5',
+                color: 'var(--color-text-primary)',
                 marginBottom: '0.75rem',
               }}
             >
@@ -197,7 +198,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                 ...fontMono,
                 fontSize: '0.85rem',
                 lineHeight: 1.6,
-                color: 'rgba(203, 193, 181, 0.7)',
+                color: 'var(--color-text-secondary)',
                 marginBottom: '1.8rem',
               }}
             >
@@ -205,7 +206,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
             </p>
             <button
               onClick={onClose}
-              className="w-full rounded-md border border-[#CBC1B5]/15 bg-[#CBC1B5]/5 py-2.5 font-mono text-[11px] uppercase tracking-widest text-[#CBC1B5]/90 transition-colors duration-200 hover:bg-[#CBC1B5]/10 hover:text-white"
+              className="w-full rounded-md border border-primary/15 bg-primary/5 py-2.5 font-mono text-[11px] uppercase tracking-widest text-primary/90 transition-colors duration-200 hover:bg-primary/10 hover:text-primary"
             >
               Close Window
             </button>
@@ -221,7 +222,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                   fontSize: '9px',
                   textTransform: 'uppercase',
                   letterSpacing: '0.12em',
-                  color: '#A07C4A',
+                  color: 'var(--color-accent)',
                 }}
               >
                 Full Name *
@@ -233,7 +234,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                 onChange={(e) => setName(e.target.value)}
                 required
                 disabled={status === 'loading'}
-                className="w-full rounded border border-white/8 bg-[#0B1020]/40 px-3.5 py-2 text-sm text-[#CBC1B5] outline-none transition-all duration-300 placeholder:text-[#CBC1B5]/30 focus:border-[#A07C4A]/50 focus:bg-[#0B1020]/60 focus:shadow-[0_0_0_1px_rgba(160,124,74,0.2)]"
+                className="w-full rounded border border-border bg-card/45 px-3.5 py-2 text-sm text-primary outline-none transition-all duration-300 placeholder:text-primary/30 focus:border-accent/50 focus:bg-card/65 focus:shadow-[0_0_0_1px_var(--color-accent)]"
                 placeholder="e.g. Dilip Kumar"
               />
             </div>
@@ -247,7 +248,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                   fontSize: '9px',
                   textTransform: 'uppercase',
                   letterSpacing: '0.12em',
-                  color: '#A07C4A',
+                  color: 'var(--color-accent)',
                 }}
               >
                 Work Email *
@@ -259,7 +260,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={status === 'loading'}
-                className="w-full rounded border border-white/8 bg-[#0B1020]/40 px-3.5 py-2 text-sm text-[#CBC1B5] outline-none transition-all duration-300 placeholder:text-[#CBC1B5]/30 focus:border-[#A07C4A]/50 focus:bg-[#0B1020]/60 focus:shadow-[0_0_0_1px_rgba(160,124,74,0.2)]"
+                className="w-full rounded border border-border bg-card/45 px-3.5 py-2 text-sm text-primary outline-none transition-all duration-300 placeholder:text-primary/30 focus:border-accent/50 focus:bg-card/65 focus:shadow-[0_0_0_1px_var(--color-accent)]"
                 placeholder="you@company.com"
               />
             </div>
@@ -273,7 +274,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                   fontSize: '9px',
                   textTransform: 'uppercase',
                   letterSpacing: '0.12em',
-                  color: '#A07C4A',
+                  color: 'var(--color-accent)',
                 }}
               >
                 Company *
@@ -285,7 +286,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                 onChange={(e) => setCompany(e.target.value)}
                 required
                 disabled={status === 'loading'}
-                className="w-full rounded border border-white/8 bg-[#0B1020]/40 px-3.5 py-2 text-sm text-[#CBC1B5] outline-none transition-all duration-300 placeholder:text-[#CBC1B5]/30 focus:border-[#A07C4A]/50 focus:bg-[#0B1020]/60 focus:shadow-[0_0_0_1px_rgba(160,124,74,0.2)]"
+                className="w-full rounded border border-border bg-card/45 px-3.5 py-2 text-sm text-primary outline-none transition-all duration-300 placeholder:text-primary/30 focus:border-accent/50 focus:bg-card/65 focus:shadow-[0_0_0_1px_var(--color-accent)]"
                 placeholder="e.g. Unotusk Inc."
               />
             </div>
@@ -299,7 +300,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                   fontSize: '9px',
                   textTransform: 'uppercase',
                   letterSpacing: '0.12em',
-                  color: '#A07C4A',
+                  color: 'var(--color-accent)',
                 }}
               >
                 Message / Context (Optional)
@@ -310,7 +311,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                 onChange={(e) => setMessage(e.target.value)}
                 disabled={status === 'loading'}
                 rows={3}
-                className="w-full resize-none rounded border border-white/8 bg-[#0B1020]/40 px-3.5 py-2 text-sm text-[#CBC1B5] outline-none transition-all duration-300 placeholder:text-[#CBC1B5]/30 focus:border-[#A07C4A]/50 focus:bg-[#0B1020]/60 focus:shadow-[0_0_0_1px_rgba(160,124,74,0.2)]"
+                className="w-full resize-none rounded border border-border bg-card/45 px-3.5 py-2 text-sm text-primary outline-none transition-all duration-300 placeholder:text-primary/30 focus:border-accent/50 focus:bg-card/65 focus:shadow-[0_0_0_1px_var(--color-accent)]"
                 placeholder="Tell us a bit about your product or team memory challenges..."
               />
             </div>
@@ -318,7 +319,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
             {/* Error Message */}
             {status === 'error' && (
               <div
-                className="rounded border border-red-500/20 bg-red-950/20 px-3.5 py-2 text-center text-xs text-red-400"
+                className="rounded border border-red-500/20 bg-red-500/5 dark:bg-red-950/20 px-3.5 py-2 text-center text-xs text-red-600 dark:text-red-400"
                 style={{ ...fontMono }}
               >
                 {errorMessage}
@@ -329,7 +330,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
             <button
               type="submit"
               disabled={status === 'loading'}
-              className="relative w-full rounded bg-[#A07C4A] py-3 text-center font-mono text-[10px] font-semibold uppercase tracking-widest text-[#0B1020] transition-all duration-300 hover:bg-[#b08d5b] hover:shadow-[0_0_16px_rgba(160,124,74,0.35)] disabled:opacity-50"
+              className="relative w-full rounded bg-accent py-3 text-center font-mono text-[10px] font-semibold uppercase tracking-widest text-white transition-all duration-300 hover:brightness-110 disabled:opacity-50"
             >
               {status === 'loading' ? (
                 <span className="flex items-center justify-center gap-2">

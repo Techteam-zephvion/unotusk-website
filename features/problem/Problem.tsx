@@ -178,24 +178,24 @@ export function Problem() {
   const maskOverlay: React.CSSProperties = {
     position: 'absolute', top: 0, bottom: 0,
     left: '-32px', right: 0,
-    background: 'linear-gradient(to right, transparent 0px, #0B1020 32px)',
+    background: 'linear-gradient(to right, transparent 0px, var(--color-bg) 32px)',
     pointerEvents: 'none',
   }
 
   return (
-    <div ref={containerRef} style={{ background: '#0B1020', color: '#CBC1B5' }}>
+    <div ref={containerRef} style={{ background: 'var(--color-bg)', color: 'var(--color-text-primary)' }}>
 
       {/* ── Chapter 1: Problem Statement ────────────────────── */}
       <div
         ref={titleRef}
         className="flex min-h-screen items-center"
-        style={{ padding: '0 7vw', background: '#0B1020' }}
+        style={{ padding: '0 7vw', background: 'var(--color-bg)' }}
       >
         <div>
           <div style={{ position: 'relative', overflow: 'hidden', paddingBottom: '0.1em' }}>
             <div
               ref={tL1}
-              style={{ ...serif, fontSize: 'clamp(2.4rem, 5.8vw, 6rem)', lineHeight: 1.1, letterSpacing: '-0.025em', color: '#CBC1B5' }}
+              style={{ ...serif, fontSize: 'clamp(2.4rem, 5.8vw, 6rem)', lineHeight: 1.1, letterSpacing: '-0.025em', color: 'var(--color-text-primary)' }}
             >
               The problem isn&rsquo;t AI capability.
             </div>
@@ -204,7 +204,7 @@ export function Problem() {
           <div style={{ position: 'relative', overflow: 'hidden', marginTop: '0.1em', paddingBottom: '0.1em' }}>
             <div
               ref={tL2}
-              style={{ ...serif, fontSize: 'clamp(2.4rem, 5.8vw, 6rem)', lineHeight: 1.1, letterSpacing: '-0.025em', color: 'rgba(203,193,181,0.62)' }}
+              style={{ ...serif, fontSize: 'clamp(2.4rem, 5.8vw, 6rem)', lineHeight: 1.1, letterSpacing: '-0.025em', color: 'var(--color-text-secondary)' }}
             >
               It&rsquo;s AI without project memory.
             </div>
@@ -217,32 +217,32 @@ export function Problem() {
       <div
         ref={statsRef}
         className="relative flex min-h-screen flex-col items-center justify-center px-6 text-center"
-        style={{ background: '#0B1020' }}
+        style={{ background: 'var(--color-bg)' }}
         aria-live="polite"
       >
         <div style={{ position: 'relative', width: '100%', height: 'clamp(6rem, 16vw, 15rem)', marginBottom: '3.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div ref={s1Num} aria-label="95 percent" style={{ ...serif, position: 'absolute', clipPath: HC, fontSize: 'clamp(5.5rem, 15vw, 14rem)', lineHeight: 1.05, letterSpacing: '-0.045em', color: '#CBC1B5' }}>
+          <div ref={s1Num} aria-label="95 percent" style={{ ...serif, position: 'absolute', clipPath: HC, fontSize: 'clamp(5.5rem, 15vw, 14rem)', lineHeight: 1.05, letterSpacing: '-0.045em', color: 'var(--color-text-primary)' }}>
             95%
           </div>
-          <div ref={s2Num} aria-label="0 percent" style={{ ...serif, position: 'absolute', clipPath: HC, fontSize: 'clamp(5.5rem, 15vw, 14rem)', lineHeight: 1.05, letterSpacing: '-0.045em', color: '#CBC1B5' }}>
+          <div ref={s2Num} aria-label="0 percent" style={{ ...serif, position: 'absolute', clipPath: HC, fontSize: 'clamp(5.5rem, 15vw, 14rem)', lineHeight: 1.05, letterSpacing: '-0.045em', color: 'var(--color-text-primary)' }}>
             0%
           </div>
         </div>
 
         <div style={{ position: 'relative', width: '100%', maxWidth: 440, minHeight: '5.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div ref={s1Desc} style={{ position: 'absolute', opacity: 0, fontSize: 'clamp(0.875rem, 1.4vw, 1rem)', lineHeight: 1.7, color: 'rgba(203,193,181,0.62)', letterSpacing: '0.01em', textAlign: 'center' }}>
+          <div ref={s1Desc} style={{ position: 'absolute', opacity: 0, fontSize: 'clamp(0.875rem, 1.4vw, 1rem)', lineHeight: 1.7, color: 'var(--color-text-secondary)', letterSpacing: '0.01em', textAlign: 'center' }}>
             of enterprise GenAI pilots produce<br />no measurable business impact.
           </div>
-          <div ref={s2Desc} style={{ position: 'absolute', opacity: 0, fontSize: 'clamp(0.875rem, 1.4vw, 1rem)', lineHeight: 1.7, color: 'rgba(203,193,181,0.62)', letterSpacing: '0.01em', textAlign: 'center' }}>
+          <div ref={s2Desc} style={{ position: 'absolute', opacity: 0, fontSize: 'clamp(0.875rem, 1.4vw, 1rem)', lineHeight: 1.7, color: 'var(--color-text-secondary)', letterSpacing: '0.01em', textAlign: 'center' }}>
             of engineering leaders are very confident<br />AI-generated code behaves correctly<br />in production.
           </div>
         </div>
 
         <div style={{ position: 'relative', height: '1.5rem', marginTop: '1.5rem' }}>
-          <div ref={s1Src} style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', opacity: 0, ...mono, fontSize: 9, letterSpacing: '0.20em', textTransform: 'uppercase', color: 'rgba(203,193,181,0.32)', whiteSpace: 'nowrap' }}>
+          <div ref={s1Src} style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', opacity: 0, ...mono, fontSize: 9, letterSpacing: '0.20em', textTransform: 'uppercase', color: 'var(--color-text-primary)', opacity: 0.32, whiteSpace: 'nowrap' }}>
             MIT NANDA
           </div>
-          <div ref={s2Src} style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', opacity: 0, ...mono, fontSize: 9, letterSpacing: '0.20em', textTransform: 'uppercase', color: 'rgba(203,193,181,0.32)', whiteSpace: 'nowrap' }}>
+          <div ref={s2Src} style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', opacity: 0, ...mono, fontSize: 9, letterSpacing: '0.20em', textTransform: 'uppercase', color: 'var(--color-text-primary)', opacity: 0.32, whiteSpace: 'nowrap' }}>
             Stack Overflow
           </div>
         </div>
@@ -252,18 +252,18 @@ export function Problem() {
       <div
         ref={punchRef}
         className="flex min-h-screen flex-col items-center justify-center px-6 text-center"
-        style={{ background: '#0B1020' }}
+        style={{ background: 'var(--color-bg)' }}
       >
-        <div ref={pL1} style={{ ...serif, clipPath: H, fontSize: 'clamp(2.2rem, 5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: '#CBC1B5' }}>Teams keep paying</div>
-        <div ref={pL2} style={{ ...serif, clipPath: H, fontSize: 'clamp(2.2rem, 5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: '#CBC1B5' }}>for lessons</div>
-        <div ref={pL3} style={{ ...serif, clipPath: H, fontSize: 'clamp(2.2rem, 5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: 'rgba(203,193,181,0.62)' }}>they already learned.</div>
+        <div ref={pL1} style={{ ...serif, clipPath: H, fontSize: 'clamp(2.2rem, 5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: 'var(--color-text-primary)' }}>Teams keep paying</div>
+        <div ref={pL2} style={{ ...serif, clipPath: H, fontSize: 'clamp(2.2rem, 5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: 'var(--color-text-primary)' }}>for lessons</div>
+        <div ref={pL3} style={{ ...serif, clipPath: H, fontSize: 'clamp(2.2rem, 5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: 'var(--color-text-secondary)' }}>they already learned.</div>
       </div>
 
       {/* ── Chapter 4: Bridge ───────────────────────────────── */}
       <div
         ref={bridgeRef}
         className="flex min-h-screen items-center justify-center px-6 text-center"
-        style={{ background: '#0B1020' }}
+        style={{ background: 'var(--color-bg)' }}
       >
         <style>{`
           @keyframes sparkleTwinkle {
@@ -298,7 +298,7 @@ export function Problem() {
           .bridge-text {
             font-size: clamp(1.5rem, 3.2vw, 2.5rem);
             letter-spacing: 0.04em;
-            color: #CBC1B5;
+            color: var(--color-text-primary);
             filter: blur(0px);
             font-weight: 300;
             line-height: 1;

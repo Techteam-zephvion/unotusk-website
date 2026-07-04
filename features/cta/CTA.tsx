@@ -67,7 +67,7 @@ export function CTA({ onOpenModal }: CTAProps) {
       ref={containerRef}
       id="early-access"
       className="flex min-h-screen flex-col justify-center"
-      style={{ padding: '0 7vw', background: '#0B1020', color: '#CBC1B5' }}
+      style={{ padding: '0 7vw', background: 'var(--color-bg)', color: 'var(--color-text-primary)' }}
     >
       <div style={{ maxWidth: '38rem' }}>
 
@@ -79,7 +79,7 @@ export function CTA({ onOpenModal }: CTAProps) {
             fontSize: 'clamp(1.8rem, 3.2vw, 3.2rem)',
             lineHeight: 1.08,
             letterSpacing: '-0.025em',
-            color: '#CBC1B5',
+            color: 'var(--color-text-primary)',
             marginBottom: '2.8rem',
           }}
         >
@@ -93,7 +93,7 @@ export function CTA({ onOpenModal }: CTAProps) {
             ...mono,
             fontSize: 'clamp(0.875rem, 1.35vw, 0.95rem)',
             lineHeight: 1.80,
-            color: '#CBC1B5',
+            color: 'var(--color-text-primary)',
             letterSpacing: '0.005em',
             marginBottom: '1.1rem',
           }}
@@ -109,7 +109,7 @@ export function CTA({ onOpenModal }: CTAProps) {
             ...mono,
             fontSize: 'clamp(0.875rem, 1.35vw, 0.95rem)',
             lineHeight: 1.80,
-            color: '#CBC1B5',
+            color: 'var(--color-text-primary)',
             letterSpacing: '0.005em',
             marginBottom: '3.8rem',
           }}
@@ -120,35 +120,7 @@ export function CTA({ onOpenModal }: CTAProps) {
         <div ref={btnRef} style={{ opacity: 0 }}>
           <button
             onClick={onOpenModal}
-            style={{
-              ...mono,
-              fontSize: '0.70rem',
-              letterSpacing: '0.20em',
-              textTransform: 'uppercase',
-              color: '#A07C4A',
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              minHeight: '44px',
-              paddingBottom: '0.35rem',
-              background: 'transparent',
-              borderTop: 0,
-              borderLeft: 0,
-              borderRight: 0,
-              borderBottom: '1px solid rgba(160,124,74,0.30)',
-              outline: 'none',
-              cursor: 'pointer',
-              transition: 'border-color 0.3s, opacity 0.3s',
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(160,124,74,0.70)'
-              ;(e.currentTarget as HTMLButtonElement).style.opacity = '0.80'
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(160,124,74,0.30)'
-              ;(e.currentTarget as HTMLButtonElement).style.opacity = '1'
-            }}
+            className="group inline-flex items-center gap-2 border-b border-accent/30 pb-1.5 font-mono text-[11px] uppercase tracking-[0.20em] text-accent bg-transparent border-t-0 border-x-0 outline-none cursor-pointer transition-all duration-300 hover:border-accent/70 hover:opacity-80"
           >
             Request Early Access →
           </button>

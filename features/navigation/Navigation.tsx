@@ -38,8 +38,8 @@ export function Navigation({ onOpenModal, initialAnimDone = false }: NavigationP
       className="fixed top-0 left-0 right-0 z-50"
       style={{
         transition: 'background 0.5s ease, border-color 0.5s ease',
-        background: scrolled ? 'rgba(11,16,32,0.88)' : 'transparent',
-        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.05)' : '1px solid transparent',
+        background: scrolled ? 'var(--color-nav-bg)' : 'transparent',
+        borderBottom: scrolled ? '1px solid var(--color-nav-border)' : '1px solid transparent',
         backdropFilter: scrolled ? 'blur(12px)' : 'none',
       }}
     >
@@ -69,10 +69,10 @@ export function Navigation({ onOpenModal, initialAnimDone = false }: NavigationP
             width={183}
             height={56}
             priority
-            className="h-[56px] w-auto"
+            className="h-[56px] w-auto nav-logo-img"
           />
         </Link>
-
+ 
         {/* Right-aligned Navigation Controls */}
         <div className="flex items-center gap-6">
           <motion.div
@@ -86,7 +86,7 @@ export function Navigation({ onOpenModal, initialAnimDone = false }: NavigationP
           >
             <AnimatedThemeToggle />
           </motion.div>
-
+ 
           {/* CTA — only after the solution story has finished */}
           <button
             onClick={onOpenModal}
@@ -95,7 +95,7 @@ export function Navigation({ onOpenModal, initialAnimDone = false }: NavigationP
             className={[
               'group flex items-center gap-1.5 justify-center cursor-pointer bg-transparent border-0 p-0 outline-none',
               'font-sans text-[clamp(10px,0.85vw,12px)] uppercase tracking-[0.12em]',
-              'text-[#CBC1B5]/80 transition-all duration-500 hover:text-[#A07C4A]',
+              'text-primary/80 transition-all duration-500 hover:text-accent',
               showCTA ? 'opacity-100 min-h-[44px] max-h-12 mt-1 pointer-events-auto' : 'pointer-events-none opacity-0 min-h-0 max-h-0 overflow-hidden',
             ].join(' ')}
           >

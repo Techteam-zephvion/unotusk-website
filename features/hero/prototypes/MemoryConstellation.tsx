@@ -159,11 +159,11 @@ export function MemoryConstellation() {
     <div
       ref={containerRef}
       className="relative flex min-h-screen items-center justify-center overflow-hidden"
-      style={{ background: '#090D17' }}
+      style={{ background: 'var(--color-bg)' }}
     >
       {/* Grain */}
       <div className="pointer-events-none absolute inset-0 z-10" style={{ opacity: 0.036, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`, backgroundRepeat: 'repeat', backgroundSize: '200px' }} aria-hidden="true" />
-      <div className="pointer-events-none absolute inset-0 z-10" style={{ background: 'radial-gradient(ellipse 95% 90% at 50% 50%, transparent 30%, rgba(9,13,23,0.8) 100%)' }} aria-hidden="true" />
+      <div className="pointer-events-none absolute inset-0 z-10" style={{ background: 'radial-gradient(ellipse 95% 90% at 50% 50%, transparent 30%, var(--color-vignette) 100%)' }} aria-hidden="true" />
 
       {/* ── SVG edges ── */}
       {dims.w > 0 && (
@@ -185,7 +185,7 @@ export function MemoryConstellation() {
                 y1={na.y / 100 * dims.h}
                 x2={nb.x / 100 * dims.w}
                 y2={nb.y / 100 * dims.h}
-                stroke="#A07C4A"
+                stroke="var(--color-accent)"
                 strokeWidth="0.5"
                 strokeDasharray="3 5"
               />
@@ -213,7 +213,7 @@ export function MemoryConstellation() {
               style={{
                 width: node.cluster === 1 ? 4 : 3,
                 height: node.cluster === 1 ? 4 : 3,
-                background: node.cluster === 1 ? '#A07C4A' : 'rgba(245,243,239,0.4)',
+                background: node.cluster === 1 ? 'var(--color-accent)' : 'var(--color-text-secondary)',
               }}
             />
             <span
@@ -221,7 +221,7 @@ export function MemoryConstellation() {
               style={{
                 fontSize: node.cluster === 1 ? 10 : 9,
                 letterSpacing: '0.14em',
-                color: node.cluster === 1 ? '#F5F3EF' : 'rgba(245,243,239,0.5)',
+                color: node.cluster === 1 ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
               }}
             >
               {node.label}
@@ -234,24 +234,24 @@ export function MemoryConstellation() {
       <div ref={cardRef} className="relative z-20 w-full max-w-[380px]" style={{ opacity: 0 }}>
         <article
           className="w-full overflow-hidden rounded-2xl"
-          style={{ background: 'rgba(17,24,39,0.92)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 32px 80px rgba(0,0,0,0.6)' }}
+          style={{ background: 'var(--color-card-bg)', border: '1px solid var(--color-border)', boxShadow: '0 32px 80px var(--color-card-shadow)' }}
         >
-          <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#A07C4A]">recovered context</span>
+          <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: '1px solid var(--color-border)' }}>
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">recovered context</span>
             <span className="flex items-center gap-1.5">
-              <span className="h-[5px] w-[5px] rounded-full bg-[#A07C4A]/60" />
-              <span className="font-mono text-[9px] uppercase tracking-widest text-[#CBC1B5]/40">live</span>
+              <span className="h-[5px] w-[5px] rounded-full bg-accent/60" />
+              <span className="font-mono text-[9px] uppercase tracking-widest text-primary/40">live</span>
             </span>
           </div>
           <div className="px-6 pt-6 pb-4">
-            <p className="text-[15px] font-medium leading-[1.55] tracking-[-0.01em] text-[#F5F3EF]">
+            <p className="text-[15px] font-medium leading-[1.55] tracking-[-0.01em] text-primary">
               Payment retry logic was previously rejected.
             </p>
-            <p className="mt-3 font-mono text-[12px] text-[#CBC1B5]/60">March incident.</p>
+            <p className="mt-3 font-mono text-[12px] text-primary/60">March incident.</p>
           </div>
-          <div className="flex flex-wrap gap-2 px-6 pb-5 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+          <div className="flex flex-wrap gap-2 px-6 pb-5 pt-3" style={{ borderTop: '1px solid var(--color-border)' }}>
             {['PR-482', 'checkout.ts', 'Stripe'].map(tag => (
-              <span key={tag} className="rounded-md border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-[#CBC1B5]/50" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>{tag}</span>
+              <span key={tag} className="rounded-md border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-primary/50" style={{ borderColor: 'var(--color-border)' }}>{tag}</span>
             ))}
           </div>
         </article>
@@ -260,15 +260,15 @@ export function MemoryConstellation() {
       {/* ── Headline ── */}
       <div ref={headlineRef} className="absolute bottom-24 left-0 right-0 z-20 text-center px-6" style={{ opacity: 0 }}>
         <h1>
-          <span className="block text-[clamp(1.75rem,3vw,2.6rem)] leading-[1.1] tracking-[-0.025em] text-[#F5F3EF]" style={{ fontFamily: 'var(--font-young-serif), Georgia, serif' }}>
+          <span className="block text-[clamp(1.75rem,3vw,2.6rem)] leading-[1.1] tracking-[-0.025em] text-primary" style={{ fontFamily: 'var(--font-young-serif), Georgia, serif' }}>
             AI ships the wrong things.
           </span>
-          <span className="block text-[clamp(1.4rem,2.5vw,2rem)] font-light leading-[1.15] tracking-[-0.02em] text-[#CBC1B5]">
+          <span className="block text-[clamp(1.4rem,2.5vw,2rem)] font-light leading-[1.15] tracking-[-0.02em] text-primary">
             Unotusk rebuilds the memory it needs.
           </span>
         </h1>
         <div ref={ctaRef} className="mt-8" style={{ opacity: 0 }}>
-          <a href="#early-access" className="group inline-flex items-center gap-2 border-b border-[#F5F3EF]/15 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-[#F5F3EF]/60 transition-colors duration-300 hover:border-[#F5F3EF]/30 hover:text-[#F5F3EF]">
+          <a href="#early-access" className="group inline-flex items-center gap-2 border-b border-primary/15 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-primary/60 transition-colors duration-300 hover:border-primary/30 hover:text-primary">
             <span>Request Early Access</span>
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true">→</span>
           </a>
