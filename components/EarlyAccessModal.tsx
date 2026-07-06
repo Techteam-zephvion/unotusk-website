@@ -72,12 +72,15 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
     setErrorMessage('')
 
     try {
+      const isLight = typeof document !== 'undefined' && document.documentElement.classList.contains('light')
+      const theme = isLight ? 'light' : 'dark'
+
       const response = await fetch('/api/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, company, message }),
+        body: JSON.stringify({ name, email, company, message, theme }),
       })
 
       const data = await response.json()
