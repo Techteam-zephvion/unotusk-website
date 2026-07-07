@@ -300,7 +300,7 @@ export function What() {
           width: `${wPct}%`,
           height: `${wPct}%`,
           objectFit: 'fill',
-          filter: 'invert(1) brightness(0.82)',
+          filter: 'var(--color-logo-filter)',
           pointerEvents: 'none',
           maxWidth: 'none',
           maxHeight: 'none',
@@ -421,7 +421,7 @@ export function What() {
 
       // Letters dissolve into clean favicon
       mega.to(words, { opacity: 0, ease: 'power2.in', duration: 0.8 }, 4.8)
-      mega.to(faviconImgRef.current, { opacity: 0.82, ease: 'power1.out', duration: 0.8 }, 5.0)
+      mega.to(faviconImgRef.current, { opacity: 0.92, ease: 'power1.out', duration: 0.8 }, 5.0)
 
       // HOLD: clean favicon
       mega.to({}, { duration: 0.5 }, 5.9)
