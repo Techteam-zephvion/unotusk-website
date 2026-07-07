@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "out"
+  publish = ".next"
 
 # Baseline security headers. (A strict Content-Security-Policy is intentionally
 # omitted for now — the site relies heavily on inline styles, so a CSP needs a
