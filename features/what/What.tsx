@@ -11,14 +11,10 @@ const V = 'inset(0 0% 0 0)'
 
 // The packing mask is rasterized at runtime from the real Unotusk favicon
 // so the word cloud takes the icon's EXACT silhouette (eye becomes a gap).
-const FAVICON_SRC = '/favicon.png'
+const FAVICON_SRC = '/favicon.svg'
 
-// Pre-load the favicon image at module scope so it's fully cached and ready by the time the component mounts
-let preloadedImage: HTMLImageElement | null = null
-if (typeof window !== 'undefined') {
-  preloadedImage = new Image()
-  preloadedImage.src = FAVICON_SRC
-}
+const SILHOUETTE_PATH =
+  "M212.27,366.69c-3.46-2.1-5.74-5.67-5.74-9.71,0-.84.1-1.66.29-2.45.62-2.62-.99-5.26-3.62-5.87-16.69-3.92-29.05-18.04-29.05-34.85,0-6.41,1.8-12.43,4.94-17.64,3.14-5.21,7.64-9.61,13.05-12.79,12.51-4.59,21.33-15.79,21.33-28.88,0-17.18-15.2-31.11-33.96-31.11-8.74,0-16.71,3.02-22.73,7.99l-.06-.08c-18.62,14.25-30.51,35.91-30.51,60.16,0,.36,0,.71,0,1.07-.03.03-.07.05-.11.07-5.96,3.83-13.11,6.71-21.01,8.31-4.61.94-9.47,1.44-14.5,1.44-.97,0-1.95-.02-2.91-.06-.35-.01-.67.08-.94.24-.27.18-.5.42-.64.72.09.36.23.72.4,1.07,2.65,5.38,14.41,9.44,28.52,9.44,3.16,0,6.21-.2,9.06-.58,1.79-.24,3.5-.55,5.13-.91.27-.06.54-.13.81-.19,2.48-.6,4.88-1.5,7.15-2.66,2.54-1.29,5.1-2.53,7.72-3.66l10.1-4.35c3.24-1.4,5.32-4.38,5.71-7.65.51,3.87-1.72,7.73-5.71,9.34l-10.1,4.08c-2.61,1.06-5.18,2.21-7.72,3.43-2.27,1.09-4.67,1.93-7.15,2.5-.17.04-.35.08-.52.12,10.07,32.32,41.98,55.93,79.79,55.93,1.31,0,2.61-.03,3.91-.09.15,0,.26-.13.26-.28,0-.86-.46-1.65-1.2-2.09ZM158.56,264.21c-1.84,1.15-3.5,1.25-3.19-1.54.25-2.28,2.84-4.38,4.59-5.61,2.53-1.77,5.76-2.69,8.76-1.96,2.99.74,5.58,3.36,5.76,6.44-5.72-1.95-11-.4-15.91,2.66Z"
 
 // ---------------------------------------------------------------------------
 // Word source. tier = size/weight. The list runs head -> trunk; each word's
@@ -37,7 +33,7 @@ const TIER: Record<Tier, { size: number; op: number; weight: number }> = {
 const SOURCE: [string, Tier][] = [
   // ---- HEAD (decision / product) ----
   ['STRATEGY', 'm'], ['STAKEHOLDER', 's'], ['SUCCESS-CRITERIA', 's'],
-  ['DECIDER', 'm'], ['SCOPE', 's'], ['ACCEPTANCE-CRITERIA', 'xs'],
+  ['DECIDER', 'm'], ['CODE', 's'], ['ACCEPTANCE-CRITERIA', 'xs'],
   ['ARCHITECTURE', 'l'], ['CONTEXT', 's'], ['INTENT', 'xs'],
   ['DECISION', 'xl'], ['TRADE-OFF', 's'], ['ANALYSIS', 'xs'], ['RATIONALE', 's'],
   ['REQUIREMENT', 'xl'], ['FEASIBILITY', 's'], ['OBJECTIVE', 'm'],
@@ -51,19 +47,20 @@ const SOURCE: [string, Tier][] = [
   ['COMPONENT', 'm'], ['UTILS', 'xs'], ['REQUEST', 's'],
   ['MERGE', 'm'], ['BRANCH', 'm'], ['PULL-REQUEST', 's'],
   ['CODE-REVIEW', 'm'], ['DIFF', 's'], ['CONFLICT', 'xs'],
-  ['FUNCTION()', 'm'], ['CODE', 'xl'], ['CLASS', 's'], ['ASYNC', 'xs'],
+  ['FUNCTION()', 'm'], ['SCOPE', 'xl'], ['CLASS', 's'], ['ASYNC', 'xs'],
   ['TESTING', 'l'], ['UNIT-TEST', 's'], ['INTEGRATION-TEST', 'xs'],
   // ---- LOWER BODY / TRUNK (infra / ops) ----
+  ['MONITORING', 'xl'], ['LOGGING', 's'],
   ['DEFAULT', 'xs'], ['RETURN', 's'], ['CI/CD', 'l'], ['TEST-CASE', 's'],
   ['PIPELINE', 'm'], ['STATIC-ANALYSIS', 's'], ['SONAR', 'xs'], ['TAG', 'xs'],
   ['BUILD', 'm'], ['CONTAINER-IMAGE', 's'], ['DOCKERFILE', 'xs'],
   ['DEPLOY', 'l'], ['ENVIRONMENT', 's'], ['STAGING', 'xs'],
-  ['MONITORING', 'xl'], ['LOGGING', 's'], ['ALERT', 'xs'], ['METRICS', 'm'],
+  ['ALERT', 'xs'], ['METRICS', 'm'],
   ['DASHBOARD', 'xs'], ['TRACE', 's'], ['HEALTH-CHECK', 'xs'], ['PERFORMANCE', 's'],
   ['THROUGHPUT', 'xs'], ['LATENCY', 's'], ['ERROR-RATE', 'xs'],
   ['DATABASE', 'xl'], ['SCHEMA', 's'], ['MIGRATION', 'xs'], ['TRANSACTION', 's'],
-  ['QUERY', 'xs'], ['INDEX', 's'], ['CACHE', 'l'], ['REDIS', 's'],
-  ['SEARCH', 'l'], ['ELASTIC', 'xs'], ['STORAGE', 's'], ['BACKUP', 'xs'],
+  ['QUERY', 'xs'], ['INDEX', 'm'], ['CACHE', 'l'], ['REDIS', 's'],
+  ['SEARCH', 'l'], ['ELASTIC', 'xs'], ['STORAGE', 'l'], ['BACKUP', 'xs'],
   ['ONTOLOGY', 's'], ['KNOWLEDGE', 'm'], ['LANGCHAIN', 's'], ['GRAPH', 'xs'],
   ['NODE', 'xs'], ['EDGE', 's'], ['VECTOR', 'xs'], ['EMBEDDING', 's'],
 ]
@@ -88,7 +85,7 @@ interface Placed {
 }
 
 export function What() {
-  const STAGE_SIZE = 'clamp(480px, 72vh, 600px)'
+  const STAGE_SIZE = 'clamp(300px, 82vmin, 700px)'
   const containerRef = useRef<HTMLDivElement>(null)
   const megaRef = useRef<HTMLDivElement>(null)
   const sqRef = useRef<HTMLDivElement>(null)
@@ -144,176 +141,151 @@ export function What() {
     }
 
     const pack = (sq: HTMLDivElement, S: number) => {
-      const img = preloadedImage || new Image()
-      if (!preloadedImage) {
-        img.src = FAVICON_SRC
+      if (cancelled) return
+
+      const R = 230
+      const oc = document.createElement('canvas')
+      oc.width = R; oc.height = R
+      const octx = oc.getContext('2d')!
+
+      // Draw the official silhouette path directly on the canvas without any extra margins/translations
+      octx.translate(-34.8, -181.3)
+      octx.fillStyle = '#000'
+      octx.fill(new Path2D(SILHOUETTE_PATH))
+
+      const px = octx.getImageData(0, 0, R, R).data
+      const darkAt = (x: number, y: number) => {
+        if (x < 0 || y < 0 || x >= R || y >= R) return false
+        const i = (y * R + x) * 4
+        return px[i + 3] > 0 // Any non-transparent pixel is logo ink
       }
 
-      const runPack = () => {
-        if (cancelled) return
+      const G = 164               // occupancy grid resolution
+      const cell = S / G
+      const basePx = S * 0.068
 
-        const G = 164               // occupancy grid resolution (finer = crisper edges/tail)
-        const cell = S / G
-        const basePx = S * 0.068
-
-        // 1) rasterize favicon -> luminance, crop to the elephant's bbox, map
-        //    that (square-aspect) region into a GxG inside-mask.
-        const R = 240
-        const oc = document.createElement('canvas')
-        oc.width = R; oc.height = R
-        const octx = oc.getContext('2d')!
-        octx.drawImage(img, 0, 0, R, R)
-        const px = octx.getImageData(0, 0, R, R).data
-        const darkAt = (x: number, y: number) => {
-          if (x < 0 || y < 0 || x >= R || y >= R) return false
-          const i = (y * R + x) * 4
-          if (px[i + 3] < 40) return false                    // transparent
-          const lum = px[i] * 0.299 + px[i + 1] * 0.587 + px[i + 2] * 0.114
-          return lum < 240                                    // any non-white/non-transparent pixel is logo ink
-        }
-        // bounding box of the ink
-        let bx0 = R, by0 = R, bx1 = 0, by1 = 0
-        for (let y = 0; y < R; y++)
-          for (let x = 0; x < R; x++)
-            if (darkAt(x, y)) {
-              if (x < bx0) bx0 = x; if (x > bx1) bx1 = x
-              if (y < by0) by0 = y; if (y > by1) by1 = y
-            }
-        const bs = Math.max(bx1 - bx0, by1 - by0) * 1.04       // square, tiny margin
-        const ox = (bx0 + bx1) / 2 - bs / 2
-        const oy = (by0 + by1) / 2 - bs / 2
-
-        const insideArr = new Uint8Array(G * G)
-        const rowMin = new Int16Array(G).fill(-1)
-        const rowMax = new Int16Array(G).fill(-1)
-        for (let gy = 0; gy < G; gy++) {
-          for (let gx = 0; gx < G; gx++) {
-            const sx = Math.round(ox + (gx / (G - 1)) * bs)
-            const sy = Math.round(oy + (gy / (G - 1)) * bs)
-            if (darkAt(sx, sy)) {
-              insideArr[gy * G + gx] = 1
-              if (rowMin[gy] < 0) rowMin[gy] = gx
-              rowMax[gy] = gx
-            }
+      const insideArr = new Uint8Array(G * G)
+      const rowMin = new Int16Array(G).fill(-1)
+      const rowMax = new Int16Array(G).fill(-1)
+      for (let gy = 0; gy < G; gy++) {
+        for (let gx = 0; gx < G; gx++) {
+          const cx = Math.round((gx / (G - 1)) * (R - 1))
+          const cy = Math.round((gy / (G - 1)) * (R - 1))
+          if (darkAt(cx, cy)) {
+            insideArr[gy * G + gx] = 1
+            if (rowMin[gy] < 0) rowMin[gy] = gx
+            rowMax[gy] = gx
           }
         }
-        const inside = (gx: number, gy: number) =>
-          gx >= 0 && gy >= 0 && gx < G && gy < G && insideArr[gy * G + gx] === 1
-        const occupied = new Uint8Array(G * G)
+      }
+      const inside = (gx: number, gy: number) =>
+        gx >= 0 && gy >= 0 && gx < G && gy < G && insideArr[gy * G + gx] === 1
+      const occupied = new Uint8Array(G * G)
 
-        // 2) in-memory canvas measurement (performance optimization, no DOM thrashing)
-        const mCanvas = document.createElement('canvas')
-        const mCtx = mCanvas.getContext('2d')!
-        const measure = (text: string, fs: number, w: number) => {
-          mCtx.font = `${w} ${fs}px ${fontName}, sans-serif`
-          const metrics = mCtx.measureText(text.toUpperCase())
-          return { w: metrics.width, h: fs }
-        }
+      // 2) in-memory canvas measurement (performance optimization, no DOM thrashing)
+      const mCanvas = document.createElement('canvas')
+      const mCtx = mCanvas.getContext('2d')!
+      const measure = (text: string, fs: number, w: number) => {
+        mCtx.font = `${w} ${fs}px ${fontName}, sans-serif`
+        const metrics = mCtx.measureText(text.toUpperCase())
+        return { w: metrics.width, h: fs }
+      }
 
-        // 3) word list with preferred vertical band; large first
-        const N = SOURCE.length
-        const items = SOURCE.map(([text, tier], i) => {
+      // 3) word list with preferred vertical band; large first
+      const N = SOURCE.length
+      const items = SOURCE.map(([text, tier], i) => {
+        const t = TIER[tier]
+        return { text, fs: basePx * t.size, op: t.op, weight: t.weight, py: i / (N - 1) }
+      })
+      for (let pass = 0; pass < 6; pass++) {
+        FILLER.forEach((text, i) => {
+          // later passes are smaller and biased to the lower body / trunk / tail,
+          // so the narrow bottom of the silhouette packs precisely.
+          const lower = pass >= 3
+          const tier: Tier = lower ? 'xs' : ((i + pass) % 3 === 0 ? 's' : 'xs')
           const t = TIER[tier]
-          return { text, fs: basePx * t.size, op: t.op, weight: t.weight, py: i / (N - 1) }
+          const py = lower ? 0.58 + Math.random() * 0.42 : Math.random()
+          items.push({ text, fs: basePx * t.size, op: t.op, weight: t.weight, py })
         })
-        for (let pass = 0; pass < 6; pass++) {
-          FILLER.forEach((text, i) => {
-            // later passes are smaller and biased to the lower body / trunk / tail,
-            // so the narrow bottom of the silhouette packs precisely.
-            const lower = pass >= 3
-            const tier: Tier = lower ? 'xs' : ((i + pass) % 3 === 0 ? 's' : 'xs')
-            const t = TIER[tier]
-            const py = lower ? 0.58 + Math.random() * 0.42 : Math.random()
-            items.push({ text, fs: basePx * t.size, op: t.op, weight: t.weight, py })
-          })
-        }
-        const order = items.map((_it, i) => i).sort((a, b) => items[b].fs - items[a].fs)
+      }
+      const order = items.map((_it, i) => i).sort((a, b) => items[b].fs - items[a].fs)
 
-        // 4) greedy placement: word box must fit fully inside the mask; centre it
-        //    on the shape's per-row middle so words hug the silhouette.
-        const rectFree = (gx: number, gy: number, cw: number, ch: number) => {
-          for (let yy = gy; yy < gy + ch; yy++)
-            for (let xx = gx; xx < gx + cw; xx++) {
-              if (!inside(xx, yy)) return false
-              if (occupied[yy * G + xx]) return false
-            }
-          return true
-        }
-        const mark = (gx: number, gy: number, cw: number, ch: number) => {
-          for (let yy = gy; yy < gy + ch; yy++)
-            for (let xx = gx; xx < gx + cw; xx++) occupied[yy * G + xx] = 1
-        }
-
-        const result: Placed[] = []
-        for (const idx of order) {
-          const it = items[idx]
-          const { w, h } = measure(it.text, it.fs, it.weight)
-          const cw = Math.ceil(w / cell) + 2
-          const ch = Math.ceil(h / cell) + 2
-          if (cw >= G || ch >= G) continue
-
-          const prefGy = Math.round(it.py * (G - 1))
-          let best: { gx: number; gy: number } | null = null
-
-          for (let d = 0; d <= G && !best; d++) {
-            for (const sign of d === 0 ? [0] : [1, -1]) {
-              const gy = prefGy + sign * d
-              if (gy < 0 || gy + ch > G) continue
-              // centre of the shape across the rows this word would occupy
-              let lo = G, hi = -1
-              for (let yy = gy; yy < gy + ch; yy++) {
-                if (rowMin[yy] >= 0 && rowMin[yy] < lo) lo = rowMin[yy]
-                if (rowMax[yy] > hi) hi = rowMax[yy]
-              }
-              if (hi < 0) continue
-              const prefCx = (lo + hi) / 2
-              let bestGx = -1, bestDist = Infinity
-              for (let gx = 0; gx + cw <= G; gx++) {
-                if (!rectFree(gx, gy, cw, ch)) continue
-                const dist = Math.abs(gx + cw / 2 - prefCx)
-                if (dist < bestDist) { bestDist = dist; bestGx = gx }
-              }
-              if (bestGx >= 0) { best = { gx: bestGx, gy }; break }
-            }
+      // 4) greedy placement: word box must fit fully inside the mask; centre it
+      //    on the shape's per-row middle so words hug the silhouette.
+      const rectFree = (gx: number, gy: number, cw: number, ch: number) => {
+        for (let yy = gy; yy < gy + ch; yy++)
+          for (let xx = gx; xx < gx + cw; xx++) {
+            if (!inside(xx, yy)) return false
+            if (occupied[yy * G + xx]) return false
           }
-          if (!best) continue
-          mark(best.gx, best.gy, cw, ch)
-          result.push({
-            text: it.text,
-            x: (best.gx * cell) / S,
-            y: (best.gy * cell) / S,
-            fontSize: it.fs / S,
-            op: it.op,
-            weight: it.weight,
-          })
+        return true
+      }
+      const mark = (gx: number, gy: number, cw: number, ch: number) => {
+        for (let yy = gy; yy < gy + ch; yy++)
+          for (let xx = gx; xx < gx + cw; xx++) occupied[yy * G + xx] = 1
+      }
+
+      const result: Placed[] = []
+      for (const idx of order) {
+        const it = items[idx]
+        const { w, h } = measure(it.text, it.fs, it.weight)
+
+        // Add tighter padding for small words to fit the narrow curves of the trunk
+        const padding = it.fs < basePx * 0.3 ? 1 : 2
+        const cw = Math.ceil(w / cell) + padding
+        const ch = Math.ceil(h / cell) + padding
+        if (cw >= G || ch >= G) continue
+
+        const prefGy = Math.round(it.py * (G - 1))
+        let best: { gx: number; gy: number } | null = null
+
+        for (let d = 0; d <= G && !best; d++) {
+          for (const sign of d === 0 ? [0] : [1, -1]) {
+            const gy = prefGy + sign * d
+            if (gy < 0 || gy + ch > G) continue
+            // centre of the shape across the rows this word would occupy
+            let lo = G, hi = -1
+            for (let yy = gy; yy < gy + ch; yy++) {
+              if (rowMin[yy] >= 0 && rowMin[yy] < lo) lo = rowMin[yy]
+              if (rowMax[yy] > hi) hi = rowMax[yy]
+            }
+            if (hi < 0) continue
+            const prefCx = (lo + hi) / 2
+            let bestGx = -1, bestDist = Infinity
+            for (let gx = 0; gx + cw <= G; gx++) {
+              if (!rectFree(gx, gy, cw, ch)) continue
+              const dist = Math.abs(gx + cw / 2 - prefCx)
+              if (dist < bestDist) { bestDist = dist; bestGx = gx }
+            }
+            if (bestGx >= 0) { best = { gx: bestGx, gy }; break }
+          }
         }
-
-        const scaleVal = R / bs
-        const wPct = scaleVal * 100
-        const xPct = -(ox / bs) * 100
-        const yPct = -(oy / bs) * 100
-
-        setLogoStyle({
-          position: 'absolute',
-          left: `${xPct}%`,
-          top: `${yPct}%`,
-          width: `${wPct}%`,
-          height: `${wPct}%`,
-          objectFit: 'fill',
-          filter: 'var(--color-logo-filter)',
-          pointerEvents: 'none',
-          maxWidth: 'none',
-          maxHeight: 'none',
+        if (!best) continue
+        mark(best.gx, best.gy, cw, ch)
+        result.push({
+          text: it.text,
+          x: (best.gx * cell) / S,
+          y: (best.gy * cell) / S,
+          fontSize: it.fs / S,
+          op: it.op,
+          weight: it.weight,
         })
-
-        setPlaced(result)
       }
 
-      if (img.complete) {
-        runPack()
-      } else {
-        img.onload = runPack
-      }
+      setLogoStyle({
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: '100%',
+        height: '100%',
+        objectFit: 'contain',
+        filter: 'var(--color-logo-filter)',
+        pointerEvents: 'none',
+        maxWidth: 'none',
+        maxHeight: 'none',
+      })
+
+      setPlaced(result)
     }
 
     start()
@@ -500,8 +472,8 @@ export function What() {
           ref={sqRef}
           aria-hidden="true"
           style={{
-            position: 'absolute', left: '50%', top: 'calc(50% + 32px)',
-            transform: 'translate(-50%, -50%) scale(clamp(0.5, calc(80vw / 480px), 1.0))',
+            position: 'absolute', left: '50%', top: 'calc(50% + 44px)',
+            transform: 'translate(-50%, -50%) scale(clamp(0.8, calc(90vw / 700px), 1.4))',
             width: STAGE_SIZE, height: STAGE_SIZE,
             pointerEvents: 'none',
           }}
