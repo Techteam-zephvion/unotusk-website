@@ -14,15 +14,10 @@ interface NavigationProps {
 
 export function Navigation({ onOpenModal, initialAnimDone = false }: NavigationProps) {
   const [scrolled, setScrolled] = useState(false)
-  // The CTA is the conclusion of the story — it must not appear until the
-  // visitor has travelled through the entire solution. Reveal it only once
-  // they reach the final stretch of the page (the CTA section).
-  const [showCTA, setShowCTA] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 32)
-      setShowCTA(window.scrollY > 400)
     }
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -32,6 +27,8 @@ export function Navigation({ onOpenModal, initialAnimDone = false }: NavigationP
       window.removeEventListener('resize', handleScroll)
     }
   }, [])
+
+  const isVisible = initialAnimDone || scrolled
 
   return (
     <header
@@ -78,9 +75,9 @@ export function Navigation({ onOpenModal, initialAnimDone = false }: NavigationP
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{
-              opacity: (initialAnimDone && scrolled) ? 1 : 0,
-              scale: (initialAnimDone && scrolled) ? 1 : 0.8,
-              pointerEvents: (initialAnimDone && scrolled) ? 'auto' : 'none'
+              opacity: isVisible ? 1 : 0,
+              scale: isVisible ? 1 : 0.8,
+              pointerEvents: isVisible ? 'auto' : 'none'
             }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
           >
@@ -90,13 +87,13 @@ export function Navigation({ onOpenModal, initialAnimDone = false }: NavigationP
           {/* CTA — only after the solution story has finished */}
           <button
             onClick={onOpenModal}
-            aria-hidden={!showCTA}
-            tabIndex={showCTA ? undefined : -1}
+            aria-hidden={!isVisible}
+            tabIndex={isVisible ? undefined : -1}
             className={[
               'group flex items-center gap-1.5 justify-center cursor-pointer bg-transparent border-0 p-0 outline-none',
-              'font-sans text-[clamp(10px,0.85vw,12px)] uppercase tracking-[0.12em]',
+              'font-sans text-[clamp(11.5px,0.98vw,13.8px)] uppercase tracking-[0.12em]',
               'text-primary/80 transition-all duration-500 hover:text-accent',
-              showCTA ? 'opacity-100 min-h-[44px] max-h-12 mt-1 pointer-events-auto' : 'pointer-events-none opacity-0 min-h-0 max-h-0 overflow-hidden',
+              isVisible ? 'opacity-100 min-h-[44px] max-h-12 mt-1 pointer-events-auto' : 'pointer-events-none opacity-0 min-h-0 max-h-0 overflow-hidden',
             ].join(' ')}
           >
             <span>Join Lighthouse</span>

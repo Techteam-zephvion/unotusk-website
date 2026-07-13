@@ -362,7 +362,7 @@ export function What() {
         scrollTrigger: {
           trigger: megaRef.current, pin: true, anticipatePin: 1,
           refreshPriority: 2,
-          start: 'top top', end: () => '+=' + 2200 * pinFactor(), scrub: 0.7,
+          start: 'top top', end: () => '+=' + 1200 * pinFactor(), scrub: 0.7,
         },
       })
 
@@ -378,10 +378,19 @@ export function What() {
         const st = STAGE[stageOf[i]]
         const cnt = Math.max(1, stageSeen[stageOf[i]])
         const at = st.start + (stageRank[i] / cnt) * st.span
+        // 1) Fly in and lock with glowing gold/amber light
         mega.to(el, {
           opacity: placed[i].op, x: 0, y: 0, rotate: 0, scale: 1,
+          color: 'var(--color-glow)',
+          textShadow: '0 0 10px rgba(245, 194, 122, 0.45)',
           ease: 'power2.out', duration: 0.6,
         }, at)
+        // 2) Fade color back to normal text color and clear text shadow
+        mega.to(el, {
+          color: 'var(--color-text-primary)',
+          textShadow: 'none',
+          ease: 'power1.inOut', duration: 0.8,
+        }, at + 0.45)
       })
 
       // brief holds
@@ -449,6 +458,16 @@ export function What() {
 
   return (
     <div ref={containerRef} style={{ background: 'var(--color-bg)', color: 'var(--color-text-primary)' }}>
+      <style>{`
+        .tusk-stage {
+          --tusk-scale: clamp(1.4, calc(90vw / 700px), 1.6);
+        }
+        @media (min-width: 768px) {
+          .tusk-stage {
+            --tusk-scale: clamp(0.8, calc(90vw / 700px), 1.4);
+          }
+        }
+      `}</style>
 
       {/* Favicon word cloud + product statement */}
       <div
@@ -471,9 +490,10 @@ export function What() {
         <div
           ref={sqRef}
           aria-hidden="true"
+          className="tusk-stage"
           style={{
             position: 'absolute', left: '50%', top: 'calc(50% + 44px)',
-            transform: 'translate(-50%, -50%) scale(clamp(0.8, calc(90vw / 700px), 1.4))',
+            transform: 'translate(-50%, -50%) scale(var(--tusk-scale))',
             width: STAGE_SIZE, height: STAGE_SIZE,
             pointerEvents: 'none',
           }}
@@ -520,6 +540,7 @@ export function What() {
               ...serif, clipPath: H,
               fontSize: 'clamp(1.8rem, 4vw, 4rem)', lineHeight: 1.05,
               letterSpacing: '-0.025em', color: 'var(--color-text-primary)',
+              paddingBottom: '0.15em', marginBottom: '-0.15em',
             }}
           >
             Unotusk gives AI
@@ -530,6 +551,7 @@ export function What() {
               ...serif, clipPath: H,
               fontSize: 'clamp(1.8rem, 4vw, 4rem)', lineHeight: 1.05,
               letterSpacing: '-0.025em', color: 'var(--color-text-primary)',
+              paddingBottom: '0.15em', marginBottom: '-0.15em',
             }}
           >
             the one thing it&rsquo;s missing&mdash;
@@ -540,6 +562,7 @@ export function What() {
               ...serif, clipPath: H,
               fontSize: 'clamp(1.8rem, 4vw, 4rem)', lineHeight: 1.05,
               letterSpacing: '-0.025em', color: 'var(--color-text-secondary)',
+              paddingBottom: '0.15em', marginBottom: '-0.15em',
             }}
           >
             your project&rsquo;s memory.
@@ -576,7 +599,7 @@ export function What() {
         </div>
       </div>
 
-      <div style={{ height: '60vh', background: 'var(--color-bg)' }} aria-hidden="true" />
+      <div style={{ height: '15vh', background: 'var(--color-bg)' }} aria-hidden="true" />
     </div>
   )
 }

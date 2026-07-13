@@ -52,6 +52,8 @@ export const AnimatedThemeToggle = ({ className }: { className?: string }) => {
       onClick={handleToggle}
       className={cn("flex items-center justify-center", className)}
       variant="outline"
+      aria-label="Toggle theme"
+      title={isDark ? "Switch to light theme" : "Switch to dark theme"}
     >
       <SolarSwitch isDark={isDark} />
     </Button>
@@ -73,7 +75,7 @@ const SolarSwitch = ({ isDark }: { isDark: boolean }) => {
   const pathLengthSun = useTransform(scaleSun, [0.6, 1], [0, 1]);
 
   return (
-    <div className="relative w-5 h-5 flex items-center justify-center text-[#CBC1B5] hover:text-[#A07C4A] transition-colors duration-300">
+    <div className="relative w-5 h-5 flex items-center justify-center text-primary opacity-85 hover:opacity-100 hover:text-accent transition-all duration-300">
       <motion.svg
         width="20"
         height="20"

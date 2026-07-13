@@ -8,15 +8,15 @@ const SENTENCE_WORDS = ['Payment', 'retry', 'logic', 'was', 'previously', 'rejec
 const SENTENCE_LINE2 = ['March', 'incident.']
 
 const BG_FRAGMENTS = [
-  'PR-482','checkout.ts','Rejected','Slack','commit a9f83d','Owner','Risk',
-  'Latency','Stripe','Webhook','Incident','Decision','Jira','deprecated',
-  'auth-flow.ts','WONTFIX','v2 rollback','tech-debt','Notion','#incidents',
-  'PLAT-1204','RFC-009','ADR-014','Session Hijack','Rate Limit','Deadlock',
-  'Cold Start','PR-891','commit 3b1f72','branch: hotfix','Rollback v2.2',
-  'Queue overflow','Cache Miss','Schema Lock','EC2 Spot','Postmortem',
-  'DB Spike','P0 Alert','Outage','Backpressure','Idempotency','3DS',
-  'Sprint 44','LCP 4.2s','Tree Shaking','Read Replica','VACUUM ANALYZE',
-  'Feature Flag','Kill Switch','Dark Launch','Retro: Q1','On-call Runbook',
+  'PR-482', 'checkout.ts', 'Rejected', 'Slack', 'commit a9f83d', 'Owner', 'Risk',
+  'Latency', 'Stripe', 'Webhook', 'Incident', 'Decision', 'Jira', 'deprecated',
+  'auth-flow.ts', 'WONTFIX', 'v2 rollback', 'tech-debt', 'Notion', '#incidents',
+  'PLAT-1204', 'RFC-009', 'ADR-014', 'Session Hijack', 'Rate Limit', 'Deadlock',
+  'Cold Start', 'PR-891', 'commit 3b1f72', 'branch: hotfix', 'Rollback v2.2',
+  'Queue overflow', 'Cache Miss', 'Schema Lock', 'EC2 Spot', 'Postmortem',
+  'DB Spike', 'P0 Alert', 'Outage', 'Backpressure', 'Idempotency', '3DS',
+  'Sprint 44', 'LCP 4.2s', 'Tree Shaking', 'Read Replica', 'VACUUM ANALYZE',
+  'Feature Flag', 'Kill Switch', 'Dark Launch', 'Retro: Q1', 'On-call Runbook',
 ]
 
 const CORRUPT = '▒░█▓▄▀'
@@ -202,7 +202,7 @@ export function ReconstructionEngine() {
     }, containerRef)
 
     return () => ctx.revert()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const line1Text = 'AI ships the wrong things.'
@@ -320,7 +320,7 @@ export function ReconstructionEngine() {
         <div ref={ctaRef} className="mt-10" style={{ opacity: 0 }}>
           <a
             href="#early-access"
-            className="group inline-flex items-center gap-2 border-b border-primary/25 dark:border-primary/15 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-primary/75 dark:text-primary/60 transition-colors duration-300 hover:border-primary/30 hover:text-primary"
+            className="group inline-flex items-center gap-2 border-b border-accent/25 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-accent transition-colors duration-300 hover:border-primary/30 hover:text-primary"
           >
             <span>Request Early Access</span>
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true">→</span>

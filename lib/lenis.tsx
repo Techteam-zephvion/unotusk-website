@@ -12,6 +12,17 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
     // Guarantee the page starts at top on every mount (belt-and-suspenders with ScrollInit)
     window.scrollTo(0, 0)
 
+    // Bypass Lenis on mobile/touch devices to restore native scrolling and fix click latency
+    const isTouchDevice =
+      typeof window !== 'undefined' &&
+      (window.matchMedia('(pointer: coarse)').matches ||
+       'ontouchstart' in window ||
+       navigator.maxTouchPoints > 0)
+
+    if (isTouchDevice) {
+      return
+    }
+
     const lenis = new Lenis({
       duration: 0.8,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

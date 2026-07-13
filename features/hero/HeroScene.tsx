@@ -310,7 +310,7 @@ export function HeroScene() {
     }, containerRef)
 
     return () => ctx.revert()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -398,7 +398,7 @@ export function HeroScene() {
 
             <a
               href="#early-access"
-              className="group inline-flex items-center gap-2 border-b border-[#F5F3EF]/15 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-[#F5F3EF]/60 transition-colors duration-300 hover:border-[#F5F3EF]/30 hover:text-[#F5F3EF]"
+              className="group inline-flex items-center gap-2 border-b border-accent/25 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-accent transition-colors duration-300 hover:border-primary/30 hover:text-primary"
             >
               <span>Request Early Access</span>
               <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true">→</span>

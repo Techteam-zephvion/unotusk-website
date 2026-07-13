@@ -21,8 +21,8 @@ export default function Home() {
         <Problem />
         <What />
         <CTA onOpenModal={() => setIsModalOpen(true)} />
+        <Footer />
       </main>
-      <Footer />
       <EarlyAccessModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   )

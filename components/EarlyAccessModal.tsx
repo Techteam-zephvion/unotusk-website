@@ -15,6 +15,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
 
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  const [errors, setErrors] = useState<{ name?: string; email?: string; company?: string }>({})
 
   const modalRef = useRef<HTMLDivElement>(null)
 
@@ -46,25 +47,41 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
     if (isOpen) {
       setStatus('idle')
       setErrorMessage('')
+      setName('')
+      setEmail('')
+      setCompany('')
+      setMessage('')
+      setErrors({})
     }
   }, [isOpen])
 
   if (!isOpen) return null
 
+  const validateForm = () => {
+    const tempErrors: { name?: string; email?: string; company?: string } = {}
+    if (!name.trim()) {
+      tempErrors.name = 'Full Name is required.'
+    }
+    if (!email.trim()) {
+      tempErrors.email = 'Work Email is required.'
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(email)) {
+        tempErrors.email = 'Please enter a valid email address.'
+      }
+    }
+    if (!company.trim()) {
+      tempErrors.company = 'Company is required.'
+    }
+    setErrors(tempErrors)
+    return Object.keys(tempErrors).length === 0
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     // Client-side validation
-    if (!name.trim() || !email.trim() || !company.trim()) {
-      setStatus('error')
-      setErrorMessage('Please fill in all required fields.')
-      return
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      setStatus('error')
-      setErrorMessage('Please enter a valid email address.')
+    if (!validateForm()) {
       return
     }
 
@@ -91,6 +108,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
         setEmail('')
         setCompany('')
         setMessage('')
+        setErrors({})
       } else {
         setStatus('error')
         setErrorMessage(data.error || 'Something went wrong. Please try again.')
@@ -108,7 +126,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-md transition-opacity duration-300"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-md transition-opacity duration-300"
       onClick={(e) => {
         if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
           onClose()
@@ -155,14 +173,14 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
           <img
             src="/logo.svg"
             alt="Unotusk"
-            className="mx-auto mb-3 h-8 w-auto"
+            className="mx-auto mb-3 h-10 w-auto"
             style={{ filter: 'var(--color-logo-filter)', opacity: 0.95 }}
           />
           <h2
             id="modal-title"
             style={{
               ...fontMono,
-              fontSize: '0.75rem',
+              fontSize: '0.9rem',
               fontWeight: 500,
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
@@ -215,14 +233,15 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             {/* Name Field */}
             <div className="space-y-1">
               <label
                 htmlFor="name"
                 style={{
                   ...fontMono,
-                  fontSize: '9px',
+                  fontSize: '11px',
+                  fontWeight: 600,
                   textTransform: 'uppercase',
                   letterSpacing: '0.12em',
                   color: 'var(--color-accent)',
@@ -237,9 +256,17 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                 onChange={(e) => setName(e.target.value)}
                 required
                 disabled={status === 'loading'}
-                className="w-full rounded border border-border bg-card/45 px-3.5 py-2 text-sm text-primary outline-none transition-all duration-300 placeholder:text-primary/30 focus:border-accent/50 focus:bg-card/65 focus:shadow-[0_0_0_1px_var(--color-accent)]"
+                className={`w-full rounded border bg-card/45 px-3.5 py-2 text-sm text-primary outline-none transition-all duration-300 placeholder:text-primary/45 focus:bg-card/65 ${errors.name
+                    ? 'border-red-500/50 focus:border-red-500/50 focus:shadow-[0_0_0_1px_rgba(239,68,68,0.5)]'
+                    : 'border-border focus:border-accent/50 focus:shadow-[0_0_0_1px_var(--color-accent)]'
+                  }`}
                 placeholder="e.g. Dilip Kumar"
               />
+              {errors.name && (
+                <p className="text-[10px] text-red-500 mt-1 font-mono tracking-wide">
+                  {errors.name}
+                </p>
+              )}
             </div>
 
             {/* Email Field */}
@@ -248,7 +275,8 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                 htmlFor="email"
                 style={{
                   ...fontMono,
-                  fontSize: '9px',
+                  fontSize: '11px',
+                  fontWeight: 600,
                   textTransform: 'uppercase',
                   letterSpacing: '0.12em',
                   color: 'var(--color-accent)',
@@ -263,9 +291,17 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={status === 'loading'}
-                className="w-full rounded border border-border bg-card/45 px-3.5 py-2 text-sm text-primary outline-none transition-all duration-300 placeholder:text-primary/30 focus:border-accent/50 focus:bg-card/65 focus:shadow-[0_0_0_1px_var(--color-accent)]"
+                className={`w-full rounded border bg-card/45 px-3.5 py-2 text-sm text-primary outline-none transition-all duration-300 placeholder:text-primary/45 focus:bg-card/65 ${errors.email
+                    ? 'border-red-500/50 focus:border-red-500/50 focus:shadow-[0_0_0_1px_rgba(239,68,68,0.5)]'
+                    : 'border-border focus:border-accent/50 focus:shadow-[0_0_0_1px_var(--color-accent)]'
+                  }`}
                 placeholder="you@company.com"
               />
+              {errors.email && (
+                <p className="text-[10px] text-red-500 mt-1 font-mono tracking-wide">
+                  {errors.email}
+                </p>
+              )}
             </div>
 
             {/* Company Field */}
@@ -274,7 +310,8 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                 htmlFor="company"
                 style={{
                   ...fontMono,
-                  fontSize: '9px',
+                  fontSize: '11px',
+                  fontWeight: 600,
                   textTransform: 'uppercase',
                   letterSpacing: '0.12em',
                   color: 'var(--color-accent)',
@@ -289,9 +326,17 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                 onChange={(e) => setCompany(e.target.value)}
                 required
                 disabled={status === 'loading'}
-                className="w-full rounded border border-border bg-card/45 px-3.5 py-2 text-sm text-primary outline-none transition-all duration-300 placeholder:text-primary/30 focus:border-accent/50 focus:bg-card/65 focus:shadow-[0_0_0_1px_var(--color-accent)]"
+                className={`w-full rounded border bg-card/45 px-3.5 py-2 text-sm text-primary outline-none transition-all duration-300 placeholder:text-primary/45 focus:bg-card/65 ${errors.company
+                    ? 'border-red-500/50 focus:border-red-500/50 focus:shadow-[0_0_0_1px_rgba(239,68,68,0.5)]'
+                    : 'border-border focus:border-accent/50 focus:shadow-[0_0_0_1px_var(--color-accent)]'
+                  }`}
                 placeholder="e.g. Unotusk Inc."
               />
+              {errors.company && (
+                <p className="text-[10px] text-red-500 mt-1 font-mono tracking-wide">
+                  {errors.company}
+                </p>
+              )}
             </div>
 
             {/* Message Field */}
@@ -300,7 +345,8 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                 htmlFor="message"
                 style={{
                   ...fontMono,
-                  fontSize: '9px',
+                  fontSize: '11px',
+                  fontWeight: 600,
                   textTransform: 'uppercase',
                   letterSpacing: '0.12em',
                   color: 'var(--color-accent)',
@@ -314,7 +360,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
                 onChange={(e) => setMessage(e.target.value)}
                 disabled={status === 'loading'}
                 rows={3}
-                className="w-full resize-none rounded border border-border bg-card/45 px-3.5 py-2 text-sm text-primary outline-none transition-all duration-300 placeholder:text-primary/30 focus:border-accent/50 focus:bg-card/65 focus:shadow-[0_0_0_1px_var(--color-accent)]"
+                className="w-full resize-none rounded border border-border bg-card/45 px-3.5 py-2 text-sm text-primary outline-none transition-all duration-300 placeholder:text-primary/45 focus:border-accent/50 focus:bg-card/65 focus:shadow-[0_0_0_1px_var(--color-accent)]"
                 placeholder="Tell us a bit about your product or team memory challenges..."
               />
             </div>
@@ -333,7 +379,7 @@ export function EarlyAccessModal({ isOpen, onClose }: EarlyAccessModalProps) {
             <button
               type="submit"
               disabled={status === 'loading'}
-              className="relative w-full rounded bg-accent py-3 text-center font-mono text-[10px] font-semibold uppercase tracking-widest text-white transition-all duration-300 hover:brightness-110 disabled:opacity-50"
+              className="relative w-full rounded bg-accent py-3 text-center font-mono text-[12px] font-semibold uppercase tracking-widest text-white transition-all duration-300 hover:brightness-110 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
             >
               {status === 'loading' ? (
                 <span className="flex items-center justify-center gap-2">

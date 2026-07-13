@@ -8,7 +8,10 @@
   --color-text-primary:   #CBC1B5;
   --color-text-secondary: rgba(203,193,181,0.62);
   --color-accent:         #A07C4A;
+  --color-glow:           #F5C27A;
   --color-border:         rgba(255, 255, 255, 0.06);
+  --color-toggle-border:  rgba(255, 255, 255, 0.15);
+  --color-toggle-border-hover: var(--color-accent);
   --color-card-bg:        #090D17;
   --color-nav-bg:         rgba(11, 16, 32, 0.88);
   --color-nav-border:     rgba(255, 255, 255, 0.05);
@@ -28,9 +31,12 @@ html.light {
   --color-bg:             #FAF8F5;
   --color-ocean:          #E5ECF5;
   --color-text-primary:   #1C2534;
-  --color-text-secondary: rgba(28,37,52,0.62);
-  --color-accent:         #8B6230;
-  --color-border:         rgba(28, 37, 52, 0.08);
+  --color-text-secondary: rgba(28,37,52,0.80);
+  --color-accent:         #482B0C;
+  --color-glow:           #B87D30;
+  --color-border:         rgba(28, 37, 52, 0.15);
+  --color-toggle-border:  rgba(28, 37, 52, 0.25);
+  --color-toggle-border-hover: rgba(28, 37, 52, 0.65);
   --color-card-bg:        #FFFFFF;
   --color-nav-bg:         rgba(250, 248, 245, 0.88);
   --color-nav-border:     rgba(28, 37, 52, 0.05);
@@ -40,15 +46,19 @@ html.light {
 }
 
 @theme inline {
-  --color-background:        var(--color-bg);
-  --color-text-primary:      var(--color-text-primary);
-  --color-text-secondary:    var(--color-text-secondary);
-  --color-accent:            var(--color-accent);
-  --color-border:            var(--color-border);
-  --color-card:              var(--color-card-bg);
-  --font-sans:               var(--font-body), system-ui, sans-serif;
-  --font-display:            var(--font-display);
-  --font-body:               var(--font-body);
+  --color-background:          var(--color-bg);
+  --color-primary:             var(--color-text-primary);
+  --color-secondary:           var(--color-text-secondary);
+  --color-text-primary:        var(--color-text-primary);
+  --color-text-secondary:      var(--color-text-secondary);
+  --color-accent:              var(--color-accent);
+  --color-border:              var(--color-border);
+  --color-toggle-border:       var(--color-toggle-border);
+  --color-toggle-border-hover: var(--color-toggle-border-hover);
+  --color-card:                var(--color-card-bg);
+  --font-sans:                 var(--font-body), system-ui, sans-serif;
+  --font-display:              var(--font-display);
+  --font-body:                 var(--font-body);
 }
 
 /* ── Base Reset ─────────────────────────────────────────────── */
@@ -65,6 +75,12 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+
+@media (max-width: 767px) {
+  html {
+    font-size: 108%;
+  }
 }
 
 body {

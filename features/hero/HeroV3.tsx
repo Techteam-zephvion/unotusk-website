@@ -48,9 +48,10 @@ interface Frag {
 }
 
 // ── Layout generator — client-side only ─────────────────────
-function buildFragments(): Frag[] {
-  const pool = [...VOCAB].sort(() => Math.random() - 0.5).slice(0, 88)
-  const CHAIN = 11  // fragments that participate in reconstruction
+function buildFragments(isMobile: boolean): Frag[] {
+  const count = isMobile ? 35 : 88
+  const CHAIN = isMobile ? 6 : 11  // fragments that participate in reconstruction
+  const pool = [...VOCAB].sort(() => Math.random() - 0.5).slice(0, count)
 
   return pool.map((text, i) => {
     const isChain = i < CHAIN
@@ -74,8 +75,8 @@ function buildFragments(): Frag[] {
         ? 0.0
         : 0.2 + Math.random() * 0.4,
       size: isChain
-        ? 12 + Math.floor(Math.random() * 2)
-        : 9 + Math.floor(Math.random() * 2),
+        ? (isMobile ? 10 : 12) + Math.floor(Math.random() * 2)
+        : (isMobile ? 8 : 9) + Math.floor(Math.random() * 2),
       rotate: Math.round((Math.random() - 0.5) * (isChain ? 5 : 12)),
       isChain,
     }
@@ -100,7 +101,10 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
   const [animDone, setAnimDone] = useState(false)
 
   // Generate layout client-side only (avoids SSR mismatch)
-  useEffect(() => { setFrags(buildFragments()) }, [])
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768
+    setFrags(buildFragments(isMobile))
+  }, [])
 
   useEffect(() => {
     if (!frags.length || !sectionRef.current) return
@@ -346,8 +350,8 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
             key={i}
             ref={(el) => { fragRefs.current[i] = el }}
             className={`absolute font-mono uppercase text-primary ${animDone
-                ? 'pointer-events-auto cursor-default hover:!opacity-85 hover:![filter:none] hover:text-accent transition-all duration-300 ease-out'
-                : ''
+              ? 'pointer-events-auto cursor-default hover:!opacity-85 hover:![filter:none] hover:text-accent transition-all duration-300 ease-out'
+              : ''
               }`}
             style={{
               left: `${f.x}%`,
@@ -381,11 +385,11 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
               className="inline-block h-[6px] w-[6px] rounded-full"
               style={{ background: 'var(--color-accent)', opacity: 0.95 }}
             />
-            <span className="font-mono text-[11.5px] font-medium uppercase tracking-[0.28em] text-accent">
+            <span className="font-mono text-[13px] font-medium uppercase tracking-[0.28em] text-accent">
               Project Intelligence Layer
             </span>
           </div>
-          <span className="font-mono text-[12.5px] uppercase tracking-[0.20em] text-primary/85 dark:text-primary/70">
+          <span className="font-mono text-[14px] uppercase tracking-[0.20em] text-primary opacity-90 dark:opacity-75">
             Context Reconstructed
           </span>
         </div>
@@ -404,6 +408,8 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
             style={{
               fontFamily: 'var(--font-young-serif), Georgia, serif',
               clipPath: 'inset(0 100% 0 0)',
+              paddingBottom: '0.15em',
+              marginBottom: '-0.15em',
             }}
           >
             AI ships the wrong things.
@@ -411,7 +417,11 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
           <span
             ref={line2Ref}
             className="block text-[clamp(1.5rem,3vw,2.5rem)] font-normal dark:font-light leading-[1.12] tracking-[-0.022em] text-primary"
-            style={{ clipPath: 'inset(0 100% 0 0)' }}
+            style={{
+              clipPath: 'inset(0 100% 0 0)',
+              paddingBottom: '0.15em',
+              marginBottom: '-0.15em',
+            }}
           >
             Unotusk rebuilds the memory it needs.
           </span>
@@ -421,7 +431,8 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
         <div ref={ctaRef} style={{ opacity: 0 }}>
           <button
             onClick={onOpenModal}
-            className="group inline-flex items-center gap-2 border-b border-primary/24 dark:border-primary/14 pb-px font-mono text-[11px] uppercase tracking-[0.14em] text-primary/70 dark:text-primary/55 bg-transparent border-t-0 border-x-0 outline-none cursor-pointer transition-colors duration-300 hover:border-primary/28 hover:text-primary"
+            className="group inline-flex items-center gap-2 border-b pb-px font-mono text-[12px] uppercase tracking-[0.14em] text-accent bg-transparent border-t-0 border-x-0 outline-none cursor-pointer transition-colors duration-300 hover:border-primary dark:hover:border-primary hover:text-primary dark:hover:text-primary"
+            style={{ borderBottomColor: 'var(--color-accent)' }}
           >
             <span>Request Early Access</span>
             <span
