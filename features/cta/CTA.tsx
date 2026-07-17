@@ -93,11 +93,11 @@ export function CTA({ onOpenModal }: CTAProps) {
           style={{
             ...serif,
             clipPath: H,
-            fontSize: 'clamp(1.8rem, 3.2vw, 3.2rem)',
-            lineHeight: 1.08,
+            fontSize: 'clamp(2rem, 4.5vw, 4.25rem)',
+            lineHeight: 1.05,
             letterSpacing: '-0.025em',
             color: 'var(--color-text-primary)',
-            marginBottom: '2.8rem',
+            marginBottom: '2.5rem',
           }}
         >
           Join the first five<br />lighthouse teams.
@@ -108,11 +108,11 @@ export function CTA({ onOpenModal }: CTAProps) {
           style={{
             opacity: 0,
             ...mono,
-            fontSize: 'clamp(0.875rem, 1.35vw, 0.95rem)',
-            lineHeight: 1.80,
+            fontSize: 'clamp(1rem, 1.6vw, 1.25rem)',
+            lineHeight: 1.60,
             color: 'var(--color-text-primary)',
             letterSpacing: '0.005em',
-            marginBottom: '1.1rem',
+            marginBottom: '1.25rem',
           }}
         >
           We&rsquo;re working with a small number of product
@@ -124,11 +124,11 @@ export function CTA({ onOpenModal }: CTAProps) {
           style={{
             opacity: 0,
             ...mono,
-            fontSize: 'clamp(0.875rem, 1.35vw, 0.95rem)',
-            lineHeight: 1.80,
+            fontSize: 'clamp(1rem, 1.6vw, 1.25rem)',
+            lineHeight: 1.60,
             color: 'var(--color-text-primary)',
             letterSpacing: '0.005em',
-            marginBottom: '3.8rem',
+            marginBottom: '3.5rem',
           }}
         >
           Every request is reviewed personally.
@@ -137,7 +137,7 @@ export function CTA({ onOpenModal }: CTAProps) {
         <div ref={btnRef} style={{ opacity: 0 }}>
           <button
             onClick={onOpenModal}
-            className="group inline-flex items-center gap-2 border-b pb-px font-mono text-[13px] uppercase tracking-[0.14em] text-accent bg-transparent border-t-0 border-x-0 outline-none cursor-pointer transition-colors duration-300 hover:border-primary dark:hover:border-primary hover:text-primary dark:hover:text-primary"
+            className="group inline-flex items-center gap-2 border-b pb-px font-mono text-[14px] uppercase tracking-[0.14em] text-accent bg-transparent border-t-0 border-x-0 outline-none cursor-pointer transition-colors duration-300 hover:border-primary dark:hover:border-primary hover:text-primary dark:hover:text-primary"
             style={{ borderBottomColor: 'var(--color-accent)' }}
           >
             <span>Request Early Access</span>
