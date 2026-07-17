@@ -87,7 +87,7 @@ export function CTA({ onOpenModal }: CTAProps) {
       <div className="flex-1" />
 
       {/* Main CTA Content */}
-      <div style={{ padding: '0 7vw', maxWidth: '38rem', width: '100%' }}>
+      <div style={{ padding: '0 7vw', maxWidth: 'calc(38rem + 14vw)', width: '100%' }}>
         <div
           ref={headRef}
           style={{
