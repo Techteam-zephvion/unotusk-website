@@ -100,6 +100,13 @@ export function What() {
   const bridgeT = useRef<HTMLDivElement>(null)
 
   const [placed, setPlaced] = useState<Placed[]>([])
+  const [mobileHeight, setMobileHeight] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setMobileHeight(window.innerHeight)
+    }
+  }, [])
   const [logoStyle, setLogoStyle] = useState<React.CSSProperties>({
     position: 'absolute',
     left: '50%',
@@ -427,8 +434,8 @@ export function What() {
       mega.to(psClose1.current, { clipPath: V, ease: 'none', duration: 0.5 }, 4.4)
       mega.to(psClose2.current, { clipPath: V, ease: 'none', duration: 0.5 }, 5.0)
 
-      // Final hold before unpinning (page text and vapour remain fully visible to prevent blank frames)
-      mega.to({}, { duration: 0.2 }, 5.9)
+
+
     }, containerRef)
 
     // This pinned trigger is created LATE (after async favicon load + packing).
@@ -481,7 +488,11 @@ export function What() {
       <div
         ref={megaRef}
         className="relative overflow-hidden min-h-dvh"
-        style={{ background: 'var(--color-bg)' }}
+        style={{
+          background: 'var(--color-bg)',
+          height: mobileHeight ? `${mobileHeight}px` : undefined,
+          minHeight: mobileHeight ? `${mobileHeight}px` : undefined,
+        }}
         role="region"
         aria-label="Project knowledge forming the Unotusk elephant"
       >
@@ -630,6 +641,9 @@ export function What() {
           @media (max-width: 640px) {
             .product-statement { bottom: 26%; }
             .closing-statement { bottom: 12%; }
+            .bridge-wrap {
+              transform: translateY(-16vh);
+            }
           }
         `}</style>
 

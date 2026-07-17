@@ -291,11 +291,11 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
           ease: 'none',
           scrollTrigger: {
             trigger: sectionRef.current,
-            // Start fading when the hero's centre hits the viewport top
-            start: 'center top',
-            // Complete fade when the hero's bottom leaves the viewport top
-            end: 'bottom top',
-            scrub: 0.6,
+            // Start fading out immediately as the user scrolls
+            start: 'top top',
+            // Complete fade-out before the next section's text is fully entered
+            end: 'bottom 30%',
+            scrub: 0.5,
           },
         }
       )
@@ -344,6 +344,15 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
         style={{
           background:
             'radial-gradient(ellipse 92% 88% at 50% 50%, transparent 28%, var(--color-vignette) 100%)',
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Blend overlay at the bottom to fade seamlessly into the next section */}
+      <div
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 z-10"
+        style={{
+          background: 'linear-gradient(to bottom, transparent, var(--color-bg))',
         }}
         aria-hidden="true"
       />

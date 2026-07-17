@@ -211,8 +211,8 @@ export function Problem() {
       gsap.timeline({
         scrollTrigger: {
           trigger: punchRef.current,
-          start: 'top 70%', // starts when 30% of the section is visible
-          end: 'top top',
+          start: 'top 75%', // starts when 25% of the section is visible
+          end: 'top 40%',  // fully revealed earlier while there is still ample space above
           scrub: 0.5,
         },
       })
@@ -307,12 +307,15 @@ export function Problem() {
             </div>
           </div>
 
-          <div style={{ position: 'relative', width: '100%', maxWidth: 440, minHeight: '5.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div ref={s1Desc} style={{ position: 'absolute', opacity: 1, fontSize: 'clamp(0.875rem, 1.4vw, 1rem)', lineHeight: 1.7, color: 'var(--color-text-secondary)', letterSpacing: '0.01em', textAlign: 'center' }}>
-              of enterprise GenAI pilots produce<br />no measurable business impact.
+          <div style={{ position: 'relative', width: '100%', maxWidth: 540, minHeight: '6.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div ref={s1Desc} style={{ position: 'absolute', opacity: 1, fontSize: 'clamp(0.78rem, 4.5vw, 1.35rem)', lineHeight: 1.7, color: 'var(--color-text-secondary)', letterSpacing: '0.01em', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <span style={{ whiteSpace: 'nowrap' }}>of enterprise GenAI pilots produce</span>
+              <span style={{ whiteSpace: 'nowrap' }}>no measurable business impact.</span>
             </div>
-            <div ref={s2Desc} style={{ position: 'absolute', opacity: 0, fontSize: 'clamp(0.875rem, 1.4vw, 1rem)', lineHeight: 1.7, color: 'var(--color-text-secondary)', letterSpacing: '0.01em', textAlign: 'center' }}>
-              of engineering leaders are very confident<br />AI-generated code behaves correctly<br />in production.
+            <div ref={s2Desc} style={{ position: 'absolute', opacity: 0, fontSize: 'clamp(0.78rem, 4.5vw, 1.35rem)', lineHeight: 1.7, color: 'var(--color-text-secondary)', letterSpacing: '0.01em', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <span style={{ whiteSpace: 'nowrap' }}>of engineering leaders are very confident</span>
+              <span style={{ whiteSpace: 'nowrap' }}>AI-generated code behaves correctly</span>
+              <span style={{ whiteSpace: 'nowrap' }}>in production.</span>
             </div>
           </div>
 
@@ -333,9 +336,9 @@ export function Problem() {
         className="flex min-h-[32vh] sm:min-h-[58vh] flex-col items-center justify-center px-6 text-center"
         style={{ background: 'var(--color-bg)' }}
       >
-        <div ref={pL1} style={{ ...serif, clipPath: H, fontSize: 'clamp(1.6rem, 5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: 'var(--color-text-primary)', paddingBottom: '0.15em', marginBottom: '-0.15em' }}>Teams keep paying</div>
-        <div ref={pL2} style={{ ...serif, clipPath: H, fontSize: 'clamp(1.6rem, 5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: 'var(--color-text-primary)', paddingBottom: '0.15em', marginBottom: '-0.15em' }}>for lessons</div>
-        <div ref={pL3} style={{ ...serif, clipPath: H, fontSize: 'clamp(1.6rem, 5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: 'var(--color-text-secondary)', paddingBottom: '0.15em', marginBottom: '-0.15em' }}>they already learned.</div>
+        <div ref={pL1} style={{ ...serif, clipPath: H, fontSize: 'clamp(1.3rem, 6.5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: 'var(--color-text-primary)', paddingBottom: '0.15em', marginBottom: '-0.15em', whiteSpace: 'nowrap' }}>Teams keep paying</div>
+        <div ref={pL2} style={{ ...serif, clipPath: H, fontSize: 'clamp(1.3rem, 6.5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: 'var(--color-text-primary)', paddingBottom: '0.15em', marginBottom: '-0.15em', whiteSpace: 'nowrap' }}>for lessons</div>
+        <div ref={pL3} style={{ ...serif, clipPath: H, fontSize: 'clamp(1.3rem, 6.5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: 'var(--color-text-secondary)', paddingBottom: '0.15em', marginBottom: '-0.15em', whiteSpace: 'nowrap' }}>they already learned.</div>
       </div>
 
 

@@ -29,14 +29,14 @@ export function Footer() {
           <a
             href="mailto:hello@unotusk.com"
             className="text-primary/60 transition-colors duration-300 hover:text-primary font-mono tracking-[0.12em] uppercase"
-            style={{ ...mono, fontSize: responsiveFontSize }}
+            style={{ ...mono, fontSize: responsiveFontSize, whiteSpace: 'nowrap' }}
           >
             hello@unotusk.com
           </a>
           <span style={{ ...mono, fontSize: responsiveFontSize, color: 'var(--color-text-secondary)', opacity: 0.5 }}>
             &middot;
           </span>
-          <span style={{ ...mono, fontSize: responsiveFontSize, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-text-secondary)', opacity: 0.8 }}>
+          <span style={{ ...mono, fontSize: responsiveFontSize, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-text-secondary)', opacity: 0.8, whiteSpace: 'nowrap' }}>
             Built in Bengaluru
           </span>
         </div>
