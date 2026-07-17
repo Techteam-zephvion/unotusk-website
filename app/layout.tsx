@@ -90,7 +90,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-full flex-col" suppressHydrationWarning>
         <Script
           id="theme-initializer"
           strategy="beforeInteractive"
