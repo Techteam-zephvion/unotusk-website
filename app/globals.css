@@ -25,6 +25,15 @@
 
   /* Spacing scale */
   --space-section: clamp(5rem, 10vw, 9rem);
+
+  /* Navigation Bar Height */
+  --nav-height: 88px;
+}
+
+@media (max-width: 439px) {
+  :root {
+    --nav-height: 110px;
+  }
 }
 
 html.light {
@@ -128,7 +137,8 @@ p {
 }
 
 /* ── Light Mode Logo Conversion ────────────────────────────── */
-html.light img[src="/logo.svg"] {
+html.light img[src="/logo.svg"],
+html.light img[src="/favicon.svg"] {
   filter: invert(0.9) sepia(0.3) saturate(1.5) hue-rotate(190deg) brightness(0.4);
   transition: filter 0.4s ease;
 }

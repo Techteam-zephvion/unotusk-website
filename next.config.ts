@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   allowedDevOrigins: [
     "*.ngrok-free.app",
+    "192.168.1.7"
   ],
   // The site is fully client-rendered (GSAP/Lenis, all 'use client'), with a
   // single prerenderable route — so we ship it as a static export and serve it

@@ -24,10 +24,15 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
     }
 
     const lenis = new Lenis({
-      duration: 0.8,
+      duration: 0.6,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     })
+
+    // Expose lenis instance globally for custom snapping/scrolling
+    if (typeof window !== 'undefined') {
+      (window as any).lenis = lenis
+    }
 
     // Drive Lenis from GSAP's ticker so ScrollTrigger scrub works correctly
     const onScroll = () => ScrollTrigger.update()
@@ -41,6 +46,9 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
       lenis.off('scroll', onScroll)
       gsap.ticker.remove(tickerFn)
       lenis.destroy()
+      if (typeof window !== 'undefined') {
+        delete (window as any).lenis
+      }
     }
   }, [])
 

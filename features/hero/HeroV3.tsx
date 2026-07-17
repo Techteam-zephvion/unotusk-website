@@ -99,11 +99,15 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
 
   const [frags, setFrags] = useState<Frag[]>([])
   const [animDone, setAnimDone] = useState(false)
+  const [mobileHeight, setMobileHeight] = useState<number | null>(null)
 
   // Generate layout client-side only (avoids SSR mismatch)
   useEffect(() => {
     const isMobile = window.innerWidth < 768
     setFrags(buildFragments(isMobile))
+    if (isMobile) {
+      setMobileHeight(window.innerHeight)
+    }
   }, [])
 
   useEffect(() => {
@@ -291,7 +295,7 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
             start: 'center top',
             // Complete fade when the hero's bottom leaves the viewport top
             end: 'bottom top',
-            scrub: 1.5,
+            scrub: 0.6,
           },
         }
       )
@@ -303,7 +307,11 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
     <section
       ref={sectionRef}
       className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden"
-      style={{ background: 'var(--color-bg)' }}
+      style={{
+        background: 'var(--color-bg)',
+        height: mobileHeight ? `${mobileHeight}px` : undefined,
+        minHeight: mobileHeight ? `${mobileHeight}px` : undefined,
+      }}
       aria-label="Hero"
     >
       {/* Film grain */}
@@ -382,14 +390,14 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
         >
           <div className="flex items-center gap-2.5">
             <span
-              className="inline-block h-[6px] w-[6px] rounded-full"
+              className="inline-block shrink-0 h-[6px] w-[6px] rounded-full"
               style={{ background: 'var(--color-accent)', opacity: 0.95 }}
             />
-            <span className="font-mono text-[13px] font-medium uppercase tracking-[0.28em] text-accent">
+            <span className="font-mono text-[11px] sm:text-[13px] font-medium uppercase tracking-[0.18em] sm:tracking-[0.28em] text-accent whitespace-nowrap">
               Project Intelligence Layer
             </span>
           </div>
-          <span className="font-mono text-[14px] uppercase tracking-[0.20em] text-primary opacity-90 dark:opacity-75">
+          <span className="font-mono text-[11px] sm:text-[13px] uppercase tracking-[0.18em] sm:tracking-[0.20em] text-primary opacity-90 dark:opacity-75">
             Context Reconstructed
           </span>
         </div>
@@ -435,12 +443,19 @@ export function HeroV3({ onOpenModal, onAnimationComplete }: HeroV3Props) {
             style={{ borderBottomColor: 'var(--color-accent)' }}
           >
             <span>Request Early Access</span>
-            <span
-              className="inline-block transition-transform duration-300 group-hover:translate-x-0.5"
+            <svg
+              className="inline-block transition-transform duration-300 group-hover:translate-x-0.5 h-[12px] w-[12px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               aria-hidden="true"
             >
-              →
-            </span>
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
           </button>
         </div>
       </div>

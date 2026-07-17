@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import localFont from 'next/font/local'
 import { LenisProvider } from '@/lib/lenis'
 import { ScrollInit } from '@/components/ScrollInit'
+import Script from 'next/script'
 import './globals.css'
 
 const inter = Inter({
@@ -68,23 +69,6 @@ export default function RootLayout({
     >
       <head>
         <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var savedTheme = localStorage.getItem('theme');
-                  var systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-                  var initialTheme = savedTheme || systemTheme;
-                  document.documentElement.classList.toggle('light', initialTheme === 'light');
-                  document.documentElement.classList.toggle('dark', initialTheme === 'dark');
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
-      </head>
-      <body className="flex min-h-full flex-col">
-        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -104,6 +88,13 @@ export default function RootLayout({
               },
             }),
           }}
+        />
+      </head>
+      <body className="flex min-h-full flex-col">
+        <Script
+          id="theme-initializer"
+          strategy="beforeInteractive"
+          src="/theme-init.js"
         />
         <ScrollInit />
         <LenisProvider>{children}</LenisProvider>

@@ -35,14 +35,14 @@ export function CTA({ onOpenModal }: CTAProps) {
       // Pin + slow reveal. Dwell holds the invitation so it can be read, not chased.
       // Pin distance scales down on tablet/mobile; desktop keeps the tuned pacing.
       const pinFactor = () =>
-        window.innerWidth < 640 ? 0.45 : window.innerWidth < 1024 ? 0.78 : 1
+        window.innerWidth < 640 ? 0.22 : window.innerWidth < 1024 ? 0.78 : 1
       // Reveal timeline (scrubs as CTA section enters viewport)
       gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top 70%', // starts when 30% of the section is visible
           end: 'top top',
-          scrub: 1.0,
+          scrub: 0.5,
         },
       })
         .fromTo(headRef.current, { clipPath: H }, { clipPath: V, ease: 'none', duration: 1.0 }, 0)
@@ -59,7 +59,7 @@ export function CTA({ onOpenModal }: CTAProps) {
           refreshPriority: 1,
           start: 'top top',
           end: () => '+=' + 300 * pinFactor(),
-          scrub: 1.2,
+          scrub: 0.6,
         },
       })
         .to({}, { duration: 1.0 }) // HOLD: visitor reads the invitation before footer
@@ -77,11 +77,10 @@ export function CTA({ onOpenModal }: CTAProps) {
     <div
       ref={containerRef}
       id="early-access"
-      className="relative flex flex-col justify-between overflow-hidden"
+      className="relative flex flex-col overflow-hidden min-h-[75vh] sm:min-h-screen"
       style={{
         background: 'var(--color-bg)',
         color: 'var(--color-text-primary)',
-        minHeight: '100dvh',
       }}
     >
       {/* Top vertical spacer */}
@@ -142,18 +141,25 @@ export function CTA({ onOpenModal }: CTAProps) {
             style={{ borderBottomColor: 'var(--color-accent)' }}
           >
             <span>Request Early Access</span>
-            <span
-              className="inline-block transition-transform duration-300 group-hover:translate-x-0.5"
+            <svg
+              className="inline-block transition-transform duration-300 group-hover:translate-x-0.5 h-[13px] w-[13px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               aria-hidden="true"
             >
-              →
-            </span>
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
           </button>
         </div>
       </div>
 
       {/* Bottom vertical spacer */}
-      <div style={{ height: 'clamp(1.5rem, 5vh, 4rem)' }} />
+      <div style={{ height: 'clamp(2rem, 6vh, 4rem)' }} />
     </div>
   )
 }

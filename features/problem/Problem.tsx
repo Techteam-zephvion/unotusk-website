@@ -3,8 +3,13 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
+
+const V = 'inset(0% 0% 0% 0%)'
+const H = 'inset(0% 100% 0% 0%)'
+const HC = 'inset(0% 50% 0% 50%)'
 
 export function Problem() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -18,6 +23,7 @@ export function Problem() {
 
   // Chapter 2 — Statistics
   const statsRef = useRef<HTMLDivElement>(null)
+  const statsContentRef = useRef<HTMLDivElement>(null)
   const s1Num = useRef<HTMLDivElement>(null)
   const s2Num = useRef<HTMLDivElement>(null)
   const s1Desc = useRef<HTMLDivElement>(null)
@@ -25,45 +31,44 @@ export function Problem() {
   const s1Src = useRef<HTMLDivElement>(null)
   const s2Src = useRef<HTMLDivElement>(null)
 
+  const isAnimatingRef = useRef(false)
+  const currentStateRef = useRef(0) // 0: State 1 (95%), 1: State 2 (0%)
+
   // Chapter 3 — Punch
   const punchRef = useRef<HTMLDivElement>(null)
   const pL1 = useRef<HTMLDivElement>(null)
   const pL2 = useRef<HTMLDivElement>(null)
   const pL3 = useRef<HTMLDivElement>(null)
 
-  // Chapter 4 — Bridge
-  const bridgeRef = useRef<HTMLDivElement>(null)
-  const bridgeT = useRef<HTMLDivElement>(null)
-  const bridgeMask = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    const V = 'inset(0% 0% 0% 0%)'
-    const H = 'inset(0% 100% 0% 0%)'
-    const HC = 'inset(0% 50% 0% 50%)'
+
 
     // Scale pinned-scroll distance to the device. Desktop keeps the exact tuned
     // pacing (×1); tablet and mobile get proportionally shorter pins so touch
     // users aren't dragging through thousands of extra pixels. Re-evaluated on
     // every ScrollTrigger refresh (including resize/orientation change).
     const pinFactor = () =>
-      window.innerWidth < 640 ? 0.45 : window.innerWidth < 1024 ? 0.78 : 1
+      window.innerWidth < 640 ? 0.22 : window.innerWidth < 1024 ? 0.78 : 1
 
     const ctx = gsap.context(() => {
 
       // ── Initial states ───────────────────────────────────────────
-      gsap.set([mask1Ref.current, mask2Ref.current, bridgeMask.current], { xPercent: 0 })
-      gsap.set(s1Num.current, { clipPath: HC, opacity: 0 })
+      gsap.set([mask1Ref.current, mask2Ref.current], { xPercent: 0 })
+      gsap.set(s1Num.current, { clipPath: V, opacity: 1 })
+      gsap.set([s1Desc.current], { opacity: 1 })
+      gsap.set([s1Src.current], { opacity: 0.65 })
       gsap.set(s2Num.current, { clipPath: HC, opacity: 0 })
-      gsap.set([s1Desc.current, s1Src.current, s2Desc.current, s2Src.current], { opacity: 0 })
+      gsap.set([s2Desc.current, s2Src.current], { opacity: 0 })
       gsap.set([pL1.current, pL2.current, pL3.current], { clipPath: H })
 
       if (reduced) {
-        gsap.set([mask1Ref.current, mask2Ref.current, bridgeMask.current], { xPercent: 110 })
+        gsap.set([mask1Ref.current, mask2Ref.current], { xPercent: 110 })
         gsap.set([pL1.current, pL2.current, pL3.current], { clipPath: V })
         gsap.set(s1Num.current, { clipPath: V })
         gsap.set([s1Desc.current], { opacity: 1 })
+        gsap.set(statsContentRef.current, { opacity: 1 })
         return
       }
 
@@ -85,7 +90,7 @@ export function Problem() {
           trigger: titleRef.current,
           start: 'top 60%', // starts when 40% of the section is visible
           end: 'top top',
-          scrub: 1.0,
+          scrub: 0.5,
         },
       })
         .fromTo(mask1Ref.current, { xPercent: 0 }, { xPercent: 110, ease: 'power2.out', duration: 1.0 }, 0)
@@ -99,45 +104,18 @@ export function Problem() {
           anticipatePin: 1,
           refreshPriority: 6,
           start: 'top top',
-          end: () => '+=' + 350 * pinFactor(),
-          scrub: 1.2,
+          end: () => '+=' + 120 * pinFactor(),
+          scrub: 0.6,
         },
       })
-        .to({}, { duration: 0.4 }) // HOLD: visitor reads the revealed text
-        .fromTo([tL1.current, tL2.current], { opacity: 1 }, { opacity: 0.15, ease: 'power1.in', duration: 0.6 })
+        .to({}, { duration: 0.3 }) // HOLD: visitor reads the revealed text
+        .fromTo([tL1.current, tL2.current], { opacity: 1 }, { opacity: 0.15, ease: 'power1.inOut', duration: 0.7 })
 
       // Reveal when section is 30% visible (non-scrubbed to avoid scroll lock conflicts)
-      gsap.fromTo(s1Num.current,
-        { clipPath: HC, opacity: 0 },
-        {
-          clipPath: V,
-          opacity: 1,
-          ease: 'power2.out',
-          duration: 0.6,
-          scrollTrigger: {
-            trigger: statsRef.current,
-            start: 'top 70%',
-            toggleActions: 'play none none reverse',
-          }
-        }
-      )
-      gsap.fromTo(s1Desc.current,
+      gsap.fromTo(statsContentRef.current,
         { opacity: 0 },
         {
           opacity: 1,
-          ease: 'power2.out',
-          duration: 0.6,
-          scrollTrigger: {
-            trigger: statsRef.current,
-            start: 'top 70%',
-            toggleActions: 'play none none reverse',
-          }
-        }
-      )
-      gsap.fromTo(s1Src.current,
-        { opacity: 0 },
-        {
-          opacity: 0.65,
           ease: 'power2.out',
           duration: 0.6,
           scrollTrigger: {
@@ -148,27 +126,86 @@ export function Problem() {
         }
       )
 
-      // Pinned timeline for transitioning to s2 (0%) and exit
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: statsRef.current,
-          pin: true,
-          anticipatePin: 1,
-          refreshPriority: 5,
-          start: 'top top',
-          end: () => '+=' + 500 * pinFactor(),
-          scrub: 1.2,
+      // Transition timeline (paused, manually controlled)
+      const statsTimeline = gsap.timeline({ paused: true })
+        // Fade out State 1 (95%)
+        .fromTo(s1Num.current, { clipPath: V, opacity: 1 }, { clipPath: HC, opacity: 0, ease: 'power3.in', duration: 0.3 })
+        .fromTo(s1Desc.current, { opacity: 1 }, { opacity: 0, ease: 'power3.in', duration: 0.25 }, '<')
+        .fromTo(s1Src.current, { opacity: 0.65 }, { opacity: 0, ease: 'power3.in', duration: 0.2 }, '<')
+        // Clean gap
+        .to({}, { duration: 0.1 })
+        // Fade in State 2 (0%)
+        .fromTo(s2Num.current, { clipPath: HC, opacity: 0 }, { clipPath: V, opacity: 1, ease: 'power3.out', duration: 0.3 }, '+=0.1')
+        .fromTo(s2Desc.current, { opacity: 0 }, { opacity: 1, ease: 'power3.out', duration: 0.25 }, '<')
+        .fromTo(s2Src.current, { opacity: 0 }, { opacity: 0.65, ease: 'power3.out', duration: 0.2 }, '<')
+
+      const transitionTo = (targetState: number, targetScrollY: number) => {
+        isAnimatingRef.current = true
+        currentStateRef.current = targetState
+
+        // 1. Play timeline in the correct direction
+        if (targetState === 1) {
+          statsTimeline.play()
+        } else {
+          statsTimeline.reverse()
+        }
+
+        // 2. Smoothly scroll window to target Y
+        // @ts-ignore
+        if (window.lenis) {
+          // @ts-ignore
+          window.lenis.scrollTo(targetScrollY, {
+            duration: 0.8,
+            force: true,
+          })
+        } else {
+          gsap.to(window, {
+            scrollTo: targetScrollY,
+            duration: 0.8,
+            ease: 'power2.out',
+            overwrite: 'auto',
+          })
+        }
+
+        // 3. Release lock after scroll transition completes
+        setTimeout(() => {
+          isAnimatingRef.current = false
+        }, 850)
+      }
+
+      // Pinned ScrollTrigger for the stats section
+      ScrollTrigger.create({
+        trigger: statsRef.current,
+        pin: true,
+        anticipatePin: 1,
+        refreshPriority: 5,
+        start: () => window.innerWidth < 768 ? 'top 20%' : 'top top',
+        end: () => '+=' + 500 * pinFactor(),
+        onEnter: () => {
+          if (!isAnimatingRef.current) {
+            currentStateRef.current = 0
+            statsTimeline.progress(0)
+          }
         },
+        onEnterBack: () => {
+          if (!isAnimatingRef.current) {
+            currentStateRef.current = 1
+            statsTimeline.progress(1)
+          }
+        },
+        onUpdate: (self) => {
+          if (isAnimatingRef.current) return
+
+          const progress = self.progress
+          const pinDist = 500 * pinFactor()
+
+          if (currentStateRef.current === 0 && self.direction === 1 && progress > 0.22) {
+            transitionTo(1, self.start + pinDist)
+          } else if (currentStateRef.current === 1 && self.direction === -1 && progress < 0.78) {
+            transitionTo(0, self.start)
+          }
+        }
       })
-        .to({}, { duration: 0.6 }) // HOLD: reads 95%
-        .to(s1Num.current, { clipPath: HC, opacity: 0, ease: 'power3.in', duration: 0.6 })
-        .to(s1Desc.current, { opacity: 0, ease: 'none', duration: 0.4 }, '<')
-        .to(s1Src.current, { opacity: 0, ease: 'none', duration: 0.3 }, '<')
-        .to({}, { duration: 0.2 }) // clean gap: no numbers overlapping!
-        .fromTo(s2Num.current, { clipPath: HC, opacity: 0 }, { clipPath: V, opacity: 1, ease: 'power3.out', duration: 0.6, immediateRender: false })
-        .fromTo(s2Desc.current, { opacity: 0 }, { opacity: 1, ease: 'none', duration: 0.4, immediateRender: false }, '<')
-        .fromTo(s2Src.current, { opacity: 0 }, { opacity: 0.65, ease: 'none', duration: 0.3, immediateRender: false }, '<')
-        .to({}, { duration: 0.6 }) // HOLD: reads 0% before unpinning
 
       // Reveal timeline (scrubs as punch section enters viewport)
       gsap.timeline({
@@ -176,7 +213,7 @@ export function Problem() {
           trigger: punchRef.current,
           start: 'top 70%', // starts when 30% of the section is visible
           end: 'top top',
-          scrub: 1.0,
+          scrub: 0.5,
         },
       })
         .fromTo(pL1.current, { clipPath: H }, { clipPath: V, ease: 'power2.out', duration: 1.0 }, 0)
@@ -192,38 +229,14 @@ export function Problem() {
           refreshPriority: 4,
           start: 'top top',
           end: () => '+=' + 100 * pinFactor(),
-          scrub: 1.2,
+          scrub: 0.6,
         },
       })
         .to({}, { duration: 1.0 }) // HOLD: visitor reads the punch lines before unpinning
 
-      // Reveal timeline (scrubs as bridge section enters viewport)
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: bridgeRef.current,
-          start: 'top 70%', // starts when 30% of the section is visible
-          end: 'top top',
-          scrub: 1.0,
-        },
-      })
-        .fromTo(bridgeMask.current, { xPercent: 0 }, { xPercent: 110, ease: 'power2.out', duration: 1.0 })
 
-      // Pinned timeline for chapter exit
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: bridgeRef.current,
-          pin: true,
-          anticipatePin: 1,
-          refreshPriority: 3,
-          start: 'top top',
-          end: () => '+=' + 150 * pinFactor(),
-          scrub: 1.2,
-        },
-      })
-        .to({}, { duration: 0.4 }) // HOLD: visitor reads the bridge statement before transition
-        .fromTo(bridgeT.current,
-          { opacity: 1, filter: 'blur(0px)' },
-          { opacity: 0, filter: 'blur(4px)', ease: 'power2.in', duration: 0.8 })
+
+
 
     }, containerRef)
 
@@ -252,7 +265,7 @@ export function Problem() {
       {/* ── Chapter 1: Problem Statement ────────────────────── */}
       <div
         ref={titleRef}
-        className="flex min-h-screen items-center"
+        className="flex min-h-[45vh] sm:min-h-[65vh] items-center"
         style={{ padding: '0 7vw', background: 'var(--color-bg)' }}
       >
         <div>
@@ -280,34 +293,36 @@ export function Problem() {
       {/* ── Chapter 2: Statistics ───────────────────────────── */}
       <div
         ref={statsRef}
-        className="relative flex min-h-screen flex-col items-center justify-center px-6 text-center"
+        className="relative flex min-h-[75vh] sm:min-h-screen flex-col items-center justify-center px-6 text-center"
         style={{ background: 'var(--color-bg)' }}
         aria-live="polite"
       >
-        <div style={{ position: 'relative', width: '100%', height: 'clamp(6rem, 16vw, 15rem)', marginBottom: '3.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div ref={s1Num} aria-label="95 percent" style={{ ...serif, position: 'absolute', clipPath: HC, opacity: 0, fontSize: 'clamp(4.5rem, 15vw, 14rem)', lineHeight: 1.05, letterSpacing: '-0.045em', color: 'var(--color-text-primary)' }}>
-            95%
+        <div ref={statsContentRef} style={{ opacity: 0, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ position: 'relative', width: '100%', height: 'clamp(6rem, 16vw, 15rem)', marginBottom: '3.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div ref={s1Num} aria-label="95 percent" style={{ ...serif, position: 'absolute', clipPath: V, opacity: 1, fontSize: 'clamp(4.5rem, 15vw, 14rem)', lineHeight: 1.05, letterSpacing: '-0.045em', color: 'var(--color-text-primary)' }}>
+              95%
+            </div>
+            <div ref={s2Num} aria-label="0 percent" style={{ ...serif, position: 'absolute', clipPath: HC, opacity: 0, fontSize: 'clamp(4.5rem, 15vw, 14rem)', lineHeight: 1.05, letterSpacing: '-0.045em', color: 'var(--color-text-primary)' }}>
+              0%
+            </div>
           </div>
-          <div ref={s2Num} aria-label="0 percent" style={{ ...serif, position: 'absolute', clipPath: HC, opacity: 0, fontSize: 'clamp(4.5rem, 15vw, 14rem)', lineHeight: 1.05, letterSpacing: '-0.045em', color: 'var(--color-text-primary)' }}>
-            0%
-          </div>
-        </div>
 
-        <div style={{ position: 'relative', width: '100%', maxWidth: 440, minHeight: '5.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div ref={s1Desc} style={{ position: 'absolute', opacity: 0, fontSize: 'clamp(0.875rem, 1.4vw, 1rem)', lineHeight: 1.7, color: 'var(--color-text-secondary)', letterSpacing: '0.01em', textAlign: 'center' }}>
-            of enterprise GenAI pilots produce<br />no measurable business impact.
+          <div style={{ position: 'relative', width: '100%', maxWidth: 440, minHeight: '5.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div ref={s1Desc} style={{ position: 'absolute', opacity: 1, fontSize: 'clamp(0.875rem, 1.4vw, 1rem)', lineHeight: 1.7, color: 'var(--color-text-secondary)', letterSpacing: '0.01em', textAlign: 'center' }}>
+              of enterprise GenAI pilots produce<br />no measurable business impact.
+            </div>
+            <div ref={s2Desc} style={{ position: 'absolute', opacity: 0, fontSize: 'clamp(0.875rem, 1.4vw, 1rem)', lineHeight: 1.7, color: 'var(--color-text-secondary)', letterSpacing: '0.01em', textAlign: 'center' }}>
+              of engineering leaders are very confident<br />AI-generated code behaves correctly<br />in production.
+            </div>
           </div>
-          <div ref={s2Desc} style={{ position: 'absolute', opacity: 0, fontSize: 'clamp(0.875rem, 1.4vw, 1rem)', lineHeight: 1.7, color: 'var(--color-text-secondary)', letterSpacing: '0.01em', textAlign: 'center' }}>
-            of engineering leaders are very confident<br />AI-generated code behaves correctly<br />in production.
-          </div>
-        </div>
 
-        <div style={{ position: 'relative', height: '1.5rem', marginTop: '1.5rem' }}>
-          <div ref={s1Src} style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', opacity: 0, ...mono, fontSize: 11, letterSpacing: '0.20em', textTransform: 'uppercase', color: 'var(--color-text-primary)', whiteSpace: 'nowrap' }}>
-            MIT NANDA
-          </div>
-          <div ref={s2Src} style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', opacity: 0, ...mono, fontSize: 11, letterSpacing: '0.20em', textTransform: 'uppercase', color: 'var(--color-text-primary)', whiteSpace: 'nowrap' }}>
-            Stack Overflow
+          <div style={{ position: 'relative', height: '1.5rem', marginTop: '1.5rem' }}>
+            <div ref={s1Src} style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', opacity: 0.65, ...mono, fontSize: 11, letterSpacing: '0.20em', textTransform: 'uppercase', color: 'var(--color-text-primary)', whiteSpace: 'nowrap' }}>
+              MIT NANDA
+            </div>
+            <div ref={s2Src} style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', opacity: 0, ...mono, fontSize: 11, letterSpacing: '0.20em', textTransform: 'uppercase', color: 'var(--color-text-primary)', whiteSpace: 'nowrap' }}>
+              Stack Overflow
+            </div>
           </div>
         </div>
       </div>
@@ -315,7 +330,7 @@ export function Problem() {
       {/* ── Chapter 3: Punch ────────────────────────────────── */}
       <div
         ref={punchRef}
-        className="flex min-h-screen flex-col items-center justify-center px-6 text-center"
+        className="flex min-h-[32vh] sm:min-h-[58vh] flex-col items-center justify-center px-6 text-center"
         style={{ background: 'var(--color-bg)' }}
       >
         <div ref={pL1} style={{ ...serif, clipPath: H, fontSize: 'clamp(1.6rem, 5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: 'var(--color-text-primary)', paddingBottom: '0.15em', marginBottom: '-0.15em' }}>Teams keep paying</div>
@@ -323,135 +338,9 @@ export function Problem() {
         <div ref={pL3} style={{ ...serif, clipPath: H, fontSize: 'clamp(1.6rem, 5vw, 5.25rem)', lineHeight: 1.04, letterSpacing: '-0.025em', color: 'var(--color-text-secondary)', paddingBottom: '0.15em', marginBottom: '-0.15em' }}>they already learned.</div>
       </div>
 
-      <div
-        ref={bridgeRef}
-        className="relative flex min-h-screen items-center justify-center px-6 text-center overflow-hidden"
-        style={{ background: 'var(--color-bg)' }}
-      >
-        {/* Galaxy Background Glow */}
-        <div
-          className="absolute pointer-events-none select-none"
-          style={{
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 'clamp(320px, 85vw, 800px)',
-            height: 'clamp(320px, 85vw, 800px)',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(160,124,74,0.18) 0%, rgba(30,58,95,0.14) 40%, rgba(11,16,32,0) 70%)',
-            filter: 'blur(35px)',
-            opacity: 0.95,
-            zIndex: 1,
-          }}
-          aria-hidden="true"
-        />
 
-        <style>{`
-          @keyframes sparkleTwinkle {
-            0%, 100% {
-              transform: scale(0) rotate(0deg);
-              opacity: 0;
-            }
-            50% {
-              transform: scale(1) rotate(90deg);
-              opacity: 0.95;
-            }
-          }
-          .sparkle-star {
-            position: absolute;
-            pointer-events: none;
-            animation: sparkleTwinkle 2.5s ease-in-out infinite;
-          }
-          .bridge-flex {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-          }
-          .bridge-logo {
-            height: clamp(3.8rem, 12vw, 4.5rem);
-            font-size: clamp(3.8rem, 12vw, 4.5rem);
-            width: auto;
-            opacity: 1;
-            display: inline-block;
-          }
-          .bridge-text {
-            font-size: clamp(1.8rem, 6.5vw, 2.5rem);
-            letter-spacing: 0.04em;
-            color: var(--color-text-primary);
-            filter: blur(0px);
-            font-weight: 300;
-            line-height: 1;
-            display: inline-block;
-          }
-          @media (min-width: 480px) {
-            .bridge-flex {
-              flex-direction: row;
-              gap: 1rem;
-            }
-            .bridge-logo {
-              height: clamp(2.7rem, 5.76vw, 4.5rem);
-              font-size: clamp(2.7rem, 5.76vw, 4.5rem);
-              transform: translateY(-0.18em);
-            }
-            .bridge-text {
-              font-size: clamp(1.2rem, 3.2vw, 2.5rem);
-              transform: translateY(-0.04em);
-            }
-          }
-        `}</style>
-
-        <div className="relative inline-block px-6 md:px-12 py-6 z-10" ref={bridgeT}>
-          {/* Sparkles */}
-          <svg
-            className="sparkle-star top-0 left-6 text-[#A07C4A]"
-            style={{ animationDelay: '0.2s' }}
-            width="24"
-            height="24"
-            viewBox="0 0 21 21"
-          >
-            <path d="M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z" fill="currentColor" />
-          </svg>
-          <svg
-            className="sparkle-star bottom-2 right-6 text-[#C5A880]"
-            style={{ animationDelay: '1.1s' }}
-            width="28"
-            height="28"
-            viewBox="0 0 21 21"
-          >
-            <path d="M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z" fill="currentColor" />
-          </svg>
-          <svg
-            className="sparkle-star top-2 right-20 text-[#A07C4A]"
-            style={{ animationDelay: '1.9s' }}
-            width="20"
-            height="20"
-            viewBox="0 0 21 21"
-          >
-            <path d="M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z" fill="currentColor" />
-          </svg>
-
-          <div style={{ position: 'relative', overflow: 'hidden' }}>
-            <div className="bridge-flex">
-              <img
-                src="/logo.svg"
-                alt="Unotusk"
-                className="bridge-logo"
-              />
-              <span
-                className="bridge-text"
-                style={mono}
-              >
-                changes that.
-              </span>
-            </div>
-            <div ref={bridgeMask} aria-hidden="true" style={maskOverlay} />
-          </div>
-        </div>
-      </div>
 
     </div>
   )
 }
-// Rebuild trigger to clear stale cache
+// Rebuild trigger to clear stale cache: 1720980567
