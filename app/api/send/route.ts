@@ -170,7 +170,7 @@ export async function POST(request: Request) {
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="body-bg" style="background-color:${bodyBg};">
           <tr>
             <td align="center" style="padding:32px 0;">
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="email-shell email-bg" style="width:100%; max-width:100%; background-color:${emailBg};">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" class="email-shell email-bg" style="width:100%; max-width:600px; margin:0 auto; background-color:${emailBg};">
                 <tr>
                   <td class="mobile-pad" style="padding:26px 32px 22px 32px;">
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
