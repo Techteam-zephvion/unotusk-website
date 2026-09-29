@@ -105,8 +105,8 @@ export async function POST(request: Request) {
     // Absolute public asset URLs pointing to production site
     const baseUrl = "https://unotusk.com";
     const heroImageUrl = `${baseUrl}/UnoTusk%20Design.png`;
-    const managePreferencesUrl = `${baseUrl}/early-access`;
-    const unsubscribeUrl = `${baseUrl}/early-access`;
+    const managePreferencesUrl = `${baseUrl}/#early-access`;
+    const unsubscribeUrl = `${baseUrl}/#early-access`;
 
     const isLight = theme === "light";
 
@@ -300,13 +300,13 @@ export async function POST(request: Request) {
                       <tr>
                         <td bgcolor="${accentColor}" style="background-color:${accentColor}; border-radius:0;">
                           <!--[if mso]>
-                          <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.unotusk.com/early-access" style="height:48px;v-text-anchor:middle;width:172px;" arcsize="0%" stroke="f" fillcolor="${accentColor}">
+                          <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.unotusk.com/#early-access" style="height:48px;v-text-anchor:middle;width:172px;" arcsize="0%" stroke="f" fillcolor="${accentColor}">
                             <w:anchorlock/>
                             <center style="color:${buttonTextColor};font-family:Arial,sans-serif;font-size:14px;font-weight:bold;">Reserve Your Spot</center>
                           </v:roundrect>
                           <![endif]-->
                           <!--[if !mso]><!-->
-                          <a class="button" href="https://www.unotusk.com/early-access" target="_blank" style="display:inline-block; padding:16px 24px; font-family:Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size:14px; line-height:16px; font-weight:600; color:${buttonTextColor}; text-decoration:none;">
+                          <a class="button" href="https://www.unotusk.com/#early-access" target="_blank" style="display:inline-block; padding:16px 24px; font-family:Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size:14px; line-height:16px; font-weight:600; color:${buttonTextColor}; text-decoration:none;">
                             Reserve Your Spot
                           </a>
                           <!--<![endif]-->
