@@ -365,7 +365,7 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify({
           from: fromEmail,
-          to: ["dilipkumarnaidu47@gmail.com", "vbl.zephvion@gmail.com"],
+          to: ["dilipkumarnaidu47@gmail.com", "vbk.zephvion@gmail.com"],
           reply_to: email,
           subject: `New Early Access Request from ${name}`,
           html: emailHtml,
