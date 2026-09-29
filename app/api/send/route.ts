@@ -22,6 +22,8 @@ function writeSubmissionLog(
   }
 }
 
+const recentSubmissions = new Set<string>();
+
 export async function POST(request: Request) {
   let name = "";
   let email = "";
@@ -70,6 +72,23 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+    
+    // Email regex validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      writeSubmissionLog(name, email, company, message, "FAILED", "Validation failed: invalid email");
+      return NextResponse.json(
+        { error: "Please provide a valid email address." },
+        { status: 400 }
+      );
+    }
+    
+    // Prevent double submissions
+    if (recentSubmissions.has(email)) {
+      return NextResponse.json({ success: true, message: "Request received" });
+    }
+    recentSubmissions.add(email);
+    setTimeout(() => recentSubmissions.delete(email), 60000);
 
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
@@ -81,7 +100,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const fromEmail = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "Unotusk <noreply@unotusk.com>";
 
     // Absolute public asset URLs pointing to production site
     const baseUrl = "https://unotusk.com";
@@ -246,24 +265,34 @@ export async function POST(request: Request) {
                   </td>
                 </tr>
 
-                ${message ? `
                 <tr>
                   <td style="padding:40px 0 0 0;">
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="hero-surface" style="background-color:${heroSurface}; border-left:none; border-right:none; border-top:1px solid ${borderColor}; border-bottom:1px solid ${borderColor};">
                       <tr>
                         <td class="message-panel" style="padding:24px 32px;">
                           <p class="text-secondary" style="margin:0 0 8px 0; font-family:'IBM Plex Mono', 'Courier New', Courier, monospace; font-size:11px; line-height:16px; color:${accentColor}; letter-spacing:0.5px; text-transform:uppercase;">
-                            Your message
+                            Submission Details
+                          </p>
+                          <p class="text-primary" style="margin:0; font-family:Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size:14px; line-height:22px; color:${textPrimary};">
+                            <strong>Name:</strong> ${name}<br/>
+                            <strong>Email:</strong> ${email}<br/>
+                            <strong>Company:</strong> ${company}<br/>
+                            <strong>Time:</strong> ${new Date().toISOString()}<br/>
+                          </p>
+                          ${message ? `
+                          <br/>
+                          <p class="text-secondary" style="margin:0 0 8px 0; font-family:'IBM Plex Mono', 'Courier New', Courier, monospace; font-size:11px; line-height:16px; color:${accentColor}; letter-spacing:0.5px; text-transform:uppercase;">
+                            Message
                           </p>
                           <p class="text-primary" style="margin:0; font-family:Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size:14px; line-height:22px; color:${textPrimary}; white-space:pre-wrap;">
                             ${message}
                           </p>
+                          ` : ''}
                         </td>
                       </tr>
                     </table>
                   </td>
                 </tr>
-                ` : ''}
 
                 <tr>
                   <td class="mobile-pad" style="padding:44px 32px 58px 32px;">
@@ -336,9 +365,9 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify({
           from: fromEmail,
-          to: email,
+          to: ["dilipkumarnaidu@unotusk.com", "vbl.zephvion@gmail.com"],
           reply_to: email,
-          subject: `Welcome to Unotusk — Early Access Request Received`,
+          subject: `New Early Access Request from ${name}`,
           html: emailHtml,
         }),
       });
@@ -355,7 +384,7 @@ export async function POST(request: Request) {
         const errorMsg = resendData.message || "Failed to send email via Resend.";
         writeSubmissionLog(name, email, company, message, "FAILED", `Resend API error: ${errorMsg}`);
         return NextResponse.json(
-          { error: errorMsg },
+          { error: "Failed to send email. Please try again later." },
           { status: resendResponse.status || 400 }
         );
       }
@@ -367,14 +396,14 @@ export async function POST(request: Request) {
       const errorMsg = error.message || "An unexpected error occurred.";
       writeSubmissionLog(name, email, company, message, "FAILED", `Exception: ${errorMsg}`);
       return NextResponse.json(
-        { error: errorMsg },
+        { error: "An unexpected error occurred while sending the request." },
         { status: 500 }
       );
     }
   } catch (error: any) {
     console.error("Error in main request handler:", error);
     return NextResponse.json(
-      { error: error.message || "An unexpected error occurred." },
+      { error: "An unexpected error occurred processing your request." },
       { status: 500 }
     );
   }
